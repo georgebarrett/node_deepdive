@@ -36,9 +36,12 @@ const url = require('url');
 // SERVER
 
 
-
-// reading the file synchonously, locating it and then storing it the 'data' variable
+// reading the files synchonously. these are only executed once right at the beginning. each read file is sotred in a variable
 const data = fs.readFileSync(`${__dirname}/starter/dev-data/data.json`, 'utf-8');
+const templateOverview = fs.readFileSync(`${__dirname}/starter/templates/overview.html`, 'utf-8');
+const templateCard = fs.readFileSync(`${__dirname}/starter/templates/card.html`, 'utf-8');
+const templateProduct = fs.readFileSync(`${__dirname}/starter/templates/product.html`, 'utf-8');
+
 // storing the json data in a new variable dataObject
 const dataObject = JSON.parse(data);
 
@@ -46,13 +49,20 @@ const dataObject = JSON.parse(data);
 const server = http.createServer((req, res) => {
     const pathName = req.url;
 
+    // overview page
     if (pathName === '/' || pathName === '/overview') {
-        res.end('this is the overview');
+    res.end('this is the overview');
+
+    // product page
     } else if (pathName === '/product') {
         res.end('this is the product');
+
+    //  api page
     } else if (pathName === '/api') {
         res.writeHead(200, { 'content-type': 'application/json' });
         res.end(data);
+
+    // error handler
     } else {
         res.writeHead(404, {
             'content-type': 'text/html'
