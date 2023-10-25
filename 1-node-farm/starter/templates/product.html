@@ -13,7 +13,7 @@
       href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/apple/155/ear-of-maize_1f33d.png"
     />
 
-    <title>product / image /// NODE FARM</title>
+    <title>{%productname%} {%productimage%} /// NODE FARM</title>
 
     <style>
       *,
@@ -270,36 +270,36 @@
       <h1>🌽 Node Farm 🥦</h1>
 
       <figure class="product">
-        <div class="product__organic {not_organic}"><h5>Organic or not</h5></div>
+        <div class="product__organic {%notorganic%}"><h5>Organic</h5></div>
         <a href="#" class="product__back">
           <span class="emoji-left">👈</span>Back
         </a>
         <div class="product__hero">
-          <span class="product__emoji product__emoji--1">emoji</span>
-          <span class="product__emoji product__emoji--2">emoji</span>
-          <span class="product__emoji product__emoji--3">emoji</span>
-          <span class="product__emoji product__emoji--4">emoji</span>
-          <span class="product__emoji product__emoji--5">emoji</span>
-          <span class="product__emoji product__emoji--6">emoji</span>
-          <span class="product__emoji product__emoji--7">emoji</span>
-          <span class="product__emoji product__emoji--8">emoji</span>
-          <span class="product__emoji product__emoji--9">emoji</span>
+          <span class="product__emoji product__emoji--1">{%productimage%}</span>
+          <span class="product__emoji product__emoji--2">{%productimage%}</span>
+          <span class="product__emoji product__emoji--3">{%productimage%}</span>
+          <span class="product__emoji product__emoji--4">{%productimage%}</span>
+          <span class="product__emoji product__emoji--5">{%productimage%}</span>
+          <span class="product__emoji product__emoji--6">{%productimage%}</span>
+          <span class="product__emoji product__emoji--7">{%productimage%}</span>
+          <span class="product__emoji product__emoji--8">{%productimage%}</span>
+          <span class="product__emoji product__emoji--9">{%productimage%}</span>
         </div>
-        <h2 class="product__name">product</h2>
+        <h2 class="product__name">{%productname%}</h2>
         <div class="product__details">
-          <p><span class="emoji-left">🌍</span>from</p>
-          <p><span class="emoji-left">❤️</span>nutrients</p>
-          <p><span class="emoji-left">📦</span>quantity</p>
-          <p><span class="emoji-left">🏷</span>{£price}</p>
+          <p><span class="emoji-left">🌍</span>From {%productcountry%}</p>
+          <p><span class="emoji-left">❤️</span>{%productnutrients%}</p>
+          <p><span class="emoji-left">📦</span>{%productquantity%}</p>
+          <p><span class="emoji-left">🏷</span>£{%productprice%}</p>
         </div>
   
         <a href="#" class="product__link">
           <span class="emoji-left">🛒</span>
-          <span>Add to shopping card {%£price%}</span>
+          <span>Add to shopping card £{%productprice%}</span>
         </a>
   
         <p class="product__description">
-          description
+          {%productdescription%}
         </p>
       </figure>
       
