@@ -37,7 +37,13 @@ const url = require('url');
 
 // creating a server that provides a response. this server is stored in a variable
 const server = http.createServer((req, res) => {
-    res.end('hello from the server');
+    const pathName = req.url
+
+    if (pathName === '/overview') {
+        res.end('this is the overview');
+    } else if (pathName === '/product') {
+        res.end('this is the product');
+    }
 });
 
 // i can call the server variable. the call back function will fire when the server starts listening and not before
