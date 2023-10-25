@@ -51,7 +51,8 @@ const server = http.createServer((req, res) => {
 
     // overview page
     if (pathName === '/' || pathName === '/overview') {
-    res.end('this is the overview');
+    res.writeHead(200, { 'content-type': 'text/html' });   
+    res.end(templateOverview);
 
     // product page
     } else if (pathName === '/product') {
