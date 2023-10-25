@@ -37,12 +37,22 @@ const url = require('url');
 
 // creating a server that provides a response. this server is stored in a variable
 const server = http.createServer((req, res) => {
-    const pathName = req.url
+    const pathName = req.url;
 
     if (pathName === '/' || pathName === '/overview') {
         res.end('this is the overview');
     } else if (pathName === '/product') {
         res.end('this is the product');
+    } else if (pathName === '/api') {
+
+        // reading the file and locating it. then refering to its content as data. from there i can manipulate it within the function
+        fs.readFile(`${__dirname}/starter/dev-data/data.json`, 'utf-8', (error, data) => {
+            const productData = JSON.parse(data);
+            console.log(productData)
+            res.writeHead(200, { 'content-type': 'application/json' });
+            res.end(data);
+        })
+
     } else {
         res.writeHead(404, {
             'content-type': 'text/html'
