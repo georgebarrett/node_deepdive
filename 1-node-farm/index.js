@@ -35,6 +35,13 @@ const url = require('url');
 
 // SERVER
 
+
+
+// reading the file synchonously, locating it and then storing it the 'data' variable
+const data = fs.readFileSync(`${__dirname}/starter/dev-data/data.json`, 'utf-8');
+// storing the json data in a new variable dataObject
+const dataObject = JSON.parse(data);
+
 // creating a server that provides a response. this server is stored in a variable
 const server = http.createServer((req, res) => {
     const pathName = req.url;
@@ -44,15 +51,8 @@ const server = http.createServer((req, res) => {
     } else if (pathName === '/product') {
         res.end('this is the product');
     } else if (pathName === '/api') {
-
-        // reading the file and locating it. then refering to its content as data. from there i can manipulate it within the function
-        fs.readFile(`${__dirname}/starter/dev-data/data.json`, 'utf-8', (error, data) => {
-            const productData = JSON.parse(data);
-            console.log(productData)
-            res.writeHead(200, { 'content-type': 'application/json' });
-            res.end(data);
-        })
-
+        res.writeHead(200, { 'content-type': 'application/json' });
+        res.end(data);
     } else {
         res.writeHead(404, {
             'content-type': 'text/html'
