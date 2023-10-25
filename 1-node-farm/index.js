@@ -34,7 +34,18 @@ const url = require('url');
 
 
 // SERVER
-
+const replaceTemplate = (template, product) => {
+    let output = template.replace(/{%productname%}/g, product.productName);
+    output = output.replace(/{%productimage%}/g, product.image);
+    output = output.replace(/{%productprice%}/g, product.price);
+    output = output.replace(/{%productcountry%}/g, product.from);
+    output = output.replace(/{%productnutrients%}/g, product.nutrients);
+    output = output.replace(/{%productquantity%}/g, product.quantity);
+    output = output.replace(/{%productdescription%}/g, product.description);
+    output = output.replace(/{%productid%}/g, product.id);
+    
+    if (!product.organic) output = output.replace(/{%notorganic%}/g, 'not-organic');
+}
 
 // reading the files synchonously. these are only executed once right at the beginning. each read file is sotred in a variable
 const data = fs.readFileSync(`${__dirname}/starter/dev-data/data.json`, 'utf-8');
@@ -42,7 +53,7 @@ const templateOverview = fs.readFileSync(`${__dirname}/starter/templates/overvie
 const templateCard = fs.readFileSync(`${__dirname}/starter/templates/card.html`, 'utf-8');
 const templateProduct = fs.readFileSync(`${__dirname}/starter/templates/product.html`, 'utf-8');
 
-// storing the json data in a new variable dataObject
+// storing the json vegetable data in a new variable dataObject
 const dataObject = JSON.parse(data);
 
 // creating a server that provides a response. this server is stored in a variable
@@ -51,7 +62,10 @@ const server = http.createServer((req, res) => {
 
     // overview page
     if (pathName === '/' || pathName === '/overview') {
-    res.writeHead(200, { 'content-type': 'text/html' });   
+    res.writeHead(200, { 'content-type': 'text/html' });
+    
+    const cardsHtml = dataObject.map(element => replaceTemplate(templateCard, element))
+
     res.end(templateOverview);
 
     // product page
