@@ -1,6 +1,10 @@
 const fs = require('fs');
 const http = require('http');
 
+
+// FILES
+
+
 // const hello = 'hola mundo';
 // console.log(hello);
 
@@ -13,16 +17,31 @@ const http = require('http');
 // console.log('file written');
 
 // non-blocking asynchronous behaviour
-fs.readFile('./starter/txt/start.txt', 'utf-8', (error, data1) => {
-    fs.readFile(`./starter/txt/${data1}.txt`, 'utf-8', (error, data2) => {
-        console.log(data2);
-        fs.readFile('./starter/txt/append.txt', 'utf-8', (error, data3) => {
-            console.log(data3);
+// fs.readFile('./starter/txt/start.txt', 'utf-8', (error, data1) => {
+//     fs.readFile(`./starter/txt/${data1}.txt`, 'utf-8', (error, data2) => {
+//         console.log(data2);
+//         fs.readFile('./starter/txt/append.txt', 'utf-8', (error, data3) => {
+//             console.log(data3);
 
-            fs.writeFile('./starter/txt/final.txt', `${data2}\n${data3}`, 'utf-8', error => {
-                console.log('your file has been written');
-            })
-        });  
-    });
+//             fs.writeFile('./starter/txt/final.txt', `${data2}\n${data3}`, 'utf-8', error => {
+//                 console.log('your file has been written');
+//             })
+//         });  
+//     });
+// });
+// console.log('will read file');
+
+
+// SERVER
+
+// creating a server that provides a response. this server is stored in a variable
+const server = http.createServer((req, res) => {
+    res.end('hello from the server');
 });
-console.log('will read file');
+
+// i can call the server variable. the call back function will fire when the server starts listening and not before
+server.listen(8000, '127.0.0.1', () => {
+    console.log('listening to requests on port 8000');
+});
+
+
