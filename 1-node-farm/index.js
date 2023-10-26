@@ -66,10 +66,11 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'content-type': 'text/html' });
     
     // if an arrow function exists without the curly braces then the return is implicit
-    const cardsHtml = dataObject.map(element => replaceTemplate(templateCard, element));
-    console.log(cardsHtml);
+    const cardsHtml = dataObject.map(element => replaceTemplate(templateCard, element)).join('');
+    // console.log(cardsHtml);
+    const output = templateOverview.replace('{%productcards%}', cardsHtml);
 
-    res.end(templateOverview);
+    res.end(output);
 
     // product page
     } else if (pathName === '/product') {
