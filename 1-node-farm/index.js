@@ -3,7 +3,7 @@ const http = require('http');
 const url = require('url');
 
 
-// FILES
+// WRITING FILES
 
 
 // const hello = 'hola mundo';
@@ -33,7 +33,7 @@ const url = require('url');
 // console.log('will read file');
 
 
-// SERVER
+// SERVER SIDE
 const replaceTemplate = (template, product) => {
     let output = template.replace(/{%productname%}/g, product.productName);
     output = output.replace(/{%productimage%}/g, product.image);
@@ -45,6 +45,7 @@ const replaceTemplate = (template, product) => {
     output = output.replace(/{%productid%}/g, product.id);
     
     if (!product.organic) output = output.replace(/{%notorganic%}/g, 'not-organic');
+    return output;
 }
 
 // reading the files synchonously. these are only executed once right at the beginning. each read file is sotred in a variable
@@ -64,7 +65,9 @@ const server = http.createServer((req, res) => {
     if (pathName === '/' || pathName === '/overview') {
     res.writeHead(200, { 'content-type': 'text/html' });
     
-    const cardsHtml = dataObject.map(element => replaceTemplate(templateCard, element))
+    // if an arrow function exists without the curly braces then the return is implicit
+    const cardsHtml = dataObject.map(element => replaceTemplate(templateCard, element));
+    console.log(cardsHtml);
 
     res.end(templateOverview);
 
