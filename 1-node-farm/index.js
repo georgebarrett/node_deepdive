@@ -59,10 +59,15 @@ const dataObject = JSON.parse(data);
 
 // creating a server that provides a response. this server is stored in a variable
 const server = http.createServer((req, res) => {
-    const pathName = req.url;
+    // console.log(req.url);
+    // console.log(url.parse(req.url, true));
+    
+    // this is two variables that have been deconstructed
+    const { query, pathname } = url.parse(req.url, true);
+
 
     // overview page
-    if (pathName === '/' || pathName === '/overview') {
+    if (pathname === '/' || pathname === '/overview') {
     res.writeHead(200, { 'content-type': 'text/html' });
     
     // if an arrow function exists without the curly braces then the return is implicit
@@ -73,11 +78,15 @@ const server = http.createServer((req, res) => {
     res.end(output);
 
     // product page
-    } else if (pathName === '/product') {
-        res.end('this is the product');
+    } else if (pathname === '/product') {
+        // console.log(query);
+        res.writeHead(200, { 'content-type': 'text/html' });
+        const product = dataObject[query.id];
+        const output = replaceTemplate(templateProduct, product);
+        res.end(output);
 
     //  api page
-    } else if (pathName === '/api') {
+    } else if (pathname === '/api') {
         res.writeHead(200, { 'content-type': 'application/json' });
         res.end(data);
 
