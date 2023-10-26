@@ -5,9 +5,6 @@ const slugify = require('slugify');
 
 const replaceTemplate = require('./modules/replaceTemplate');
 
-
-
-
 // WRITING FILES
 
 // const hello = 'hola mundo';
@@ -59,7 +56,6 @@ const server = http.createServer((req, res) => {
     // this is two variables that have been deconstructed
     const { query, pathname } = url.parse(req.url, true);
 
-
     // overview page
     if (pathname === '/' || pathname === '/overview') {
     res.writeHead(200, { 'content-type': 'text/html' });
@@ -97,5 +93,3 @@ const server = http.createServer((req, res) => {
 server.listen(8000, '127.0.0.1', () => {
     console.log('listening to requests on port 8000');
 });
-
-
