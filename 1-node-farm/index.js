@@ -5,7 +5,6 @@ const url = require('url');
 
 // WRITING FILES
 
-
 // const hello = 'hola mundo';
 // console.log(hello);
 
