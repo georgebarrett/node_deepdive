@@ -2,6 +2,8 @@ const fs = require('fs');
 const http = require('http');
 const url = require('url');
 
+const replaceTemplate = require('./modules/replaceTemplate');
+
 
 // WRITING FILES
 
@@ -33,19 +35,6 @@ const url = require('url');
 
 
 // SERVER SIDE
-const replaceTemplate = (template, product) => {
-    let output = template.replace(/{%productname%}/g, product.productName);
-    output = output.replace(/{%productimage%}/g, product.image);
-    output = output.replace(/{%productprice%}/g, product.price);
-    output = output.replace(/{%productcountry%}/g, product.from);
-    output = output.replace(/{%productnutrients%}/g, product.nutrients);
-    output = output.replace(/{%productquantity%}/g, product.quantity);
-    output = output.replace(/{%productdescription%}/g, product.description);
-    output = output.replace(/{%productid%}/g, product.id);
-    
-    if (!product.organic) output = output.replace(/{%notorganic%}/g, 'not-organic');
-    return output;
-}
 
 // reading the files synchonously. these are only executed once right at the beginning. each read file is sotred in a variable
 const data = fs.readFileSync(`${__dirname}/starter/dev-data/data.json`, 'utf-8');
