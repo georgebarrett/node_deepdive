@@ -1,8 +1,11 @@
 const fs = require('fs');
 const http = require('http');
 const url = require('url');
+const slugify = require('slugify');
 
 const replaceTemplate = require('./modules/replaceTemplate');
+
+
 
 
 // WRITING FILES
@@ -44,6 +47,9 @@ const templateProduct = fs.readFileSync(`${__dirname}/starter/templates/product.
 
 // storing the json vegetable data in a new variable dataObject
 const dataObject = JSON.parse(data);
+
+// this applies the product name (in lowercase) to the end of the url rather than the id
+const slugs = dataObject.map(element => slugify(element.productName, { lower: true }));
 
 // creating a server that provides a response. this server is stored in a variable
 const server = http.createServer((req, res) => {
