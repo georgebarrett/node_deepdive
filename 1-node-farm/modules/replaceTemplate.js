@@ -9,5 +9,5 @@ module.exports = (template, product) => {
     output = output.replace(/{%productid%}/g, product.id);
     
     if (!product.organic) output = output.replace(/{%notorganic%}/g, 'not-organic');
-    return output;
+    return output;  
 }
