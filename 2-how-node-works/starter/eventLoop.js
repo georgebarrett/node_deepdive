@@ -18,6 +18,7 @@ fs.readFile('test-file.txt', () => {
     // nextTick should be called setImmediate and vice versa. nexTick will 
     // always be executed first within the event loop
     // ticks refer to the rotation through the event loop
+    // stick to either process.nextTick or setImmediate. setImmediate is favourable
     process.nextTick(() => console.log('process.next tick'));
 });
 
