@@ -1,4 +1,7 @@
 const fs = require('fs');
+const crypto = require('crypto');
+
+const start = Date.now();
 
 // this timer will expire after 0 seconds
 setTimeout(() => console.log('timer 1 finished'), 0);
@@ -20,6 +23,10 @@ fs.readFile('test-file.txt', () => {
     // ticks refer to the rotation through the event loop
     // stick to either process.nextTick or setImmediate. setImmediate is favourable
     process.nextTick(() => console.log('process.next tick'));
+
+    crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
+        console.log(Date.now() - start, 'password encrypted');
+    });
 });
 
 console.log('hola from the top level');
