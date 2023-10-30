@@ -3,6 +3,7 @@ const crypto = require('crypto');
 
 const start = Date.now();
 
+// this declares that there is only one thread rather than the default of four
 process.env.UV_THREADPOOL_SIZE = 1;
 
 // this timer will expire after 0 seconds
