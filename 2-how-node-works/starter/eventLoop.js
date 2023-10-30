@@ -43,6 +43,11 @@ fs.readFile('test-file.txt', () => {
     crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
         console.log(Date.now() - start, 'password encrypted');
     });
+
+    // this code is the synchronous version of the above. meaning the encryptions 
+    // cannot happen at the same time even if all four threads are open
+    // crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512');
+    // console.log(Date.now() - start, 'password encrypted');
 });
 
 console.log('hola from the top level');
