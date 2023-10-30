@@ -3,6 +3,8 @@ const crypto = require('crypto');
 
 const start = Date.now();
 
+process.env.UV_THREADPOOL_SIZE = 1;
+
 // this timer will expire after 0 seconds
 setTimeout(() => console.log('timer 1 finished'), 0);
 
@@ -23,6 +25,19 @@ fs.readFile('test-file.txt', () => {
     // ticks refer to the rotation through the event loop
     // stick to either process.nextTick or setImmediate. setImmediate is favourable
     process.nextTick(() => console.log('process.next tick'));
+
+    // these four password encryptions take the same amount of time due to node having four threads
+    crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
+        console.log(Date.now() - start, 'password encrypted');
+    });
+
+    crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
+        console.log(Date.now() - start, 'password encrypted');
+    });
+
+    crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
+        console.log(Date.now() - start, 'password encrypted');
+    });
 
     crypto.pbkdf2('password', 'salt', 100000, 1024, 'sha512', () => {
         console.log(Date.now() - start, 'password encrypted');
