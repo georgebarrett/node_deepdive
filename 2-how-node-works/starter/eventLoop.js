@@ -14,6 +14,11 @@ fs.readFile('test-file.txt', () => {
     setTimeout(() => console.log('timer 2 finished'), 0);
     setTimeout(() => console.log('timer 3 finished'), 3000);
     setImmediate(() => console.log('immediate 2 finished'));
+
+    // nextTick should be called setImmediate and vice versa. nexTick will 
+    // always be executed first within the event loop
+    // ticks refer to the rotation through the event loop
+    process.nextTick(() => console.log('process.next tick'));
 });
 
 console.log('hola from the top level');
