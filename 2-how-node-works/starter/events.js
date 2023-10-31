@@ -1,8 +1,17 @@
 // importing a in-built node module
 const EventEmitter = require('events');
 
-// storing a new instance of the module in a variable 
-const myEmitter = new EventEmitter();
+// this new Sales class inherits everything from the EventEmitter class
+// Sales is the parent class. EventEmitter is the superclass
+class Sales extends EventEmitter {
+    
+    constructor() {
+        super();
+    }
+}
+
+// this is storing a new instance of the parent sales class that inherits everything from the EventEmitter superclass
+const myEmitter = new Sales();
 
 // this is a callback action that occurs once the 'buy' button has been hit (observers)
 myEmitter.on('newSale', () => {
