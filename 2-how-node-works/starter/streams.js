@@ -30,6 +30,15 @@ server.on('request', (req, res) => {
         // nothing needs to be passed into the 'end' method because the data has been written using the 'res.write(chunk)' above
         res.end();
     });
+    // error event for a readable stream
+    readable.on('error', err => {
+        // this call back function will be executed when the error even is emitted
+        console.log(err);
+        // 500 indicates a serverside error
+        res.statusCode(500);
+        // file not found will be the repsonse that the client will see on the browser
+        res.end('file not found');
+    });
 });
 
 // activating server
