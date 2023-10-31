@@ -39,20 +39,25 @@ myEmitter.emit('newSale', 9);
 // creating a new instance of an http server
 const server = http.createServer();
 
+// this is an event listener that is emitted every time the server receives a request
+// the console records the request. when the server receives the request 'request received' appears on the localhost
 server.on('request', (req, res) => {
     console.log('request received');
     console.log(req.url);
     res.end('request received');
 });
 
+// this is another event listener that will execute after the one above
 server.on('request', (req, res) => {
     console.log('another request received');
 });
 
+// this closes the server. however there is no functionality inside the callback function that actually closes the server
 server.on('close', () => {
     console.log('server closed')
 });
 
+// this starts the server
 server.listen(8000, '127.0.0.1', () => {
     console.log('waiting for requests...')
 });
