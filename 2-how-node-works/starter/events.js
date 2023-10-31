@@ -1,5 +1,6 @@
-// importing a in-built node module
+// importing an in-built node modules
 const EventEmitter = require('events');
+const http = require('http');
 
 // this new Sales class inherits everything from the EventEmitter class
 // Sales is the parent class. EventEmitter is the superclass
@@ -33,4 +34,25 @@ myEmitter.on('newSale', stock => {
 myEmitter.emit('newSale', 9);
 
 
+/////////////////////////////////
 
+// creating a new instance of an http server
+const server = http.createServer();
+
+server.on('request', (req, res) => {
+    console.log('request received');
+    console.log(req.url);
+    res.end('request received');
+});
+
+server.on('request', (req, res) => {
+    console.log('another request received');
+});
+
+server.on('close', () => {
+    console.log('server closed')
+});
+
+server.listen(8000, '127.0.0.1', () => {
+    console.log('waiting for requests...')
+});
