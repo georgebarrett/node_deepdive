@@ -20,3 +20,15 @@ console.log(calculator1.add(2, 2));
 // this module import has been deconstructed using the {}. this means i can call functions direct
 const { add, subtract, multiply, divide } = require('./testModuleTwo');
 console.log(multiply(10, 10));
+
+
+// caching
+
+// this returns the function that i defined testModuleThree.js
+// there is a top level console.log in testModuleThree.js. this only shows once despite
+// the require being called three times. however, the function in testModule Three fires
+// three times due to it being invoked three times () aka the function was cached but the top level
+// code was not
+require('./testModuleThree')();
+require('./testModuleThree')();
+require('./testModuleThree')();
