@@ -53,7 +53,7 @@ server.on('request', (req, res) => {
 
     // solution 3
     // using the pipe operator to control the speed of data coming in and out
-    const readable = fs.createReadStream('testtttt-file.txt');
+    const readable = fs.createReadStream('test-file.txt');
     readable.pipe(res);
 });
 
