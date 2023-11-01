@@ -9,6 +9,7 @@ const server = require('http').createServer();
 server.on('request', (req, res) => {
     // this code reads the text file in an asynchronous fashion. because it is asynchronous it won't 
     // block the execution of other code whilst the file is being read 
+    
     // fs.readFile('test-file.txt', (err, data) => {
     // once the file has been read or an error has occured then this callback function is executed
     // if (err) console.log(err);
