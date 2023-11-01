@@ -14,5 +14,6 @@ console.log(calculator1.add(2, 2));
 
 // exports
 
+// this is the same as above but without using a class
 const calculator2 = require('./testModuleTwo');
 console.log(calculator2.multiply(10, 10));
