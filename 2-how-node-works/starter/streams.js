@@ -19,7 +19,7 @@ server.on('request', (req, res) => {
 
     // solution 2: streams
     // this approach streams the content of the file to client rather than storing it as a variable and sending the entire piece
-    const readable = fs.createReadStream('testttt-file.txt');
+    const readable = fs.createReadStream('test-file.txt');
     readable.on('data', chunk => {
         // this streams/writes all the data chunk by chunk
         res.write(chunk);
