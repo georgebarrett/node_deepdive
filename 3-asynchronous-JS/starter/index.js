@@ -23,16 +23,19 @@ fs.readFile(`${__dirname}/dog.txt`, (err, data) => {
         .then(result => {
             // always do error handling at the beginning
             // the return stops any further code from being executed
-            if (err) return console.log('this dog breed does not exist');
+            // this error handler is not actually needed due to the catch block below
+            // if (err) return console.log('this dog breed does not exist');
 
             // the result is the data retrieved. the body is the random image from the api
             // and the message refers to 'greyhound' in the dog.txt file 
             console.log(result.body.message);
-            
+
             // i am creating a new file with th write file method and then saying what i want in it
             fs.writeFile('dogImage.txt', result.body.message, err => {
                 if (err) return console.log('dog image could not be saved');
                 console.log('random dog image saved to file');
             });
+        }).catch(err => {
+            console.log(err.message);
         });
 });
