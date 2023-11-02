@@ -35,6 +35,7 @@ fs.readFile(`${__dirname}/dog.txt`, (err, data) => {
                 if (err) return console.log('dog image could not be saved');
                 console.log('random dog image saved to file');
             });
+            // it is great having a .catch because it clearly seperates what i want to happen from the error handling
         }).catch(err => {
             console.log(err.message);
         });
