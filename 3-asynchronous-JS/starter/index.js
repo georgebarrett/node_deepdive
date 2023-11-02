@@ -1,6 +1,21 @@
 const fs = require('fs');
 const superagent = require('superagent');
 
+// this function, behind the scenes reads the file with rs but then returns a promise, which can be
+// used instead of a call back function
+const readFilePro = file => {
+    return new Promise((resolve, reject) => {
+        fs.readFile(file, (err, data) => {
+            // error handler first. this is connected to the .catch method
+            if (err) reject('No file located');
+
+            // the data is the value that the resolve returns aka if the .then is successful
+            // resolve is when a promise has been fulfiled, reject is the opposite
+            resolve(data);
+        });
+    });
+}
+
 // reading file and locating it using __dirname. using the console to print the text
 fs.readFile(`${__dirname}/dog.txt`, (err, data) => {
     console.log(`breed: ${data}`);
