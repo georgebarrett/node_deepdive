@@ -16,8 +16,7 @@ const readFilePro = file => {
     });
 }
 
-// reading file and locating it using __dirname. using the console to print the text
-fs.readFile(`${__dirname}/dog.txt`, (err, data) => {
+readFilePro(`${__dirname}/dog.txt`).then(data => {
     console.log(`breed: ${data}`);
 
     // solution 1
