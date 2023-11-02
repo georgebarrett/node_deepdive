@@ -20,7 +20,7 @@ fs.readFile(`${__dirname}/dog.txt`, (err, data) => {
 
     superagent
         .get(`https://dog.ceo/api/breed/${data}/images/random`)
-        .end((err, result) => {
+        .then(result => {
             // always do error handling at the beginning
             // the return stops any further code from being executed
             if (err) return console.log('this dog breed does not exist');
@@ -28,7 +28,7 @@ fs.readFile(`${__dirname}/dog.txt`, (err, data) => {
             // the result is the data retrieved. the body is the random image from the api
             // and the message refers to 'greyhound' in the dog.txt file 
             console.log(result.body.message);
-
+            
             // i am creating a new file with th write file method and then saying what i want in it
             fs.writeFile('dogImage.txt', result.body.message, err => {
                 if (err) return console.log('dog image could not be saved');
