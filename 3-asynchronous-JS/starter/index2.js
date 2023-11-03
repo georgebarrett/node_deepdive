@@ -42,10 +42,18 @@ const getDogPicture = async () => {
         console.log('random dog image saved to file');
     } catch (err) {
         console.log(err);
-    }   
+    }
+    return '2: process almost complete'   
 }
 
-getDogPicture();
+// top level code
+console.log('1: getting dog pictures');
+// calling main function but adding a .then to incorporate the return value 
+// of getDogPicture and a final console.log
+getDogPicture().then(x => {
+    console.log(x)
+    console.log('3: process complete')
+});
 
 
 // reference for using only .thens and callbacks
