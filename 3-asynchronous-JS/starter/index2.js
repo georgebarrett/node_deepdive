@@ -47,12 +47,18 @@ const getDogPicture = async () => {
     return '2: process almost complete'   
 };
 
+// IIFE function - a function that is made and immediately called
 (async () => {
     try {
+        // this will execute
         console.log('1: getting dog pictures');
+        // no code will execute beyond this point until getDogPicture has finished its work
         const x = await getDogPicture();
+        // saving the function to variable means i can console.log it
         console.log(x)
+        // then this final code snippet fires
         console.log('3: process complete');
+        // if any of the above fail, the code will jump to the catch block and throw the message
     } catch (error) {
         console.log('ERROR');
     }
