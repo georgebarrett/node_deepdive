@@ -33,7 +33,7 @@ const getDogPicture = async () => {
         // the function will wait for the file to be fully read before storing it inside the data variable
         const data = await readFilePromise(`${__dirname}/dog.txt`);
         console.log(`breed: ${data}`);
-    
+
         // when dealing with saving multiple images, i don't want each call to be asynchronous because they
         // can all happen at once. save them all as variables and then use the Promise.all method bellow
         const resultOnePromise = superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
@@ -48,15 +48,15 @@ const getDogPicture = async () => {
         const images = allImagePromises.map(element => element.body.message)
 
         console.log(images)
-    
+
         // no need for a variable because nothing meaningful is being returned. it's just being saved
         await writeFilePromise('dogImage.txt', images.join('\n'));
         console.log('random dog image saved to file');
     } catch (err) {
         console.log(err);
-        throw(err);
+        throw (err);
     }
-    return '2: process almost complete'   
+    return '2: process almost complete'
 };
 
 // IIFE function - a function that is made and immediately called
