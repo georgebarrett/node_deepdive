@@ -15,7 +15,7 @@ const readFilePromise = (file) => {
             resolve(data);
         });
     });
-}
+};
 
 const writeFilePromise = (file, data) => {
     return new Promise((resolve, reject) => {
@@ -25,7 +25,7 @@ const writeFilePromise = (file, data) => {
             resolve('success');
         });
     });
-}
+};
 
 
 const getDogPicture = async () => {
@@ -42,19 +42,31 @@ const getDogPicture = async () => {
         console.log('random dog image saved to file');
     } catch (err) {
         console.log(err);
+        throw(err);
     }
     return '2: process almost complete'   
-}
+};
+
+
+
+// below is an example of error handling but it reverts back to .then and .catch
 
 // top level code
-console.log('1: getting dog pictures');
+// console.log('1: getting dog pictures');
 // calling main function but adding a .then to incorporate the return value 
 // of getDogPicture and a final console.log
-getDogPicture().then(x => {
-    console.log(x)
-    console.log('3: process complete')
-});
+// getDogPicture()
+//     .then(x => {
+//         console.log(x)
+//         console.log('3: process complete')
+//     })
+//     .catch(err => {
+//         console.log('ERROR')
+//     })
 
+
+
+// below is the .then and .catch way of doing the async/await function above
 
 // reference for using only .thens and callbacks
 
