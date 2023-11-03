@@ -27,8 +27,11 @@ const writeFilePromise = (file, data) => {
     });
 }
 
-readFilePromise(`${__dirname}/dog.txt`).then(data => {
-    console.log(`breed: ${data}`);
+// this function returns a promise
+readFilePromise(`${__dirname}/dog.txt`)
+    // the callback function within the .then also returns a promise
+    .then(data => {
+        console.log(`breed: ${data}`);
 
     // solution 1
 
@@ -43,25 +46,26 @@ readFilePromise(`${__dirname}/dog.txt`).then(data => {
 
     // this solution uses the .then method which is far more in vogue and prevents callback hell
 
-    superagent
-        .get(`https://dog.ceo/api/breed/${data}/images/random`)
+        return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
+    })
+        // this .then is chained onto the last. the result is the value of the first resolved promise
         .then(result => {
+        
             // always do error handling at the beginning
-            // the return stops any further code from being executed
-            // this error handler is not actually needed due to the catch block below
-            // if (err) return console.log('this dog breed does not exist');
+        // the return stops any further code from being executed
+        // this error handler is not actually needed due to the catch block below
+        // if (err) return console.log('this dog breed does not exist');
 
-            // the result is the data retrieved. the body is the random image from the api
-            // and the message refers to 'greyhound' in the dog.txt file 
-            console.log(result.body.message);
+        // the result is the data retrieved. the body is the random image from the api
+        // and the message refers to 'greyhound' in the dog.txt file 
+        console.log(result.body.message);
 
-            // i am creating a new file with th write file method and then saying what i want in it
-            fs.writeFile('dogImage.txt', result.body.message, err => {
-                if (err) return console.log('dog image could not be saved');
-                console.log('random dog image saved to file');
-            });
-            // it is great having a .catch because it clearly seperates what i want to happen from the error handling
-        }).catch(err => {
-            console.log(err.message);
+        // i am creating a new file with th write file method and then saying what i want in it
+        fs.writeFile('dogImage.txt', result.body.message, err => {
+            if (err) return console.log('dog image could not be saved');
+            console.log('random dog image saved to file');
         });
-});
+        // it is great having a .catch because it clearly seperates what i want to happen from the error handling
+    }).catch(err => {
+        console.log(err.message);
+    });
