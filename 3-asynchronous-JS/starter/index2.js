@@ -27,21 +27,43 @@ const writeFilePromise = (file, data) => {
     });
 }
 
-// this function returns a promise
-readFilePromise(`${__dirname}/dog.txt`)
-    .then(data => {
+
+const getDogPicture = async () => {
+    try {
+        // the function will wait for the file to be fully read before storing it inside the data variable
+        const data = await readFilePromise(`${__dirname}/dog.txt`);
         console.log(`breed: ${data}`);
-
-        return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`)
-    })
-    .then(result => {
+    
+        const result = await superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
         console.log(result.body.message);
-
-        return writeFilePromise('dogImage.txt', result.body.message);
-    })
-    .then(() => {
+    
+        // no need for a variable because nothing meaningful is being returned. it's just being saved
+        await writeFilePromise('dogImage.txt', result.body.message);
         console.log('random dog image saved to file');
-    })
-    .catch(err => {
-        console.log(err.message);
-    });
+    } catch (err) {
+        console.log(err);
+    }   
+}
+
+getDogPicture();
+
+
+// reference for using only .thens and callbacks
+
+// readFilePromise(`${__dirname}/dog.txt`)
+//     .then(data => {
+//         console.log(`breed: ${data}`);
+
+//         return superagent.get(`https://dog.ceo/api/breed/${data}/images/random`);
+//     })
+//     .then(result => {
+//         console.log(result.body.message);
+
+//         return writeFilePromise('dogImage.txt', result.body.message);
+//     })
+//     .then(() => {
+//         console.log('random dog image saved to file');
+//     })
+//     .catch(err => {
+//         console.log(err.message);
+//     });
