@@ -1,13 +1,14 @@
 const fs = require('fs');
+const { resolve } = require('path');
 const superagent = require('superagent');
 
 // this function, behind the scenes reads the file with rs but then returns a promise, which can be
 // used instead of a call back function
-const readFilePro = file => {
+const readFilePromise = (file) => {
     return new Promise((resolve, reject) => {
         fs.readFile(file, (err, data) => {
             // error handler first. this is connected to the .catch method
-            if (err) reject('No file located');
+            if (err) reject('no file located');
 
             // the data is the value that the resolve returns aka if the .then is successful
             // resolve is when a promise has been fulfiled, reject is the opposite
@@ -16,14 +17,24 @@ const readFilePro = file => {
     });
 }
 
-readFilePro(`${__dirname}/dog.txt`).then(data => {
+const writeFilePromise = (file, data) => {
+    return new Promise((resolve, reject) => {
+        fs.writeFile(file, data, err => {
+            if (err) reject('the file has not been saved');
+            // a promise does not have to always return a meaningful value
+            resolve('success');
+        });
+    });
+}
+
+readFilePromise(`${__dirname}/dog.txt`).then(data => {
     console.log(`breed: ${data}`);
 
     // solution 1
-    
+
     // superagent module allows for get requests to api
     // without the .end method the request would not be finalised. the body refers to the random dog image
-    
+
     // superagent.get(`https://dog.ceo/api/breed/${data}/images/random`).end((err, result) => {
     //     console.log(result.body);
     // });
