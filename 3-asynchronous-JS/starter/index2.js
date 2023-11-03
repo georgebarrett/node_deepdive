@@ -47,7 +47,16 @@ const getDogPicture = async () => {
     return '2: process almost complete'   
 };
 
-
+(async () => {
+    try {
+        console.log('1: getting dog pictures');
+        const x = await getDogPicture();
+        console.log(x)
+        console.log('3: process complete');
+    } catch (error) {
+        console.log('ERROR');
+    }
+})();
 
 // below is an example of error handling but it reverts back to .then and .catch
 
