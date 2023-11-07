@@ -43,9 +43,31 @@ app.get('/api/v1/tours', (req, res) => {
 // the request object is what holds all the data that is been posted
 app.post('/api/v1/tours', (req, res) => {
     // body refers to the object data that is attached to the request
-    console.log(req.body);
-    // this is sending back a response
-    res.send('response');
+    // console.log(req.body);
+
+    // because there is no database and the data is coming from a regular .js file
+    // use the [tours.length - 1] to find the last posted tour object
+    // the .id accesses the id of the last tour object
+    // the + 1 generates a 
+    const newId = tours[tours.length - 1].id + 1
+
+    // object.assign allows for creation of a new object by merging two existing objects together
+    // the new object tour has been created and stored in newTour
+    const newTour = Object.assign({ id: newId }, req.body);
+
+    // the tours array now has the new tour pushed in with its id
+    tours.push(newTour);
+
+    // writeFileSync would block the event loop!
+    fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
+        // status 201 means created
+        res.status(201).json({
+            status: 'success',
+            data: {
+                tour: newTour
+            }
+        });
+    });
 });
 
 const port = 3000;
