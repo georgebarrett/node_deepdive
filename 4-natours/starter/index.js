@@ -31,7 +31,7 @@ app.get('/api/v1/tours', (req, res) => {
         // the status of the get request
         status: 'success',
         // providing the length of the tours makes it easy for a programmer to see the quantity
-        results: tours.length, 
+        results: tours.length,
         // data: is an envelope that contains the actual data response object
         data: {
             // key/url endpoint and value/tours variable
