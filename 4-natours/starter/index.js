@@ -1,9 +1,15 @@
 const fs = require('fs');
 const express = require('express');
 const { request } = require('http');
+const morgan = require('morgan');
 const tourController = require('./controllers');
 
 const app = express();
+
+// MIDDLEWARE
+
+// when a request is made, morgan shows some useful stuff in the console
+app.use(morgan('dev'));
 
 // express.json is middleware so that data from the client side can be attached to request objects
 app.use(express.json());
@@ -22,6 +28,8 @@ app.use((req, res, next) => {
     next();
 });
 
+// ROUTES
+
 // by adding v1, i can work on v2 without messing with the original request setup
 app.get('/api/v1/tours', tourController.getAllTours);
 
@@ -33,6 +41,8 @@ app.post('/api/v1/tours', tourController.createTour);
 app.patch('/api/v1/tours/:id', tourController.updateTour);
 
 app.delete('/api/v1/tours/:id', tourController.deleteTour);
+
+// STARTING SERVER
 
 const port = 3000;
 app.listen(port, () => {
