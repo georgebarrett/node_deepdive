@@ -40,6 +40,45 @@ app.get('/api/v1/tours', (req, res) => {
     });
 });
 
+// the : creates a variable called id
+app.get('/api/v1/tours/:id', (req, res) => {
+    // the params refer to the variables stored un the url :id
+    // /api/v1/tours/5 will automatically asign the :id variable to 5
+    console.log(req.params);
+
+    // req.params.id returns a string with the id number inside
+    // by multiplying the string by one, it will convert the string to an integer
+    const id = req.params.id * 1;
+
+    // SOLUTION 1
+    // if (id > tours.length) {
+    //     return res.status(404).json({
+    //         status: 'fail',
+    //         message: 'invalid id'
+    //     });
+    // }
+
+    // .find creates a new array with the tour that matches the tour in the params
+    const tour = tours.find(element => element.id === id);
+
+    // SOLUTION 2
+    // because the tour variable maps through all the tours using .find, if there is no match
+    // then the error can be handled like this...
+    if (!tour) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'invalid id'
+        });
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour: tour
+        }
+    });
+});
+
 // the request object is what holds all the data that is been posted
 app.post('/api/v1/tours', (req, res) => {
     // body refers to the object data that is attached to the request
