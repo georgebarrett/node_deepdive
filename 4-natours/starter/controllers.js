@@ -6,10 +6,12 @@ const tours = JSON.parse(
 );
 
 const getAllTours = (req, res) => {
+    console.log(req.requestTime);
     // .json is a send method that send a json object
     res.status(200).json({
         // the status of the get request
         status: 'success',
+        requestedAt: req.requestTime,
         // providing the length of the tours makes it easy for a programmer to see the quantity
         results: tours.length,
         // data: is an envelope that contains the actual data response object
