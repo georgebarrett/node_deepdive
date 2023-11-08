@@ -7,26 +7,13 @@ const app = express();
 // express.json is middleware so that data from the client side can be attached to request objects
 app.use(express.json());
 
-// once the home page url has been hit. the callback function will fire
-// app.get('/', (req, res) => {
-//     // using the response object to send a json object. the .json method is a send method
-//     res.status(200).json({
-//         message: 'come to the Serverside Luke',
-//         app: 'Natours'
-//     });
-// });
-
-// app.post('/', (req, res) => {
-//     res.send('you can post stuff to this endpoint...')
-// });
-
 // JSON.parse means the json from the file will automatically be converted into a javascript object
 const tours = JSON.parse(
     fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
 );
 
-// by adding v1, i can work on v2 without messing with the original request setup
-app.get('/api/v1/tours', (req, res) => {
+const getAllTours = (req, res) => {
+    // .json is a send method that send a json object
     res.status(200).json({
         // the status of the get request
         status: 'success',
@@ -38,10 +25,9 @@ app.get('/api/v1/tours', (req, res) => {
             tours: tours
         }
     });
-});
+};
 
-// the : creates a variable called id
-app.get('/api/v1/tours/:id', (req, res) => {
+const getTourById = (req, res) => {
     // the params refer to the variables stored un the url :id
     // /api/v1/tours/5 will automatically asign the :id variable to 5
     console.log(req.params);
@@ -77,10 +63,10 @@ app.get('/api/v1/tours/:id', (req, res) => {
             tour: tour
         }
     });
-});
+};
 
-// the request object is what holds all the data that is been posted
-app.post('/api/v1/tours', (req, res) => {
+const createTour = (req, res) => {
+    // the request object refers to the data that is being posted
     // body refers to the object data that is attached to the request
     // console.log(req.body);
 
@@ -107,9 +93,9 @@ app.post('/api/v1/tours', (req, res) => {
             }
         });
     });
-});
+};
 
-app.patch('/api/v1/tours/:id', (req, res) => {
+const updateTour = (req, res) => {
     // the * 1 converts the params string into an integer
     if (req.params.id * 1 > tours.length) {
         return res.status(404).json({
@@ -124,9 +110,9 @@ app.patch('/api/v1/tours/:id', (req, res) => {
             tour: 'tour updated'
         }
     })
-});
+};
 
-app.delete('/api/v1/tours/:id', (req, res) => {
+const deleteTour = (req, res) => {
     if (req.params.id * 1 > tours.length) {
         return res.status(404).json({
             status: 'fail',
@@ -142,7 +128,19 @@ app.delete('/api/v1/tours/:id', (req, res) => {
             tour: null
         }
     });
-});
+};
+
+// by adding v1, i can work on v2 without messing with the original request setup
+app.get('/api/v1/tours', getAllTours);
+
+// the : creates a variable called id
+app.get('/api/v1/tours/:id', getTourById);
+
+app.post('/api/v1/tours', createTour);
+
+app.patch('/api/v1/tours/:id', updateTour);
+
+app.delete('/api/v1/tours/:id', deleteTour);
 
 const port = 3000;
 app.listen(port, () => {
