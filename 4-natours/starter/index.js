@@ -109,6 +109,41 @@ app.post('/api/v1/tours', (req, res) => {
     });
 });
 
+app.patch('/api/v1/tours/:id', (req, res) => {
+    // the * 1 converts the params string into an integer
+    if (req.params.id * 1 > tours.length) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'invalid id'
+        });
+    }
+    
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour: 'tour updated'
+        }
+    })
+});
+
+app.delete('/api/v1/tours/:id', (req, res) => {
+    if (req.params.id * 1 > tours.length) {
+        return res.status(404).json({
+            status: 'fail',
+            message: 'invalid id'
+        });
+    }
+   
+    // 204 means 'no content'
+    res.status(204).json({
+        status: 'success',
+        data: {
+            // null proves the data i deleted no longer exists
+            tour: null
+        }
+    });
+});
+
 const port = 3000;
 app.listen(port, () => {
     console.log(`${port}...`)
