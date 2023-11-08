@@ -2,7 +2,7 @@ const fs = require('fs');
 const express = require('express');
 const { request } = require('http');
 const morgan = require('morgan');
-const tourController = require('./controllers');
+const toursController = require('./toursController');
 
 const app = express();
 
@@ -31,16 +31,16 @@ app.use((req, res, next) => {
 // ROUTES
 
 // by adding v1, i can work on v2 without messing with the original request setup
-app.get('/api/v1/tours', tourController.getAllTours);
+app.get('/api/v1/tours', toursController.getAllTours);
 
 // the : creates a variable called id
-app.get('/api/v1/tours/:id', tourController.getTourById);
+app.get('/api/v1/tours/:id', toursController.getTourById);
 
-app.post('/api/v1/tours', tourController.createTour);
+app.post('/api/v1/tours', toursController.createTour);
 
-app.patch('/api/v1/tours/:id', tourController.updateTour);
+app.patch('/api/v1/tours/:id', toursController.updateTour);
 
-app.delete('/api/v1/tours/:id', tourController.deleteTour);
+app.delete('/api/v1/tours/:id', toursController.deleteTour);
 
 // STARTING SERVER
 
