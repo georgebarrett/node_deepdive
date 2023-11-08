@@ -3,8 +3,10 @@ const express = require('express');
 const { request } = require('http');
 const morgan = require('morgan');
 const toursController = require('./toursController');
+const usersController = require('./usersController');
 
 const app = express();
+
 
 // MIDDLEWARE
 
@@ -28,7 +30,8 @@ app.use((req, res, next) => {
     next();
 });
 
-// ROUTES
+
+// TOURS ROUTES
 
 // by adding v1, i can work on v2 without messing with the original request setup
 app.get('/api/v1/tours', toursController.getAllTours);
@@ -41,6 +44,20 @@ app.post('/api/v1/tours', toursController.createTour);
 app.patch('/api/v1/tours/:id', toursController.updateTour);
 
 app.delete('/api/v1/tours/:id', toursController.deleteTour);
+
+
+// USERS ROUTES
+
+app.get('/api/v1/users', toursController.getAllTours);
+
+app.get('/api/v1/users/:id', usersController.getAllUsers);
+
+app.post('/api/v1/users', usersController.getUserById);
+
+app.patch('/api/v1/users/:id', usersController.updateUser);
+
+app.delete('/api/v1/users/:id', usersController.deleteUser);
+
 
 // STARTING SERVER
 
