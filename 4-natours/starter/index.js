@@ -1,9 +1,7 @@
-const fs = require('fs');
 const express = require('express');
-const { request } = require('http');
 const morgan = require('morgan');
-const toursController = require('./controllers/toursController');
-const usersController = require('./controllers/usersController');
+const tourRoutes = require('./routes/tourRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -30,33 +28,9 @@ app.use((req, res, next) => {
     next();
 });
 
-
-// TOURS ROUTES
-
-// by adding v1, i can work on v2 without messing with the original request setup
-app.get('/api/v1/tours', toursController.getAllTours);
-
-// the : creates a variable called id
-app.get('/api/v1/tours/:id', toursController.getTourById);
-
-app.post('/api/v1/tours', toursController.createTour);
-
-app.patch('/api/v1/tours/:id', toursController.updateTour);
-
-app.delete('/api/v1/tours/:id', toursController.deleteTour);
-
-
-// USERS ROUTES
-
-app.get('/api/v1/users', toursController.getAllTours);
-
-app.get('/api/v1/users/:id', usersController.getAllUsers);
-
-app.post('/api/v1/users', usersController.getUserById);
-
-app.patch('/api/v1/users/:id', usersController.updateUser);
-
-app.delete('/api/v1/users/:id', usersController.deleteUser);
+// adding v1 is a form of version control
+app.use('/api/v1/tours', tourRoutes);
+app.use('/api/v1/users', userRoutes);
 
 
 // STARTING SERVER
