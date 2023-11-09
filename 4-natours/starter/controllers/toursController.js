@@ -118,10 +118,8 @@ const deleteTour = (req, res) => {
     // 204 means 'no content'
     res.status(204).json({
         status: 'success',
-        data: {
-            // null proves the data i deleted no longer exists
-            tour: null
-        }
+        // null proves the data i deleted no longer exists
+        data: null
     });
 };
 
