@@ -5,6 +5,7 @@ const routes = express();
 
 // the value holds the id parameter
 // this middleware function only applies to the tours 
+// this essentially just checks the url for invalid ids and then fires an error handling function
 routes.param('id', toursController.checkId);
 
 routes
