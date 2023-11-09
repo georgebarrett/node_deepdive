@@ -5,6 +5,19 @@ const tours = JSON.parse(
     fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+const checkId = (req, res, next, value) => {
+    console.log(`tour id is: ${value}`)
+    // * 1 will convert a string into an integer
+    if (req.params.id * 1 > tours.length) {
+        // without the return node would continue running the code and hit the next function
+        return res.status(404).json({
+            status: 'fail',
+            message: 'invalid id'
+        });
+    }
+    next();
+};
+
 const getAllTours = (req, res) => {
     console.log(req.requestTime);
     // .json is a send method that send a json object
@@ -31,26 +44,8 @@ const getTourById = (req, res) => {
     // by multiplying the string by one, it will convert the string to an integer
     const id = req.params.id * 1;
 
-    // SOLUTION 1
-    // if (id > tours.length) {
-    //     return res.status(404).json({
-    //         status: 'fail',
-    //         message: 'invalid id'
-    //     });
-    // }
-
     // .find creates a new array with the tour that matches the tour in the params
-    const tour = tours.find(element => element.id === id);
-
-    // SOLUTION 2
-    // because the tour variable maps through all the tours using .find, if there is no match
-    // then the error can be handled like this...
-    if (!tour) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'invalid id'
-        });
-    }
+    const tour = tours.find(element => element.id === id);    
 
     res.status(200).json({
         status: 'success',
@@ -91,14 +86,6 @@ const createTour = (req, res) => {
 };
 
 const updateTour = (req, res) => {
-    // the * 1 converts the params string into an integer
-    if (req.params.id * 1 > tours.length) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'invalid id'
-        });
-    }
-    
     res.status(200).json({
         status: 'success',
         data: {
@@ -108,13 +95,6 @@ const updateTour = (req, res) => {
 };
 
 const deleteTour = (req, res) => {
-    if (req.params.id * 1 > tours.length) {
-        return res.status(404).json({
-            status: 'fail',
-            message: 'invalid id'
-        });
-    }
-   
     // 204 means 'no content'
     res.status(204).json({
         status: 'success',
@@ -128,5 +108,6 @@ module.exports = {
     getTourById,
     createTour,
     updateTour,
-    deleteTour
+    deleteTour,
+    checkId
 };
