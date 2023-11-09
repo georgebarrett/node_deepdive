@@ -131,4 +131,4 @@ module.exports = {
     createTour,
     updateTour,
     deleteTour
-}
+};
