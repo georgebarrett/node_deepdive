@@ -33,9 +33,4 @@ app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
 
 
-// STARTING SERVER
-
-const port = 3000;
-app.listen(port, () => {
-    console.log(`${port}...`)
-});
+module.exports = app;
