@@ -48,7 +48,7 @@ const getTourById = (req, res) => {
     const id = req.params.id * 1;
 
     // .find creates a new array with the tour that matches the tour in the params
-    const tour = tours.find(element => element.id === id);    
+    const tour = tours.find(element => element.id === id);
 
     res.status(200).json({
         status: 'success',
