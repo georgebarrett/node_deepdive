@@ -2,7 +2,7 @@ const fs = require('fs');
 
 // JSON.parse means the json from the file will automatically be converted into a javascript object
 const tours = JSON.parse(
-    fs.readFileSync(`${__dirname}/dev-data/data/tours-simple.json`)
+    fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
 const getAllUsers = (req, res) => {
