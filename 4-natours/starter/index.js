@@ -2,8 +2,8 @@ const fs = require('fs');
 const express = require('express');
 const { request } = require('http');
 const morgan = require('morgan');
-const toursController = require('./toursController');
-const usersController = require('./usersController');
+const toursController = require('./controllers/toursController');
+const usersController = require('./controllers/usersController');
 
 const app = express();
 
