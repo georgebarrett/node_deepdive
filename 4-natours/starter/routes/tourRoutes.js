@@ -12,7 +12,6 @@ routes
     // adding :id creates a variable in the url that can store an id integer
     .route('/:id')
     .get(toursController.getTourById)
-    .post(toursController.createTour)
     .patch(toursController.updateTour)
     .delete(toursController.deleteTour)
 
