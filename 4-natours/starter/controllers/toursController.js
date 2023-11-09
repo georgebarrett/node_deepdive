@@ -5,6 +5,9 @@ const tours = JSON.parse(
     fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+// this middleware function is following best express practice.
+// creating an error handling function and storing it in a variable and then adding this to each function
+// would not be following the middleware pipeline convention
 const checkId = (req, res, next, value) => {
     console.log(`tour id is: ${value}`)
     // * 1 will convert a string into an integer
