@@ -22,6 +22,7 @@ const checkId = (req, res, next, value) => {
 };
 
 // this great middleware function checks the body of the request for certain things before next()
+// the point of middleware functions is to remove all aspects of the main functions leaving only the core
 const checkBody = (req, res, next) => {
     if (!req.body.name || !req.body.price) {
         // 400 is bad request
