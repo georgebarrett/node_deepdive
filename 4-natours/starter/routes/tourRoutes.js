@@ -11,7 +11,9 @@ routes.param('id', toursController.checkId);
 routes
     .route('/')
     .get(toursController.getAllTours)
-    .post(toursController.createTour)
+    // chaining middleware pipelines. the checkBody middleware function has to fully execute before
+    // the createTour function fires
+    .post(toursController.checkBody, toursController.createTour)
 
 routes
     // adding :id creates a variable in the url that can store an id integer

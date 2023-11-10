@@ -21,6 +21,18 @@ const checkId = (req, res, next, value) => {
     next();
 };
 
+// this great middleware function checks the body of the request for certain things before next()
+const checkBody = (req, res, next) => {
+    if (!req.body.name || !req.body.price) {
+        // 400 is bad request
+        return res.status(400).json({
+            status: 'fail',
+            message: 'invalid name and/or price'
+        });
+    }
+    next();
+};
+
 const getAllTours = (req, res) => {
     console.log(req.requestTime);
     // .json is a send method that send a json object
@@ -112,5 +124,6 @@ module.exports = {
     createTour,
     updateTour,
     deleteTour,
-    checkId
+    checkId,
+    checkBody
 };
