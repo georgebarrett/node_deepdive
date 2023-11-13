@@ -13,7 +13,7 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
     // when a request is made, morgan shows some useful stuff in the console
     app.use(morgan('dev')); 
-}
+};
 
 // express.json is middleware so that data from the client side can be attached to request objects
 app.use(express.json());
