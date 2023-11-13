@@ -1,12 +1,13 @@
 const dotenv = require('dotenv');
+dotenv.config({ path: './config.env' });
 const app = require('./index');
 
-dotenv.config({ path: './config.env' });
-
-console.log(process.env);
+// console.log(process.env);
 
 // STARTING SERVER
-const port = 3000;
+// if the 'development' envrionment is activated then the project will work in PORT (defined in .env)
+// if not then the project will run on port 3000
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`${port}...`)
 });
