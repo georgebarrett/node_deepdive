@@ -8,8 +8,12 @@ const app = express();
 
 // MIDDLEWARE
 
-// when a request is made, morgan shows some useful stuff in the console
-app.use(morgan('dev'));
+// morgan is in this if statement so it will only be activated when the 'development' envirnoment is activated
+// this is due to morgan being able to display sensitive information.
+if (process.env.NODE_ENV === 'development') {
+    // when a request is made, morgan shows some useful stuff in the console
+    app.use(morgan('dev')); 
+}
 
 // express.json is middleware so that data from the client side can be attached to request objects
 app.use(express.json());
