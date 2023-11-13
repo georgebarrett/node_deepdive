@@ -10,6 +10,8 @@ const app = express();
 
 // morgan is in this if statement so it will only be activated when the 'development' envirnoment is activated
 // this is due to morgan being able to display sensitive information.
+// this console log will tell me which environment i am in in throught the terminal
+console.log(process.env.NODE_ENV)
 if (process.env.NODE_ENV === 'development') {
     // when a request is made, morgan shows some useful stuff in the console
     app.use(morgan('dev')); 
