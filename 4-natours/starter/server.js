@@ -45,27 +45,36 @@ const tourSchema = new mongoose.Schema({
 // 'tours' makes a collection called tours within the tours_database
 const Tour = mongoose.model('tours', tourSchema);
 
+
+
+// FUNCTIONS TO TEST SENDING DATA TO THE DATABASE
+
+
 // this function creates a new instance of the Tour model and then provides an example schema
-const testTour = new Tour({
-    name: 'Tour of Pluto',
-    rating: 4.9,
-    price: 100
-});
+// const testTour = new Tour({
+//     name: 'Tour of Pluto',
+//     rating: 4.9,
+//     price: 100
+// });
 
 // this will save the testTour object to the mongo collection
-const saveTestTour = async () => {
-    try {
-        const document = await testTour.save();
-        console.log(document);    
-    } catch (error) {
-        console.log('error', error);
-    }
-};
-saveTestTour();
+// const saveTestTour = async () => {
+//     try {
+//         const document = await testTour.save();
+//         console.log(document);    
+//     } catch (error) {
+//         console.log('error', error);
+//     }
+// };
+// saveTestTour();
 
 // console.log(process.env);
 
+
+
 // STARTING SERVER
+
+
 // if the 'development' envrionment is activated then the project will work in PORT (defined in .env)
 // if not then the project will run on port 3000
 const port = process.env.PORT || 3000;
