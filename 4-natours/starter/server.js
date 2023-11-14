@@ -41,6 +41,12 @@ const tourSchema = new mongoose.Schema({
     }
 });
 
+// by convention models should start with a capital
+// models take the data schema and allow for crud operations
+const Tour = mongoose.model('Tour', tourSchema);
+
+
+
 // console.log(process.env);
 
 // STARTING SERVER
