@@ -42,6 +42,7 @@ const tourSchema = new mongoose.Schema({
 
 // by convention models should start with a capital
 // models take the data schema and allow for crud operations
+// 'tours' makes a collection called tours within the tours_database
 const Tour = mongoose.model('tours', tourSchema);
 
 // this function creates a new instance of the Tour model and then provides an example schema
