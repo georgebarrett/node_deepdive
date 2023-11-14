@@ -17,7 +17,6 @@ const connectdb = async () => {
         console.error('database connection failed', error);
     }
 };
-// classic invoking the function
 connectdb();
 
 // outlining the schema and storing it in a variable
@@ -43,9 +42,25 @@ const tourSchema = new mongoose.Schema({
 
 // by convention models should start with a capital
 // models take the data schema and allow for crud operations
-const Tour = mongoose.model('Tour', tourSchema);
+const Tour = mongoose.model('tours', tourSchema);
 
+// this function creates a new instance of the Tour model and then provides an example schema
+const testTour = new Tour({
+    name: 'Tour of Pluto',
+    rating: 4.9,
+    price: 100
+});
 
+// this will save the testTour object to the mongo collection
+const saveTestTour = async () => {
+    try {
+        const document = await testTour.save();
+        console.log(document);    
+    } catch (error) {
+        console.log('error', error);
+    }
+};
+saveTestTour();
 
 // console.log(process.env);
 
