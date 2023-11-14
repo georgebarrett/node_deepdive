@@ -26,4 +26,4 @@ const tourSchema = new mongoose.Schema({
 // 'tours' makes a collection called tours within the tours_database
 const Tour = mongoose.model('tours', tourSchema);
 
-module.exports = Tour; 
+module.exports = Tour;
