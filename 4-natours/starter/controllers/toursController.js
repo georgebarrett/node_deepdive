@@ -60,7 +60,7 @@ const getAllTours = async (req, res) => {
     } catch (error) {
         res.status(404).json({
             status: 'failed',
-            message: 'unable to retrieve tours data'
+            message: 'unable to get tours data'
         });
     }
 
@@ -79,24 +79,41 @@ const getAllTours = async (req, res) => {
     // });
 };
 
-const getTourById = (req, res) => {
+const getTourById = async (req, res) => {
+    try {
+        // req = is the url request. params = the variables within the url. id = the param that is being latched onto
+        const tourById = await Tour.findById(req.params.id);
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                tour: tourById
+            }
+        }); 
+    } catch (error) {
+        res.status(404).json({
+            status: 'failed',
+            message: 'unable to get tour'
+        });
+    }
+    
     // the params refer to the variables stored un the url :id
     // /api/v1/tours/5 will automatically asign the :id variable to 5
-    console.log(req.params);
+    // console.log(req.params);
 
     // req.params.id returns a string with the id number inside
     // by multiplying the string by one, it will convert the string to an integer
-    const id = req.params.id * 1;
+    // const id = req.params.id * 1;
 
     // .find creates a new array with the tour that matches the tour in the params
-    const tour = tours.find(element => element.id === id);
+    // const tour = tours.find(element => element.id === id);
 
-    res.status(200).json({
-        status: 'success',
-        data: {
-            tour: tour
-        }
-    });
+    // res.status(200).json({
+    //     status: 'success',
+    //     data: {
+    //         tour: tour
+    //     }
+    // });
 };
 
 const createTour = async (req, res) => {
@@ -149,13 +166,27 @@ const createTour = async (req, res) => {
     // });
 };
 
-const updateTour = (req, res) => {
-    res.status(200).json({
-        status: 'success',
-        data: {
-            tour: 'tour updated'
-        }
-    })
+const updateTour = async (req, res) => {
+    try {
+        // the req.body refers to what will be updated
+        const update = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+            // this ensures that the new updated document is the one that will be returned
+            new: true
+        });
+        
+        res.status(200).json({
+            status: 'success',
+            message: 'tour updated',
+            data: {
+                tour: update
+            }
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: 'failure',
+            message: 'tour update failed'
+        });
+    }
 };
 
 const deleteTour = (req, res) => {
