@@ -1,38 +1,46 @@
-const fs = require('fs');
+// const fs = require('fs');
+const Tour = require('../models/tourModel');
+
+// USE OF JSON.PARSE
 
 // JSON.parse means the json from the file will automatically be converted into a javascript object
-const tours = JSON.parse(
-    fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-);
+// const tours = JSON.parse(
+//     fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
+// );
+
+
+// USE OF MIDDLEWARE (i don't need a checkId function because mongodb automatically asigns an id)
 
 // this middleware function is following best express practice.
 // creating an error handling function and storing it in a variable and then adding this to each function
 // would not be following the middleware pipeline convention
-const checkId = (req, res, next, value) => {
-    console.log(`tour id is: ${value}`)
-    // * 1 will convert a string into an integer
-    if (req.params.id * 1 > tours.length) {
-        // without the return node would continue running the code and hit the next function
-        return res.status(404).json({
-            status: 'fail',
-            message: 'invalid id'
-        });
-    }
-    next();
-};
+// const checkId = (req, res, next, value) => {
+//     console.log(`tour id is: ${value}`)
+//     // * 1 will convert a string into an integer
+//     if (req.params.id * 1 > tours.length) {
+//         // without the return node would continue running the code and hit the next function
+//         return res.status(404).json({
+//             status: 'fail',
+//             message: 'invalid id'
+//         });
+//     }
+//     next();
+// };
 
 // this great middleware function checks the body of the request for certain things before next()
 // the point of middleware functions is to remove all aspects of the main functions leaving only the core
-const checkBody = (req, res, next) => {
-    if (!req.body.name || !req.body.price) {
-        // 400 is bad request
-        return res.status(400).json({
-            status: 'fail',
-            message: 'invalid name and/or price'
-        });
-    }
-    next();
-};
+// const checkBody = (req, res, next) => {
+//     if (!req.body.name || !req.body.price) {
+//         // 400 is bad request
+//         return res.status(400).json({
+//             status: 'fail',
+//             message: 'invalid name and/or price'
+//         });
+//     }
+//     next();
+// };
+
+
 
 const getAllTours = (req, res) => {
     console.log(req.requestTime);
@@ -71,7 +79,17 @@ const getTourById = (req, res) => {
     });
 };
 
-const createTour = (req, res) => {
+const createTour = async (req, res) => {
+    // saving the result value of the promise in a variable. req.body is the data that comes with the post
+    const newTour = await Tour.create(req.body);
+
+    res.status(201).json({
+        status: 'success',
+        data: {
+            tour: newTour
+        }
+    });
+
     // the request object refers to the data that is being posted
     // body refers to the object data that is attached to the request
     // console.log(req.body);
@@ -80,25 +98,25 @@ const createTour = (req, res) => {
     // use the [tours.length - 1] to find the last posted tour object
     // the .id accesses the id of the last tour object
     // the + 1 generates a 
-    const newId = tours[tours.length - 1].id + 1
+    // const newId = tours[tours.length - 1].id + 1
 
     // object.assign allows for creation of a new object by merging two existing objects together
     // the new object tour has been created and stored in newTour
-    const newTour = Object.assign({ id: newId }, req.body);
+    // const newTour = Object.assign({ id: newId }, req.body);
 
     // the tours array now has the new tour pushed in with its id
-    tours.push(newTour);
+    // tours.push(newTour);
 
     // writeFileSync would block the event loop!
-    fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
-        // status 201 means created
-        res.status(201).json({
-            status: 'success',
-            data: {
-                tour: newTour
-            }
-        });
-    });
+    // fs.writeFile(`${__dirname}/dev-data/data/tours-simple.json`, JSON.stringify(tours), err => {
+    //     status 201 means created
+    //     res.status(201).json({
+    //         status: 'success',
+    //         data: {
+    //             tour: newTour
+    //         }
+    //     });
+    // });
 };
 
 const updateTour = (req, res) => {
@@ -124,7 +142,5 @@ module.exports = {
     getTourById,
     createTour,
     updateTour,
-    deleteTour,
-    checkId,
-    checkBody
+    deleteTour
 };
