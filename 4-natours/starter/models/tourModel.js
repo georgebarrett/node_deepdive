@@ -43,8 +43,27 @@ const tourSchema = new mongoose.Schema({
     discount: Number,
     summary: {
         type: String,
+        trim: true,
+        required: [true, 'a tour summary must be provided']
+    },
+    description: {
+        type: String,
         trim: true
-    }
+    },
+    imageCover: {
+        // this will be the name of the image
+        type: String,
+        required: [true, 'a tour must have a cover image']
+    },
+    // this will save the names of the images in an array of strings
+    images: [String],
+    createdAt: {
+        // creates a timestamp
+        type: Date,
+        default: Date.now()
+    },
+    // this will save the dates in an array of strings
+    startDates: [Date]
 });
 
 // by convention models should start with a capital
