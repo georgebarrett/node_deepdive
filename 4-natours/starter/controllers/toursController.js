@@ -189,13 +189,30 @@ const updateTour = async (req, res) => {
     }
 };
 
-const deleteTour = (req, res) => {
+const deleteTour = async (req, res) => {
+    try {
+        const remove = await Tour.findByIdAndDelete(req.params.id);
+
+        res.status(200).json({
+            status: 'success',
+            message: 'tour deleted',
+            data: {
+                tour: remove
+            }
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: 'fail',
+            message: 'tour not deleted'
+        });
+    }
+    
     // 204 means 'no content'
-    res.status(204).json({
-        status: 'success',
-        // null proves the data i deleted no longer exists
-        data: null
-    });
+    // res.status(204).json({
+    //     status: 'success',
+    //     null proves the data i deleted no longer exists
+    //     data: null
+    // });
 };
 
 module.exports = {
