@@ -7,17 +7,43 @@ const tourSchema = new mongoose.Schema({
         // the error handling is in the string. square braces essential
         required: [true, 'a tour must have a name'],
         // true ensures that no two documents can have the same name
-        unique: true
+        unique: true,
+        // trim removes the white spaces in the string
+        trim: true
     },
     rating: {
         type: Number,
         // default means that if no rating is left by the user, 4.5 will automatically be assigned
         default: 4.5
-
+    },
+    duration: {
+        type: Number,
+        required: [true, 'a tour must have a duration']
+    },
+    maxGroupSize: {
+        type: Number,
+        required: [true, 'a tour must have a maximum group size']
+    },
+    diffuculty: {
+        type: String,
+        required: [true, 'a tour must have a difficulty rating']
+    },
+    ratingsAverage: {
+        type: Number,
+        default: 4.5
+    },
+    ratingsQuantity: {
+        type: Number,
+        default: 0
     },
     price: {
         type: Number,
         required: [true, 'a tour must have a price']
+    },
+    discount: Number,
+    summary: {
+        type: String,
+        trim: true
     }
 });
 
