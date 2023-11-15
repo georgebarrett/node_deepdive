@@ -1,4 +1,4 @@
-// const fs = require('fs');
+const fs = require('fs');
 const Tour = require('../models/tourModel');
 
 // USE OF JSON.PARSE
@@ -80,15 +80,25 @@ const getTourById = (req, res) => {
 };
 
 const createTour = async (req, res) => {
-    // saving the result value of the promise in a variable. req.body is the data that comes with the post
-    const newTour = await Tour.create(req.body);
+    // try catch block essential for async/await
+    try {
+        // saving the result value of the promise in a variable. req.body is the data that comes with the post
+        // Tour.create returns a promise. when this is resolved then it is stored in the variable
+        const newTour = await Tour.create(req.body);
 
-    res.status(201).json({
-        status: 'success',
-        data: {
+        res.status(201).json({
+            status: 'success',
+            data: {
+            // the promise has been resolved and the post data is ready to be sent to mongo
             tour: newTour
-        }
-    });
+            }
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: 'failure',
+            message: 'incomplete tour data'
+        });   
+    }
 
     // the request object refers to the data that is being posted
     // body refers to the object data that is attached to the request
