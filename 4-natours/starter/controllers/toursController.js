@@ -27,6 +27,7 @@ const Tour = require('../models/tourModel');
 //     next();
 // };
 
+// I don't need this middleware function because the body of the data is checked in the schema
 // this great middleware function checks the body of the request for certain things before next()
 // the point of middleware functions is to remove all aspects of the main functions leaving only the core
 // const checkBody = (req, res, next) => {
@@ -41,22 +42,41 @@ const Tour = require('../models/tourModel');
 // };
 
 
-
-const getAllTours = (req, res) => {
+const getAllTours = async (req, res) => {
     console.log(req.requestTime);
+
+    try {
+        // await until all the tours are found and then return them
+        // the find method returns an array containing javascript objects
+        const allTours = await Tour.find();
+
+        res.status(200).json({
+            status: 'success',
+            results: allTours.length,
+            data: {
+                allTours
+            }
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: 'failed',
+            message: 'unable to retrieve tours data'
+        });
+    }
+
     // .json is a send method that send a json object
-    res.status(200).json({
-        // the status of the get request
-        status: 'success',
-        requestedAt: req.requestTime,
-        // providing the length of the tours makes it easy for a programmer to see the quantity
-        results: tours.length,
-        // data: is an envelope that contains the actual data response object
-        data: {
-            // key/url endpoint and value/tours variable
-            tours: tours
-        }
-    });
+    // res.status(200).json({
+    //     the status of the get request
+    //     status: 'success',
+    //     requestedAt: req.requestTime,
+    //     providing the length of the tours makes it easy for a programmer to see the quantity
+    //     results: tours.length,
+    //     data: is an envelope that contains the actual data response object
+    //     data: {
+    //         key/url endpoint and value/tours variable
+    //         tours: tours
+    //     }
+    // });
 };
 
 const getTourById = (req, res) => {
