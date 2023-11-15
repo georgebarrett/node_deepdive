@@ -13,7 +13,7 @@ routes
     .get(toursController.getAllTours)
     // chaining middleware pipelines. the checkBody middleware function has to fully execute before
     // the createTour function fires
-    .post(toursController.checkBody, toursController.createTour)
+    .post(toursController.createTour)
 
 routes
     // adding :id creates a variable in the url that can store an id integer
