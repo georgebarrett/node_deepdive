@@ -48,6 +48,7 @@ const getAllTours = async (req, res) => {
     try {
 
         // BUILDING QUERY
+        // 1. filtering
 
         // {...req.query} = js spread operator. creating a new object from the properties of req.query
         // queryObject has the same properties as req.query
@@ -60,7 +61,17 @@ const getAllTours = async (req, res) => {
         // this logs my url query to the console
         console.log(req.query, queryObject);
 
-        const query = Tour.find(queryObject);
+        // variable that stores - Tour model with the find method. queryObject is passed in which is the copy
+        // of the req.query object { difficulty: 'easy' } 
+        // const query = Tour.find(queryObject);
+
+        // 2. advanced filtering
+
+        let queryString = JSON.stringify(queryObject);
+        queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+        console.log(JSON.parse(queryString));
+
+        const query = Tour.find(JSON.parse(queryString));        
 
         // EXECUTING QUERY
 
