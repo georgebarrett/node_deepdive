@@ -22,7 +22,7 @@ connectdb();
 // READING JSON FILE
 
 // the JSON.parse converts the json data into a javascript object
-const tours = JSON.parse(fs.readFileSync('tours-simple.json', 'utf-8'));
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8'));
 
 // FUNCTION TO IMPORT DATA FROM JSON FILE TO DATABASE
 
@@ -30,7 +30,32 @@ const importToursData = async () => {
     try {
         await Tour.create(tours);
         console.log('data imported to database');
+        process.exit();
     } catch (error) {
         console.log(error);
     }
 };
+
+// DELETE ALL DATA FROM DATABASE
+
+const deleteAllData = async () => {
+    try {
+        // with deleteMany nothing needs to be passed in because it will delete all
+        // Tour is mongoose model which provides methods to interact with the mongodb database
+        await Tour.deleteMany();
+        console.log('all data has been deleted');
+        // this is an aggressive way of exiting a the process of deleting all the data
+        process.exit();      
+    } catch (error) {
+        console.log(error)
+    }
+};
+
+// argv allows for firing functions in the terminal
+// node importTourData.js --import  ----  this will execute the importToursData() function via the terminal
+// same applied for the --delete
+if (process.argv[2] === '--import') {
+    importToursData();
+} else if (process.argv[2] === '--delete') {
+    deleteAllData();    
+}
