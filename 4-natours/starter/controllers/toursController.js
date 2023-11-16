@@ -47,6 +47,8 @@ const getAllTours = async (req, res) => {
 
     try {
 
+        // BUILDING QUERY
+
         // {...req.query} = js spread operator. creating a new object from the properties of req.query
         // queryObject has the same properties as req.query
         // spread operators are used to modify an object but preserve the original. this allows for experiments
@@ -58,43 +60,51 @@ const getAllTours = async (req, res) => {
         // this logs my url query to the console
         console.log(req.query, queryObject);
 
+        const query = Tour.find(queryObject);
+
+        // EXECUTING QUERY
+
+        const tours = await query;
+
+        // SEND RESPONSE
+
+        // .json converts a javascript object into a json strong and sends it
+        res.status(200).json({
+            status: 'success',
+            requestedAt: req.requestTime,
+            results: tours.length,
+            // data is the envelope for the response
+            data: {
+                // url endpoint: tours data
+                tours: tours
+            }
+        });
+
+        // ALTERNATIVE METHOD
+
         // await until all the tours are found and then return them
         // the find method returns an array containing javascript objects
         // const allTours = await Tour.find();
         
         // this uses the find method to filter through the tours
-        const allTours = await Tour.find({
-            duration: 5,
-            difficulty: 'easy'
-        });
+        // const allTours = await Tour.find({
+        //     duration: 5,
+        //     difficulty: 'easy'
+        // });
 
-        res.status(200).json({
-            status: 'success',
-            results: allTours.length,
-            data: {
-                allTours
-            }
-        });
+        // res.status(200).json({
+        //     status: 'success',
+        //     results: allTours.length,
+        //     data: {
+        //         tours: allTours
+        //     }
+        // });
     } catch (error) {
         res.status(404).json({
             status: 'failed',
             message: 'unable to get tours data'
         });
     }
-
-    // .json is a send method that send a json object
-    // res.status(200).json({
-    //     the status of the get request
-    //     status: 'success',
-    //     requestedAt: req.requestTime,
-    //     providing the length of the tours makes it easy for a programmer to see the quantity
-    //     results: tours.length,
-    //     data: is an envelope that contains the actual data response object
-    //     data: {
-    //         key/url endpoint and value/tours variable
-    //         tours: tours
-    //     }
-    // });
 };
 
 const getTourById = async (req, res) => {
@@ -114,12 +124,9 @@ const getTourById = async (req, res) => {
             message: 'unable to get tour'
         });
     }
-    
-    // the params refer to the variables stored un the url :id
-    // /api/v1/tours/5 will automatically asign the :id variable to 5
-    // console.log(req.params);
 
-    // req.params.id returns a string with the id number inside
+    // ALTERNATIVE METHOD
+
     // by multiplying the string by one, it will convert the string to an integer
     // const id = req.params.id * 1;
 
