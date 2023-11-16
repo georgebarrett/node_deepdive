@@ -67,7 +67,9 @@ const getAllTours = async (req, res) => {
 
         // 2. advanced filtering
 
+        // this variable can be redfined - JSON.stringify converts the queryObject to a JSON string
         let queryString = JSON.stringify(queryObject);
+        // queryString is redifined - the replace functions adds a $ to 
         queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
         console.log(JSON.parse(queryString));
 
