@@ -30,10 +30,11 @@ const importToursData = async () => {
     try {
         await Tour.create(tours);
         console.log('data imported to database');
-        process.exit();
     } catch (error) {
         console.log(error);
     }
+    // this is an aggressive way of exiting a the process of deleting all the data
+    process.exit();
 };
 
 // DELETE ALL DATA FROM DATABASE
@@ -44,11 +45,10 @@ const deleteAllData = async () => {
         // Tour is mongoose model which provides methods to interact with the mongodb database
         await Tour.deleteMany();
         console.log('all data has been deleted');
-        // this is an aggressive way of exiting a the process of deleting all the data
-        process.exit();      
     } catch (error) {
         console.log(error)
     }
+    process.exit(); 
 };
 
 // argv allows for firing functions in the terminal
