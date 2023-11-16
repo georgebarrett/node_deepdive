@@ -46,9 +46,27 @@ const getAllTours = async (req, res) => {
     console.log(req.requestTime);
 
     try {
+
+        // {...req.query} = js spread operator. creating a new object from the properties of req.query
+        // queryObject has the same properties as req.query
+        // spread operators are used to modify an object but preserve the original. this allows for experiments
+        const queryObject = {...req.query};
+        // these are url params that I want to exclude from the request
+        const excludedFields = ['page', 'sort', 'limit', 'fields'];
+        // this is the process for excluding the params
+        excludedFields.forEach(element => delete queryObject[element]);
+        // this logs my url query to the console
+        console.log(req.query, queryObject);
+
         // await until all the tours are found and then return them
         // the find method returns an array containing javascript objects
-        const allTours = await Tour.find();
+        // const allTours = await Tour.find();
+        
+        // this uses the find method to filter through the tours
+        const allTours = await Tour.find({
+            duration: 5,
+            difficulty: 'easy'
+        });
 
         res.status(200).json({
             status: 'success',
