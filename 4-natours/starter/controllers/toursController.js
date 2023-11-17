@@ -48,7 +48,7 @@ const getAllTours = async (req, res) => {
     try {
 
         // BUILDING QUERY
-        // 1. filtering
+        // 1. FILTERING 
 
         // {...req.query} = js spread operator. creating a new object from the properties of req.query
         // queryObject has the same properties as req.query
@@ -65,7 +65,7 @@ const getAllTours = async (req, res) => {
         // of the req.query object { difficulty: 'easy' } 
         // const query = Tour.find(queryObject);
 
-        // 2. advanced filtering
+        // 2. ADVANCED FILTERING
 
         // this variable can be redfined - JSON.stringify converts the queryObject to a JSON string
         let queryString = JSON.stringify(queryObject);
@@ -73,9 +73,24 @@ const getAllTours = async (req, res) => {
         // the 'g' ensures the $ is added to all the occurrences. not just the first occurence 
         queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
         // JSON.parse coverts the json string back into a javascript object
-        console.log(JSON.parse(queryString));
+        // console.log(JSON.parse(queryString));
+        
         // this is using the model method to find the documents that match the argument criteria
-        const query = Tour.find(JSON.parse(queryString));
+        let query = Tour.find(JSON.parse(queryString));
+
+        // 3. SORTING
+
+        // the if statement checks to see if sort is included in the url
+        if (req.query.sort) {
+            // this creates a new sorting method where multiple sorting fields can be chained together
+            const sortBy = req.query.sort.split(',').join(' ');
+            // this modifies the existing query pattern to include a sorting method
+            query = query.sort(sortBy);
+        } else {
+            // this is for if a user does not specify a sort field
+            // creating a default sorting method
+            query = query.sort('-createdAt');
+        }
 
         // EXECUTING QUERY
 
