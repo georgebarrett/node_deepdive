@@ -92,6 +92,20 @@ const getAllTours = async (req, res) => {
             query = query.sort('-createdAt');
         }
 
+        // FIELD LIMITING
+        // the if checks to see if there are fields in the url
+        if (req.query.fields) {
+            // this produces a space separated list of fields to include in the response
+            const fields = req.query.fields.split(',').join(' ');
+            // this applies the field selection to the query
+            // it modifies the existing mongoose query to just display the url fields
+            query = query.select(fields);
+        } else {
+            // by default i am only excluding the __v field (this is a special field for mongoose)
+            // the - means exclude
+            query = query.select('-__v')
+        }
+
         // EXECUTING QUERY
 
         // this executes the query but waits for the promise to be resolved
