@@ -69,14 +69,17 @@ const getAllTours = async (req, res) => {
 
         // this variable can be redfined - JSON.stringify converts the queryObject to a JSON string
         let queryString = JSON.stringify(queryObject);
-        // queryString is redifined - the replace functions adds a $ to 
+        // queryString is redifined - the replace functions adds a $ to the maths quieries
+        // the 'g' ensures the $ is added to all the occurrences. not just the first occurence 
         queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+        // JSON.parse coverts the json string back into a javascript object
         console.log(JSON.parse(queryString));
-
-        const query = Tour.find(JSON.parse(queryString));        
+        // this is using the model method to find the documents that match the argument criteria
+        const query = Tour.find(JSON.parse(queryString));
 
         // EXECUTING QUERY
 
+        // this executes the query but waits for the promise to be resolved
         const tours = await query;
 
         // SEND RESPONSE
