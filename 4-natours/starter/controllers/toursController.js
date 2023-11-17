@@ -88,7 +88,7 @@ const getAllTours = async (req, res) => {
             query = query.sort(sortBy);
         } else {
             // this is for if a user does not specify a sort field
-            // creating a default sorting method
+            // creating a default sorting method (descending order)
             query = query.sort('-createdAt');
         }
 
