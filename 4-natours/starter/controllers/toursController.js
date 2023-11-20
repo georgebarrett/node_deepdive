@@ -79,13 +79,13 @@ class APIFeatures {
         // queryString is redifined - the replace functions adds a $ to the maths quieries
         // the 'g' ensures the $ is added to all the occurrences. not just the first occurence 
         queryString = queryString.replace(/\b(gte|gt|lte|lt)\b/g, match => `$${match}`);
+        
         // JSON.parse coverts the json string back into a javascript object
         // console.log(JSON.parse(queryString));
         
         // this is using the model method to find the documents that match the argument criteria
         // let query = Tour.find(JSON.parse(queryString));
-        this.query.find(JSON.parse(queryString));
-
+        this.query = this.query.find(JSON.parse(queryString));
         // 'this' refers to the entire object
         return this;
     }
@@ -100,10 +100,43 @@ class APIFeatures {
         } else {
             // this is for if a user does not specify a sort field
             // creating a default sorting method (descending order)
-            query = query.sort('-createdAt');
+            this.query = this.query.sort('-createdAt');
         }
-
         // 'this' refers to the entire object
+        return this;
+    }
+
+    limitFields() {
+        // the if checks to see if there are fields in the url eg ?fields=name,description
+        if (this.queryString.fields) {
+            // this converts the firelds sinto an array of strings and then into a string with space separations
+            // mongoose likes this format
+            const fields = this.query.fields.split(',').join(' ');
+            // this modifies the existing mongoose query so that it only includes the fields that are defined
+            this.query = this.query.select(fields);
+        } else {
+            // by default i am only excluding the __v field (this is a special field for mongoose)
+            // the - means exclude
+            this.query = this.query.select('-__v')
+        }
+        return this;
+    }
+
+    paginate() {
+        // * 1 this will convert the string into an integer. queries are by default strings
+        // the || 1 means the page number will default to 1  
+        const page = this.queryString.page * 1 || 1;
+        // * 1 converts the limit to an integer || sets default result limit to 100 
+        const limit = this.queryString.limit * 1 || 100;
+        // page - 1 is the previous page. multiplying the previous page by the result limit gives the total number of items to skip
+        // if page is 3 and limit is 10 (3 - 1) * 10 = 20 so the query should skip the first 20 items  
+        const skip = (page - 1) * limit;
+
+        // limit is the amount of results that we want 
+        // skip is the amount of results that should be skipped before the data gets queried
+        // page=3&limit=10, 1-10 - page 1, 11-20 - page-2, 21-30 - page-3
+        this.query = this.query.skip(skip).limit(limit);
+
         return this;
     }
 }
@@ -112,51 +145,17 @@ const getAllTours = async (req, res) => {
     console.log(req.requestTime);
 
     try {
-        // FIELD LIMITING
-
-        // the if checks to see if there are fields in the url eg ?fields=name,description
-        if (req.query.fields) {
-            // this converts the firelds sinto an array of strings and then into a string with space separations
-            // mongoose likes this format
-            const fields = req.query.fields.split(',').join(' ');
-            // this modifies the existing mongoose query so that it only includes the fields that are defined
-            query = query.select(fields);
-        } else {
-            // by default i am only excluding the __v field (this is a special field for mongoose)
-            // the - means exclude
-            query = query.select('-__v')
-        }
-
-        // PAGINAION
-
-        // * 1 this will convert the string into an integer. queries are by default strings
-        // the || 1 means the page number will default to 1  
-        const page = req.query.page * 1 || 1;
-        // * 1 converts the limit to an integer || sets default result limit to 100 
-        const limit = req.query.limit * 1 || 100;
-        // page - 1 is the previous page. multiplying the previous page by the result limit gives the total number of items to skip
-        // if page is 3 and limit is 10 (3 - 1) * 10 = 20 so the query should skip the first 20 items  
-        const skip = (page - 1) * limit;
-
-        // limit is the amount of results that we want 
-        // skip is the amount of results that should be skipped before the data gets queried
-        // page=3&limit=10, 1-10 - page 1, 11-20 - page-2, 21-30 - page-3
-        query = query.skip(skip).limit(limit);
-
-        if (req.query.page) {
-            // the countDocuments() method does exactly that. it is an inbuilt mongoose model method
-            // once the ducments have been counted in full then the quantity is stored in the variable
-            const numberOfTours = await Tour.countDocuments();
-            if (skip >= numberOfTours) throw new Error('this page does not exist');
-        }
-
-        // EXECUTING QUERY
-
         // creating a new instance of the APIFeatures object and storing it into a variable
-        // chaining methods together
-        // the .filter and .sort ust return something. this can be done with a return statement in the methods themselves
-        const features = new APIFeatures(Tour.find(), req.query).filter().sort();
-        // this executes the query but waits for the promise to be resolved
+        // Tour.find() is passing a query object
+        // req.query is the string that is coming from express
+        // the four methods are defined in the APIFeatures class and must include a return statement
+        const features = new APIFeatures(Tour.find(), req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate();
+        // await the query result so that all the selected documents can be retrieved
+        // query now lives in 'features' which is the new object stored in a variable
         const tours = await features.query;
 
         // SEND RESPONSE
