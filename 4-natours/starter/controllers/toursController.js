@@ -93,6 +93,7 @@ const getAllTours = async (req, res) => {
         }
 
         // FIELD LIMITING
+        
         // the if checks to see if there are fields in the url eg ?fields=name,description
         if (req.query.fields) {
             // this converts the firelds sinto an array of strings and then into a string with space separations
