@@ -94,10 +94,6 @@ const getAllTours = async (req, res) => {
     console.log(req.requestTime);
 
     try {
-
-        // BUILDING QUERY
-        
-
         // 3. SORTING
 
         // the if statement checks to see if sort is included in the url
