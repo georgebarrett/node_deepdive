@@ -49,18 +49,20 @@ aliasTopFiveCheapestTours = (req, res, next) => {
     next();
 };
 
-const getAllTours = async (req, res) => {
-    console.log(req.requestTime);
+class APIFeatures {
+    // this function gets automatically called when a new object is created
+    constructor(query, queryString) {
+        this.query = query;
+        this.queryString = queryString;
+    }
 
-    try {
-
-        // BUILDING QUERY
+    filter() {
         // 1. FILTERING 
 
         // {...req.query} = js spread operator. creating a new object from the properties of req.query
         // queryObject has the same properties as req.query
         // spread operators are used to modify an object but preserve the original. this allows for experiments
-        const queryObject = {...req.query};
+        const queryObject = {...this.queryString};
         // these are url params that I want to exclude from the request
         const excludedFields = ['page', 'sort', 'limit', 'fields'];
         // this is the process for excluding the params
@@ -83,7 +85,18 @@ const getAllTours = async (req, res) => {
         // console.log(JSON.parse(queryString));
         
         // this is using the model method to find the documents that match the argument criteria
-        let query = Tour.find(JSON.parse(queryString));
+        // let query = Tour.find(JSON.parse(queryString));
+        this.query.find(JSON.parse(queryString));
+    }
+}
+
+const getAllTours = async (req, res) => {
+    console.log(req.requestTime);
+
+    try {
+
+        // BUILDING QUERY
+        
 
         // 3. SORTING
 
