@@ -93,12 +93,12 @@ const getAllTours = async (req, res) => {
         }
 
         // FIELD LIMITING
-        // the if checks to see if there are fields in the url
+        // the if checks to see if there are fields in the url eg ?fields=name,description
         if (req.query.fields) {
-            // this produces a space separated list of fields to include in the response
+            // this converts the firelds sinto an array of strings and then into a string with space separations
+            // mongoose likes this format
             const fields = req.query.fields.split(',').join(' ');
-            // this applies the field selection to the query
-            // it modifies the existing mongoose query to just display the url fields
+            // this modifies the existing mongoose query so that it only includes the fields that are defined
             query = query.select(fields);
         } else {
             // by default i am only excluding the __v field (this is a special field for mongoose)
