@@ -57,8 +57,6 @@ class APIFeatures {
     }
 
     filter() {
-        // 1. FILTERING 
-
         // {...req.query} = js spread operator. creating a new object from the properties of req.query
         // queryObject has the same properties as req.query
         // spread operators are used to modify an object but preserve the original. this allows for experiments
@@ -87,6 +85,26 @@ class APIFeatures {
         // this is using the model method to find the documents that match the argument criteria
         // let query = Tour.find(JSON.parse(queryString));
         this.query.find(JSON.parse(queryString));
+
+        // 'this' refers to the entire object
+        return this;
+    }
+
+    sort() {
+        // the if statement checks to see if sort is included in the url
+        if (this.queryString.sort) {
+            // this creates a new sorting method where multiple sorting fields can be chained together
+            const sortBy = this.query.sort.split(',').join(' ');
+            // this modifies the existing query pattern to include a sorting method
+            this.query = this.query.sort(sortBy);
+        } else {
+            // this is for if a user does not specify a sort field
+            // creating a default sorting method (descending order)
+            query = query.sort('-createdAt');
+        }
+
+        // 'this' refers to the entire object
+        return this;
     }
 }
 
@@ -94,20 +112,6 @@ const getAllTours = async (req, res) => {
     console.log(req.requestTime);
 
     try {
-        // 3. SORTING
-
-        // the if statement checks to see if sort is included in the url
-        if (req.query.sort) {
-            // this creates a new sorting method where multiple sorting fields can be chained together
-            const sortBy = req.query.sort.split(',').join(' ');
-            // this modifies the existing query pattern to include a sorting method
-            query = query.sort(sortBy);
-        } else {
-            // this is for if a user does not specify a sort field
-            // creating a default sorting method (descending order)
-            query = query.sort('-createdAt');
-        }
-
         // FIELD LIMITING
 
         // the if checks to see if there are fields in the url eg ?fields=name,description
@@ -148,8 +152,12 @@ const getAllTours = async (req, res) => {
 
         // EXECUTING QUERY
 
+        // creating a new instance of the APIFeatures object and storing it into a variable
+        // chaining methods together
+        // the .filter and .sort ust return something. this can be done with a return statement in the methods themselves
+        const features = new APIFeatures(Tour.find(), req.query).filter().sort();
         // this executes the query but waits for the promise to be resolved
-        const tours = await query;
+        const tours = await features.query;
 
         // SEND RESPONSE
 
