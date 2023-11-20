@@ -60,7 +60,9 @@ const tourSchema = new mongoose.Schema({
     createdAt: {
         // creates a timestamp
         type: Date,
-        default: Date.now()
+        default: Date.now(),
+        // this will remove the field from the database
+        // select: false
     },
     // this will save the dates in an array of strings
     startDates: [Date]
