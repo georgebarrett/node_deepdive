@@ -106,6 +106,29 @@ const getAllTours = async (req, res) => {
             query = query.select('-__v')
         }
 
+        // PAGINAION
+
+        // * 1 this will convert the string into an integer. queries are by default strings
+        // the || 1 means the page number will default to 1  
+        const page = req.query.page * 1 || 1;
+        // * 1 converts the limit to an integer || sets default result limit to 100 
+        const limit = req.query.limit * 1 || 100;
+        // page - 1 is the previous page. multiplying the previous page by the result limit gives the total number of items to skip
+        // if page is 3 and limit is 10 (3 - 1) * 10 = 20 so the query should skip the first 20 items  
+        const skip = (page - 1) * limit;
+
+        // limit is the amount of results that we want 
+        // skip is the amount of results that should be skipped before the data gets queried
+        // page=3&limit=10, 1-10 - page 1, 11-20 - page-2, 21-30 - page-3
+        query = query.skip(skip).limit(limit);
+
+        if (req.query.page) {
+            // the countDocuments() method does exactly that. it is an inbuilt mongoose model method
+            // once the ducments have been counted in full then the quantity is stored in the variable
+            const numberOfTours = await Tour.countDocuments();
+            if (skip >= numberOfTours) throw new Error('this page does not exist');
+        }
+
         // EXECUTING QUERY
 
         // this executes the query but waits for the promise to be resolved
@@ -147,7 +170,7 @@ const getAllTours = async (req, res) => {
     } catch (error) {
         res.status(404).json({
             status: 'failed',
-            message: 'unable to get tours data'
+            message: error.message
         });
     }
 };
