@@ -41,6 +41,13 @@ const Tour = require('../models/tourModel');
 //     next();
 // };
 
+aliasTopFiveCheapestTours = (req, res, next) => {
+    // this is a url query in middleware format that prefills parts of the query object
+    req.query.limit = '5';
+    req.query.sort = '-ratingsAverage,price',
+    req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+    next();
+};
 
 const getAllTours = async (req, res) => {
     console.log(req.requestTime);
@@ -93,7 +100,7 @@ const getAllTours = async (req, res) => {
         }
 
         // FIELD LIMITING
-        
+
         // the if checks to see if there are fields in the url eg ?fields=name,description
         if (req.query.fields) {
             // this converts the firelds sinto an array of strings and then into a string with space separations
@@ -314,5 +321,6 @@ module.exports = {
     getTourById,
     createTour,
     updateTour,
-    deleteTour
+    deleteTour,
+    aliasTopFiveCheapestTours
 };

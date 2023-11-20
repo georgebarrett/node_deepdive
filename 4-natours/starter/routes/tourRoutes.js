@@ -7,6 +7,11 @@ const routes = express();
 // this middleware function only applies to the tours 
 // this essentially just checks the url for invalid ids and then fires an error handling function
 // routes.param('id', toursController.checkId);
+// checkId is a middleware function that doesn't exist anymore. try/catch instead
+
+routes
+    .route('/top-5-cheapest')
+    .get(toursController.aliasTopFiveCheapestTours, toursController.getAllTours)
 
 routes
     .route('/')
