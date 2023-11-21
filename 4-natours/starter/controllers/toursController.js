@@ -43,7 +43,7 @@ const getAllTours = async (req, res) => {
     } catch (error) {
         res.status(404).json({
             status: 'failed',
-            message: error.message
+            message: 'cannot retrieve tour data'
         });
     }
    
@@ -166,12 +166,48 @@ const deleteTour = async (req, res) => {
     }
 };
 
+const getTourStats = async (req, res) => {
+    try {
+        // using the Tour model to access the tour collection
+        // the array contains stages. one follows the other
+        const stats = Tour.aggregate([
+            {
+                $match: { ratingsAverage: { $gte: 4.5 } } 
+            },
+            {
+                $group: {
+                    // always specify the id for grouping purposes
+                    // the value is null because we want to apply to all tours
+                    _id: null,
+                    averageRating: { $avg: '$ratingsAverage' },
+                    averagePrice: { $avg: '$price' },
+                    minimumPrice: { $min: '$price' },
+                    maximumPrice: { $max: '$price' }
+                }
+            }
+        ]);
+
+        res.stats(200).json({
+            stats: 'success',
+            data: {
+                stats: stats
+            }
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: 'fail',
+            message: 'stats not retrieved'
+        });
+    }
+};
+
 module.exports = {
     getAllTours,
     getTourById,
     createTour,
     updateTour,
     deleteTour,
+    getTourStats,
     aliasTopFiveCheapestTours
 };
 
