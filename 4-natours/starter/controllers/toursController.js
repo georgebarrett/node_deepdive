@@ -57,7 +57,7 @@ class APIFeatures {
     }
 
     filter() {
-        // {...req.query} = js spread operator. creating a new object from the properties of req.query
+        // {...} = js spread operator. creating a new object from the properties of req.query
         // queryObject has the same properties as req.query
         // spread operators are used to modify an object but preserve the original. this allows for experiments
         const queryObject = {...this.queryString};
@@ -66,7 +66,7 @@ class APIFeatures {
         // this is the process for excluding the params
         excludedFields.forEach(element => delete queryObject[element]);
         // this logs my url query to the console
-        console.log(req.query, queryObject);
+        // console.log(req.query, queryObject);
 
         // variable that stores - Tour model with the find method. queryObject is passed in which is the copy
         // of the req.query object { difficulty: 'easy' } 
@@ -94,7 +94,7 @@ class APIFeatures {
         // the if statement checks to see if sort is included in the url
         if (this.queryString.sort) {
             // this creates a new sorting method where multiple sorting fields can be chained together
-            const sortBy = this.query.sort.split(',').join(' ');
+            const sortBy = this.queryString.sort.split(',').join(' ');
             // this modifies the existing query pattern to include a sorting method
             this.query = this.query.sort(sortBy);
         } else {
@@ -111,7 +111,7 @@ class APIFeatures {
         if (this.queryString.fields) {
             // this converts the firelds sinto an array of strings and then into a string with space separations
             // mongoose likes this format
-            const fields = this.query.fields.split(',').join(' ');
+            const fields = this.queryString.fields.split(',').join(' ');
             // this modifies the existing mongoose query so that it only includes the fields that are defined
             this.query = this.query.select(fields);
         } else {
@@ -153,7 +153,7 @@ const getAllTours = async (req, res) => {
             .filter()
             .sort()
             .limitFields()
-            .paginate();
+            .paginate()
         // await the query result so that all the selected documents can be retrieved
         // query now lives in 'features' which is the new object stored in a variable
         const tours = await features.query;
