@@ -187,8 +187,8 @@ const getTourStats = async (req, res) => {
             }
         ]);
 
-        res.stats(200).json({
-            stats: 'success',
+        res.status(200).json({
+            status: 'success',
             data: {
                 stats: stats
             }
