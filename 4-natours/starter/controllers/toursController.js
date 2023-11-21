@@ -177,13 +177,25 @@ const getTourStats = async (req, res) => {
             {
                 $group: {
                     // always specify the id for grouping purposes
-                    // the value is null because we want to apply to all tours
-                    _id: null,
+                    // i am assigning the difficulty field to the id field, this is dynamic
+                    _id: { $toUpper: '$difficulty' },
+                    // $sum: 1 means add one for each document (increment)
+                    numberOfTours: { $sum: 1 },
+                    numberOfRatings: { $sum: '$ratingsQuantity' },
                     averageRating: { $avg: '$ratingsAverage' },
                     averagePrice: { $avg: '$price' },
                     minimumPrice: { $min: '$price' },
                     maximumPrice: { $max: '$price' }
                 }
+            },
+            {
+                // the sorting field names must match the grouping keys
+                // this is sorting by the average rating field. -1 for descending
+                $sort: { averageRating: -1 }
+            },
+            {
+                // not equal to easy. this is chaining stages
+                $match: { _id: { $ne: 'EASY' } }
             }
         ]);
 
