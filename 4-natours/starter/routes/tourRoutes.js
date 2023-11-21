@@ -3,14 +3,9 @@ const toursController = require('../controllers/toursController');
 
 const routes = express();
 
-// the value holds the id parameter
-// this middleware function only applies to the tours 
-// this essentially just checks the url for invalid ids and then fires an error handling function
-// routes.param('id', toursController.checkId);
-// checkId is a middleware function that doesn't exist anymore. try/catch instead
-
 routes
     .route('/top-5-cheapest')
+    // chaining middleware pipelines. the middleware function acts as an aggregate pipeline
     .get(toursController.aliasTopFiveCheapestTours, toursController.getAllTours)
 
 routes
@@ -18,10 +13,12 @@ routes
     .get(toursController.getTourStats)
 
 routes
+    .route('/monthly-plan/:year')
+    .get(toursController.getMonthlyPlan)
+
+routes
     .route('/')
     .get(toursController.getAllTours)
-    // chaining middleware pipelines. the checkBody middleware function has to fully execute before
-    // the createTour function fires
     .post(toursController.createTour)
 
 routes
