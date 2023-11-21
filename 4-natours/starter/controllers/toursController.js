@@ -170,7 +170,7 @@ const getTourStats = async (req, res) => {
     try {
         // using the Tour model to access the tour collection
         // the array contains stages. one follows the other
-        const stats = Tour.aggregate([
+        const stats = await Tour.aggregate([
             {
                 $match: { ratingsAverage: { $gte: 4.5 } } 
             },
