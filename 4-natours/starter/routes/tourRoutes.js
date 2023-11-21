@@ -14,7 +14,8 @@ routes
     .get(toursController.aliasTopFiveCheapestTours, toursController.getAllTours)
 
 routes
-    .route('/tour-stats').get(toursController.getTourStats)
+    .route('/tour-stats')
+    .get(toursController.getTourStats)
 
 routes
     .route('/')
