@@ -14,6 +14,9 @@ routes
     .get(toursController.aliasTopFiveCheapestTours, toursController.getAllTours)
 
 routes
+    .route('./tour-stats').get(toursController.getTourStats)
+
+routes
     .route('/')
     .get(toursController.getAllTours)
     // chaining middleware pipelines. the checkBody middleware function has to fully execute before
