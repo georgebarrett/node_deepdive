@@ -96,15 +96,21 @@ tourSchema.pre('save', function(next) {
     next();
 });
 
-// post means the hook/middleware is executed after the event has occured
-// tourSchema.post('save', function(document, next) {
-//     console.log(document);
-//     next();
-// });
-
 // by convention models should start with a capital
 // models take the data schema and allow for method operations
 // 'tours' makes a collection called tours within the tours_database
 const Tour = mongoose.model('tours', tourSchema);
 
 module.exports = Tour;
+
+
+// USEFUL REFERENCES 
+
+// POST HOOK/MIDDLEWARE
+
+// post means the hook/middleware is executed after the event has occured
+// tourSchema.post('save', function(document, next) {
+//     console.log(document);
+//     next();
+// });
+
