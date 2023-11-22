@@ -2,7 +2,7 @@ const fs = require('fs');
 const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 
-aliasTopFiveCheapestTours = (req, res, next) => {
+const aliasTopFiveCheapestTours = (req, res, next) => {
     // this is a url query in middleware format that prefills parts of the query object
     req.query.limit = '5';
     req.query.sort = '-ratingsAverage,price',
@@ -172,9 +172,11 @@ const getTourStats = async (req, res) => {
         // the array contains stages. one follows the other
         const stats = await Tour.aggregate([
             {
+                // match is where documents get plucked if they meet the criteria
                 $match: { ratingsAverage: { $gte: 4.5 } } 
             },
             {
+                // group is where i can apply maths to the matches
                 $group: {
                     // always specify the id for grouping purposes
                     // i am assigning the difficulty field to the id field, this is dynamic
@@ -213,6 +215,69 @@ const getTourStats = async (req, res) => {
     }
 };
 
+const getMonthlyPlan = async (req, res) => {
+    try {
+        // req = request. params = url. year = variable parameter. * 1 to create an integer
+        const year = req.params.year * 1;
+        
+        const plan = await Tour.aggregate([
+            {
+                // unwind deconstructs an array field and makes a document for each element
+                $unwind: '$startDates'
+            },
+            {
+                $match: {
+                    startDates: {
+                        // new Date is used to create a date object from the string
+                        // a javascript date object is needed by mongoDB
+                        $gte: new Date(`${year}-01-01`),
+                        $lte: new Date(`${year}-12-31`)
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: { $month: '$startDates' },
+                    numberOfToursStartingInMonth: { $sum: 1 },
+                    // $push creates an array
+                    // name refers to the name of the tour not the field
+                    toursInformation: { $push: '$name' }
+                }
+            },
+            {
+                // adds a new field to each document. '$_id' holds the month number eg 8 for august
+                $addFields: { month: '$_id' }
+            },
+            {
+                // excludes the id field from the document 
+                $project: {
+                    _id: 0
+                }
+            },
+            {
+                // the month with the most tours will be at the top
+                $sort: { numberOfToursStartingInMonth: -1 }
+            },
+            {
+                // limiting results to 12
+                $limit: 12
+            }
+        ]);
+
+        res.status(200).json({
+            status: 'success',
+            data: {
+                plan: plan
+            }
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: 'fail',
+            message: 'monthly plan failed'
+        });
+    }
+};
+
 module.exports = {
     getAllTours,
     getTourById,
@@ -220,6 +285,7 @@ module.exports = {
     updateTour,
     deleteTour,
     getTourStats,
+    getMonthlyPlan,
     aliasTopFiveCheapestTours
 };
 
