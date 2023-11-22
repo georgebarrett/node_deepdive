@@ -67,13 +67,20 @@ const tourSchema = new mongoose.Schema({
         // select: false
     },
     // this will save the dates in an array of strings
-    startDates: [Date]
-}, {
-    // these schema options ensure that virtual properties are included
-    // data is either in json or javascript-object form
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-});
+    startDates: [Date],
+    secretTour: {
+        // usually the tours are not secret hence the 'false'
+        type: Boolean,
+        default: false
+    }
+    }, 
+    {
+        // these schema options ensure that virtual properties are included
+        // data is either in json or javascript-object form
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
+    }
+);
 
 // this is busines logic that is not actually part of the database
 // it has nothing to do with requests and responses
@@ -88,11 +95,30 @@ tourSchema
         return this.duration / 7
     });
 
-// DOCUMENT MIDDLEWARE: runs before .save() and .create()
+// DOCUMENT MIDDLEWARE
 // this middleware function gives access to the document being processed (created and saved)
 tourSchema.pre('save', function(next) {
     // when a document is saved a slug field is generated
     this.slug = slugify(this.name, { lower: true });
+    next();
+});
+
+// QUERY MIDDLEWARE
+// the 'find' makes this query middleware
+// the middleware will point at the query not the document
+// the middleware will be executed 'pre' the query and not include '$ne' any secret tours
+// the regex method will mean that any find query will pass through this middleware
+tourSchema.pre(/^find/, function(next) {
+    // 'this' refers to the query object. 'find' secret tours and exclude them
+    this.find({ secretTour: { $ne: true } });
+    this.start = Date.now()
+    next();
+});
+
+// this post middleware function displays the document post time in milliseconds
+tourSchema.post(/^find/, function(documents, next) {
+    // this.start is essentially a timer that was started in the previous middleware function
+    console.log(`query took ${Date.now() - this.start} milliseconds`)
     next();
 });
 
