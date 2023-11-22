@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 // outlining the schema and storing it in a variable
 const tourSchema = new mongoose.Schema({
@@ -11,6 +12,7 @@ const tourSchema = new mongoose.Schema({
         // trim removes the white spaces in the string
         trim: true
     },
+    slug: String,
     rating: {
         type: Number,
         // default means that if no rating is left by the user, 4.5 will automatically be assigned
@@ -79,11 +81,26 @@ const tourSchema = new mongoose.Schema({
 tourSchema
     .virtual('durationInWeeks')
     // this is not an arrow function because i need the 'this'. Mongoose convention
-    // getter function 
+    // getter function that returns the value of the virtual property
     .get(function() {
         // the duration field is in days, therefore dividing it by 7 will give a weekly value
+        // 'this points to the current virtual property'
         return this.duration / 7
     });
+
+// DOCUMENT MIDDLEWARE: runs before .save() and .create()
+// this middleware function gives access to the document being processed (created and saved)
+tourSchema.pre('save', function(next) {
+    // when a document is saved a slug field is generated
+    this.slug = slugify(this.name, { lower: true });
+    next();
+});
+
+// post means the hook/middleware is executed after the event has occured
+// tourSchema.post('save', function(document, next) {
+//     console.log(document);
+//     next();
+// });
 
 // by convention models should start with a capital
 // models take the data schema and allow for method operations
