@@ -66,10 +66,27 @@ const tourSchema = new mongoose.Schema({
     },
     // this will save the dates in an array of strings
     startDates: [Date]
+}, {
+    // these schema options ensure that virtual properties are included
+    // data is either in json or javascript-object form
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 });
 
+// this is busines logic that is not actually part of the database
+// it has nothing to do with requests and responses
+// virtuals allow the user to create fields derived from other fields
+tourSchema
+    .virtual('durationInWeeks')
+    // this is not an arrow function because i need the 'this'. Mongoose convention
+    // getter function 
+    .get(function() {
+        // the duration field is in days, therefore dividing it by 7 will give a weekly value
+        return this.duration / 7
+    });
+
 // by convention models should start with a capital
-// models take the data schema and allow for crud operations
+// models take the data schema and allow for method operations
 // 'tours' makes a collection called tours within the tours_database
 const Tour = mongoose.model('tours', tourSchema);
 
