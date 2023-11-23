@@ -122,6 +122,17 @@ tourSchema.post(/^find/, function(documents, next) {
     next();
 });
 
+// AGGREGATION MIDDLEWARE
+// using pre because i want the middleware to fire before the aggregation pipeline takes place
+tourSchema.pre('aggregate', function(next) {
+    // before any pipeline takes place, the secretTour key and value will be pushed into the array
+    // which will remove any secret tours
+    this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+    // 'this.pipeline' points to the aggregation pipeline object (array)
+    console.log(this.pipeline());
+    next();
+});
+
 // by convention models should start with a capital
 // models take the data schema and allow for method operations
 // 'tours' makes a collection called tours within the tours_database
