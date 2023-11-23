@@ -51,7 +51,19 @@ const tourSchema = new mongoose.Schema({
         type: Number,
         required: [true, 'a tour must have a price']
     },
-    discount: Number,
+    priceDiscount: {
+        type: Number,
+        validate: {
+            // the value will only be accepted if it lower than the original price
+            // 'this' refers to the schema object
+            // the validator function will only work when creating a document/tour
+            validator: function(value) {
+                return value < this.price;    
+            },
+            // ({VALUE}) is a mongoose trick that will display the value. similar to a template literal
+            message: 'The discounted price ({VALUE}) must be lower than the original price'
+        },    
+    },
     summary: {
         type: String,
         trim: true,
