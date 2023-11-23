@@ -116,7 +116,7 @@ tourSchema
         return this.duration / 7
     });
 
-// DOCUMENT MIDDLEWARE
+// DOCUMENT MIDDLEWARE: only runs on .create and .save
 // this middleware function gives access to the document being processed (created and saved)
 tourSchema.pre('save', function(next) {
     // when a document is saved a slug field is generated
