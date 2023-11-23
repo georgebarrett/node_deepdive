@@ -10,7 +10,9 @@ const tourSchema = new mongoose.Schema({
         // true ensures that no two documents can have the same name
         unique: true,
         // trim removes the white spaces in the string
-        trim: true
+        trim: true,
+        maxLength: [40, 'A tour name must have 40 or less characters'],
+        minLength: [2, 'A tour name must have at least 2 character']
     },
     slug: String,
     rating: {
