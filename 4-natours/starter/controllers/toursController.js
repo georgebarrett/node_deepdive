@@ -129,7 +129,8 @@ const updateTour = async (req, res) => {
         // the req.body refers to what will be updated
         const update = await Tour.findByIdAndUpdate(req.params.id, req.body, {
             // this ensures that the new updated document is the one that will be returned
-            new: true
+            new: true,
+            runValidators: true
         });
         
         res.status(200).json({
