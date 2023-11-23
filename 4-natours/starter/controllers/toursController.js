@@ -130,6 +130,7 @@ const updateTour = async (req, res) => {
         const update = await Tour.findByIdAndUpdate(req.params.id, req.body, {
             // this ensures that the new updated document is the one that will be returned
             new: true,
+            // ensures the updateTour function passes throught the middleware functions in the model
             runValidators: true
         });
         
