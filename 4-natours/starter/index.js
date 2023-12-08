@@ -24,14 +24,7 @@ app.use(express.json());
 // it also sets the public folder to the route
 app.use(express.static(`${__dirname}/public`));
 
-// by passing next, express knows i am defining a middle ware function
-// middleware functions must be above any http response or they won't be included in the cycle
-app.use((req, res, next) => {
-    console.log('middleware');
-    // always use next in middleware functions otherwise the request response cycle would get stuck
-    next();
-});
-
+// always pass next into middleware functions otherwise the code gets stuck
 app.use((req, res, next) => {
     // this is attaching a date to the request. .toISOString converts the date into a nice string
     req.requestTime = new Date().toISOString();
@@ -42,5 +35,12 @@ app.use((req, res, next) => {
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
 
+app.all('*', (req, res, next) => {
+    res.status(404).json({
+        status: 'fail',
+        message: `cannot find ${req.originalUrl} on this server...`
+    });
+    next();
+});
 
 module.exports = app;
