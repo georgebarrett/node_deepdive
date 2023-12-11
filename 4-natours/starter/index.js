@@ -36,11 +36,21 @@ app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
 
 app.all('*', (req, res, next) => {
-    res.status(404).json({
-        status: 'fail',
-        message: `cannot find ${req.originalUrl} on this server...`
+    const error = new Error(`cannot find ${req.originalUrl} on this server...`);
+    error.status = 'fail';
+    error.statusCode = 404;
+
+    next(error);
+});
+
+app.use((error, req, res, next) => {
+    error.statusCode = error.statusCode || 500;
+    error.status = error.status || 'error'
+    
+    res.status(error.statusCode).json({
+        status: error.status,
+        message: error.message
     });
-    next();
 });
 
 module.exports = app;
