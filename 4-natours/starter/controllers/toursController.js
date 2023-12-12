@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
+const catchAsyncErrors = require('../utils/catchAsyncError');
 
 const aliasTopFiveCheapestTours = (req, res, next) => {
     // this is a url query in middleware format that prefills parts of the query object
@@ -10,275 +11,220 @@ const aliasTopFiveCheapestTours = (req, res, next) => {
     next();
 };
 
-const getAllTours = async (req, res) => {
+const getAllTours = catchAsyncErrors(async (req, res, next) => {
     console.log(req.requestTime);
+    // creating a new instance of the APIFeatures object and storing it into a variable
+    // Tour.find() is passing a query object
+    // req.query is the string that is coming from express
+    // the four methods are defined in the APIFeatures class and must include a return statement
+    const features = new APIFeatures(Tour.find(), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate()
+    // await the query result so that all the selected documents can be retrieved
+    // query now lives in 'features' which is the new object stored in a variable
+    const tours = await features.query;
 
-    try {
-        // creating a new instance of the APIFeatures object and storing it into a variable
-        // Tour.find() is passing a query object
-        // req.query is the string that is coming from express
-        // the four methods are defined in the APIFeatures class and must include a return statement
-        const features = new APIFeatures(Tour.find(), req.query)
-            .filter()
-            .sort()
-            .limitFields()
-            .paginate()
-        // await the query result so that all the selected documents can be retrieved
-        // query now lives in 'features' which is the new object stored in a variable
-        const tours = await features.query;
+    // .json converts a javascript object into a json strong and sends it
+    res.status(200).json({
+        status: 'success',
+        requestedAt: req.requestTime,
+        results: tours.length,
+        // data is the envelope for the response
+        data: {
+            // url endpoint: tours data
+            tours: tours
+        }
+    });
+});   
+// ALTERNATIVE METHOD
 
-        // SEND RESPONSE
+// await until all the tours are found and then return them
+// the find method returns an array containing javascript objects
+// const allTours = await Tour.find();
 
-        // .json converts a javascript object into a json strong and sends it
-        res.status(200).json({
-            status: 'success',
-            requestedAt: req.requestTime,
-            results: tours.length,
-            // data is the envelope for the response
-            data: {
-                // url endpoint: tours data
-                tours: tours
+// this uses the find method to filter through the tours
+// const allTours = await Tour.find({
+//     duration: 5,
+//     difficulty: 'easy'
+// });
+
+// res.status(200).json({
+//     status: 'success',
+//     results: allTours.length,
+//     data: {
+//         tours: allTours
+//     }
+// });
+
+
+const getTourById = catchAsyncErrors(async (req, res, next) => {
+    // req = is the url request. params = the variables within the url. id = the param that is being latched onto
+    const tourById = await Tour.findById(req.params.id);
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            tour: tourById
+        }
+    }); 
+});
+// ALTERNATIVE METHOD
+
+// by multiplying the string by one, it will convert the string to an integer
+// const id = req.params.id * 1;
+
+// .find creates a new array with the tour that matches the tour in the params
+// const tour = tours.find(element => element.id === id);
+
+// res.status(200).json({
+//     status: 'success',
+//     data: {
+//         tour: tour
+//     }
+// });
+
+
+const createTour = catchAsyncErrors(async (req, res, next) => {
+    
+    const newTour = await Tour.create(req.body);
+
+    res.status(201).json({
+        status: 'success',
+        data: {
+        tour: newTour
+        }
+    }); 
+});
+
+const updateTour = catchAsyncErrors(async (req, res, next) => {
+    // the req.body refers to what will be updated
+    const update = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+        // this ensures that the new updated document is the one that will be returned
+        new: true,
+        // ensures the updateTour function passes throught the middleware functions in the model
+        runValidators: true
+    });
+    
+    res.status(200).json({
+        status: 'success',
+        message: 'tour updated',
+        data: {
+            tour: update
+        }
+    });
+});
+
+const deleteTour = catchAsyncErrors(async (req, res, next) => {
+    const remove = await Tour.findByIdAndDelete(req.params.id);
+
+    res.status(200).json({
+        status: 'success',
+        message: 'tour deleted',
+        data: {
+            tour: remove
+        }
+    });
+});
+
+const getTourStats = catchAsyncErrors(async (req, res, next) => {
+    // using the Tour model to access the tour collection
+    // the array contains stages. one follows the other
+    const stats = await Tour.aggregate([
+        {
+            // match is where documents get plucked if they meet the criteria
+            $match: { ratingsAverage: { $gte: 4.5 } } 
+        },
+        {
+            // group is where i can apply maths to the matches
+            $group: {
+                // always specify the id for grouping purposes
+                // i am assigning the difficulty field to the id field, this is dynamic
+                _id: { $toUpper: '$difficulty' },
+                // $sum: 1 means add one for each document (increment)
+                numberOfTours: { $sum: 1 },
+                numberOfRatings: { $sum: '$ratingsQuantity' },
+                averageRating: { $avg: '$ratingsAverage' },
+                averagePrice: { $avg: '$price' },
+                minimumPrice: { $min: '$price' },
+                maximumPrice: { $max: '$price' }
             }
-        });
-    } catch (error) {
-        res.status(404).json({
-            status: 'failed',
-            message: 'cannot retrieve tour data'
-        });
-    }
-   
-    // ALTERNATIVE METHOD
+        },
+        {
+            // the sorting field names must match the grouping keys
+            // this is sorting by the average rating field. -1 for descending
+            $sort: { averageRating: -1 }
+        },
+        {
+            // not equal to easy. this is chaining stages
+            $match: { _id: { $ne: 'EASY' } }
+        }
+    ]);
 
-        // await until all the tours are found and then return them
-        // the find method returns an array containing javascript objects
-        // const allTours = await Tour.find();
-        
-        // this uses the find method to filter through the tours
-        // const allTours = await Tour.find({
-        //     duration: 5,
-        //     difficulty: 'easy'
-        // });
+    res.status(200).json({
+        status: 'success',
+        data: {
+            stats: stats
+        }
+    });
+});
 
-        // res.status(200).json({
-        //     status: 'success',
-        //     results: allTours.length,
-        //     data: {
-        //         tours: allTours
-        //     }
-        // });
-};
-
-const getTourById = async (req, res) => {
-    try {
-        // req = is the url request. params = the variables within the url. id = the param that is being latched onto
-        const tourById = await Tour.findById(req.params.id);
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                tour: tourById
-            }
-        }); 
-    } catch (error) {
-        res.status(404).json({
-            status: 'failed',
-            message: 'unable to get tour'
-        });
-    }
-
-    // ALTERNATIVE METHOD
-
-    // by multiplying the string by one, it will convert the string to an integer
-    // const id = req.params.id * 1;
-
-    // .find creates a new array with the tour that matches the tour in the params
-    // const tour = tours.find(element => element.id === id);
-
-    // res.status(200).json({
-    //     status: 'success',
-    //     data: {
-    //         tour: tour
-    //     }
-    // });
-};
-
-const createTour = async (req, res) => {
-    // try catch block essential for async/await
-    try {
-        // saving the result value of the promise in a variable. req.body is the data that comes with the post
-        // Tour.create returns a promise. when this is resolved then it is stored in the variable
-        const newTour = await Tour.create(req.body);
-
-        res.status(201).json({
-            status: 'success',
-            data: {
-            // the promise has been resolved and the post data is ready to be sent to mongo
-            tour: newTour
-            }
-        });
-    } catch (error) {
-        res.status(400).json({
-            status: 'failure',
-            message: error
-        });   
-    }
-};
-
-const updateTour = async (req, res) => {
-    try {
-        // the req.body refers to what will be updated
-        const update = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-            // this ensures that the new updated document is the one that will be returned
-            new: true,
-            // ensures the updateTour function passes throught the middleware functions in the model
-            runValidators: true
-        });
-        
-        res.status(200).json({
-            status: 'success',
-            message: 'tour updated',
-            data: {
-                tour: update
-            }
-        });
-    } catch (error) {
-        res.status(404).json({
-            status: 'failure',
-            message: error
-        });
-    }
-};
-
-const deleteTour = async (req, res) => {
-    try {
-        const remove = await Tour.findByIdAndDelete(req.params.id);
-
-        res.status(200).json({
-            status: 'success',
-            message: 'tour deleted',
-            data: {
-                tour: remove
-            }
-        });
-    } catch (error) {
-        res.status(404).json({
-            status: 'fail',
-            message: 'tour not deleted'
-        });
-    }
-};
-
-const getTourStats = async (req, res) => {
-    try {
-        // using the Tour model to access the tour collection
-        // the array contains stages. one follows the other
-        const stats = await Tour.aggregate([
-            {
-                // match is where documents get plucked if they meet the criteria
-                $match: { ratingsAverage: { $gte: 4.5 } } 
-            },
-            {
-                // group is where i can apply maths to the matches
-                $group: {
-                    // always specify the id for grouping purposes
-                    // i am assigning the difficulty field to the id field, this is dynamic
-                    _id: { $toUpper: '$difficulty' },
-                    // $sum: 1 means add one for each document (increment)
-                    numberOfTours: { $sum: 1 },
-                    numberOfRatings: { $sum: '$ratingsQuantity' },
-                    averageRating: { $avg: '$ratingsAverage' },
-                    averagePrice: { $avg: '$price' },
-                    minimumPrice: { $min: '$price' },
-                    maximumPrice: { $max: '$price' }
+const getMonthlyPlan = catchAsyncErrors(async (req, res, next) => {
+    // req = request. params = url. year = variable parameter. * 1 to create an integer
+    const year = req.params.year * 1;
+    
+    const plan = await Tour.aggregate([
+        {
+            // unwind deconstructs an array field and makes a document for each element
+            $unwind: '$startDates'
+        },
+        {
+            $match: {
+                startDates: {
+                    // new Date is used to create a date object from the string
+                    // a javascript date object is needed by mongoDB
+                    $gte: new Date(`${year}-01-01`),
+                    $lte: new Date(`${year}-12-31`)
                 }
-            },
-            {
-                // the sorting field names must match the grouping keys
-                // this is sorting by the average rating field. -1 for descending
-                $sort: { averageRating: -1 }
-            },
-            {
-                // not equal to easy. this is chaining stages
-                $match: { _id: { $ne: 'EASY' } }
             }
-        ]);
+        },
+        {
+            $group: {
+                _id: { $month: '$startDates' },
+                numberOfToursStartingInMonth: { $sum: 1 },
+                // $push creates an array
+                // name refers to the name of the tour not the field
+                toursInformation: { $push: '$name' }
+            }
+        },
+        {
+            // adds a new field to each document. '$_id' holds the month number eg 8 for august
+            $addFields: { month: '$_id' }
+        },
+        {
+            // excludes the id field from the document 
+            $project: {
+                _id: 0
+            }
+        },
+        {
+            // the month with the most tours will be at the top
+            $sort: { numberOfToursStartingInMonth: -1 }
+        },
+        {
+            // limiting results to 12
+            $limit: 12
+        }
+    ]);
 
-        res.status(200).json({
-            status: 'success',
-            data: {
-                stats: stats
-            }
-        });
-    } catch (error) {
-        res.status(404).json({
-            status: 'fail',
-            message: 'stats not retrieved'
-        });
-    }
-};
-
-const getMonthlyPlan = async (req, res) => {
-    try {
-        // req = request. params = url. year = variable parameter. * 1 to create an integer
-        const year = req.params.year * 1;
-        
-        const plan = await Tour.aggregate([
-            {
-                // unwind deconstructs an array field and makes a document for each element
-                $unwind: '$startDates'
-            },
-            {
-                $match: {
-                    startDates: {
-                        // new Date is used to create a date object from the string
-                        // a javascript date object is needed by mongoDB
-                        $gte: new Date(`${year}-01-01`),
-                        $lte: new Date(`${year}-12-31`)
-                    }
-                }
-            },
-            {
-                $group: {
-                    _id: { $month: '$startDates' },
-                    numberOfToursStartingInMonth: { $sum: 1 },
-                    // $push creates an array
-                    // name refers to the name of the tour not the field
-                    toursInformation: { $push: '$name' }
-                }
-            },
-            {
-                // adds a new field to each document. '$_id' holds the month number eg 8 for august
-                $addFields: { month: '$_id' }
-            },
-            {
-                // excludes the id field from the document 
-                $project: {
-                    _id: 0
-                }
-            },
-            {
-                // the month with the most tours will be at the top
-                $sort: { numberOfToursStartingInMonth: -1 }
-            },
-            {
-                // limiting results to 12
-                $limit: 12
-            }
-        ]);
-
-        res.status(200).json({
-            status: 'success',
-            data: {
-                plan: plan
-            }
-        });
-    } catch (error) {
-        res.status(404).json({
-            status: 'fail',
-            message: 'monthly plan failed'
-        });
-    }
-};
+    res.status(200).json({
+        status: 'success',
+        data: {
+            plan: plan
+        }
+    });
+});
 
 module.exports = {
     getAllTours,
