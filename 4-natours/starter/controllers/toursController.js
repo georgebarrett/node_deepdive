@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
+const AppError = require('../utils/appError');
 const catchAsyncErrors = require('../utils/catchAsyncError');
 
 const aliasTopFiveCheapestTours = (req, res, next) => {
@@ -63,6 +64,10 @@ const getTourById = catchAsyncErrors(async (req, res, next) => {
     // req = is the url request. params = the variables within the url. id = the param that is being latched onto
     const tourById = await Tour.findById(req.params.id);
 
+    if (!tourById) {
+        return next(new AppError('no tour found with that id', 404));
+    }
+
     res.status(200).json({
         status: 'success',
         data: {
@@ -106,6 +111,10 @@ const updateTour = catchAsyncErrors(async (req, res, next) => {
         // ensures the updateTour function passes throught the middleware functions in the model
         runValidators: true
     });
+
+    if (!update) {
+        return next(new AppError('no tour found with that id', 404));
+    }
     
     res.status(200).json({
         status: 'success',
@@ -118,6 +127,10 @@ const updateTour = catchAsyncErrors(async (req, res, next) => {
 
 const deleteTour = catchAsyncErrors(async (req, res, next) => {
     const remove = await Tour.findByIdAndDelete(req.params.id);
+
+    if (!remove) {
+        return next(new AppError('no tour found with that id', 404));
+    }
 
     res.status(200).json({
         status: 'success',
