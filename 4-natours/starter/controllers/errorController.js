@@ -8,10 +8,19 @@ const sendDevError = (error, res) => {
 };
 
 const sendProdError = (error, res) => {
-    res.status(error.statusCode).json({
-        status: error.status,
-        message: error.message,
-    });
+    if (error.isOperational) {
+        res.status(error.statusCode).json({
+            status: error.status,
+            message: error.message,
+        });
+    } else {
+        console.error('error', error);
+
+        res.status(500).json({
+            status: 'error',
+            message: 'something went wrong...'
+        });
+    }
 };
 
 module.exports = (error, req, res, next) => {
