@@ -20,8 +20,20 @@ const connectdb = async () => {
 connectdb();
 
 
+// STARTING SERVER
 
+const port = process.env.PORT || 3000;
+const server = app.listen(port, () => {
+    console.log(`${port}...`);
+});
 
+process.on('unhandledRejection', err => {
+    console.log(err.name, err.message);
+    console.log('unhandled rejection. shutting down...');
+    server.close(() => {
+        process.exit(1);
+    }); 
+});
 
 // FUNCTIONS TO TEST SENDING DATA TO THE DATABASE
 
@@ -45,15 +57,3 @@ connectdb();
 // saveTestTour();
 
 // console.log(process.env);
-
-
-
-// STARTING SERVER
-
-
-// if the 'development' envrionment is activated then the project will work in PORT (defined in .env)
-// if not then the project will run on port 3000
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-    console.log(`${port}...`);
-});
