@@ -1,20 +1,28 @@
-const sendDevError = (error, res) => {
-    res.status(error.statusCode).json({
-        status: error.status,
-        error: error,
-        message: error.message,
-        stack: error.stack
+const AppError = require('../utils/appError');
+
+const handleCastError = err => {
+    const message = `invalid ${err.path}: ${err.value}`
+    return new AppError(message, 400);
+};
+
+const sendDevError = (err, res) => {
+    res.status(err.statusCode).json({
+        status: err.status,
+        error: err,
+        message: err.message,
+        stack: err.stack
     });
 };
 
-const sendProdError = (error, res) => {
-    if (error.isOperational) {
-        res.status(error.statusCode).json({
-            status: error.status,
-            message: error.message,
+const sendProdError = (err, res) => {
+    if (err.isOperational) {
+        console.log({"prod": err})
+        res.status(err.statusCode).json({
+            status: err.status,
+            message: err.message,
         });
     } else {
-        console.error('error', error);
+        console.error('error', err);
 
         res.status(500).json({
             status: 'error',
@@ -23,14 +31,16 @@ const sendProdError = (error, res) => {
     }
 };
 
-module.exports = (error, req, res, next) => {
-    
-    error.statusCode = error.statusCode || 500;
-    error.status = error.status || 'error'
+module.exports = (err, req, res, next) => {
+    console.log(err)
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || 'error'
 
     if (process.env.NODE_ENV === 'development') {
-        sendDevError(error, res);
+        sendDevError(err, res);
     } else if (process.env.NODE_ENV === 'production') {
-        sendProdError(error, res);
+        if (err.name === 'CastError') err = handleCastError(err);
+
+        sendProdError(err, res);
     }  
 };
