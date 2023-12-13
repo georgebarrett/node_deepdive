@@ -1,23 +1,35 @@
 {
-  "name": "starter",
+  "name": "one_click",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
-    "start:production": "NODE_ENV=production nodemon server.js"
+    "start:production": "NODE_ENV=production nodemon server.js",
+    "debug": "ndb server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "crypto": "^1.0.1",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "express-mongo-sanitize": "^2.2.0",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "hpp": "^0.2.3",
+    "jest": "^29.7.0",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
     "morgan": "^1.10.0",
+    "ndb": "^1.1.5",
+    "nodemailer": "^6.9.7",
     "slugify": "^1.6.6",
-    "validator": "^13.11.0"
+    "validator": "^13.11.0",
+    "xss-clean": "^0.1.4"
   },
   "devDependencies": {
     "eslint": "^8.53.0",
