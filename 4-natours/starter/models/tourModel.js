@@ -13,7 +13,7 @@ const tourSchema = new mongoose.Schema({
         // trim removes the white spaces in the string
         trim: true,
         maxLength: [40, 'a tour name must have 40 or less characters'],
-        minLength: [2, 'a tour name must have at least 2 character'],
+        minLength: [2, 'a tour name must have at least 2 characters'],
     },
     slug: String,
     rating: {
@@ -172,4 +172,3 @@ module.exports = Tour;
 //     console.log(document);
 //     next();
 // });
-
