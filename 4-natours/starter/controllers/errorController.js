@@ -5,6 +5,13 @@ const handleCastError = err => {
     return new AppError(message, 400);
 };
 
+const handleDuplicateFields = err => {
+    const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+    const message = `duplicate field value:${value}. please enter another`;
+
+    return new AppError(message, 400);
+};
+
 const sendDevError = (err, res) => {
     res.status(err.statusCode).json({
         status: err.status,
@@ -40,6 +47,7 @@ module.exports = (err, req, res, next) => {
         sendDevError(err, res);
     } else if (process.env.NODE_ENV === 'production') {
         if (err.name === 'CastError') err = handleCastError(err);
+        if (err.code === 11000) err = handleDuplicateFields(err);
 
         sendProdError(err, res);
     }  
