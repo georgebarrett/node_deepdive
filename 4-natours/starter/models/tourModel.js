@@ -105,7 +105,7 @@ const tourSchema = new mongoose.Schema({
 );
 
 // this is busines logic that is not actually part of the database
-// it has nothing to do with requests and responses
+// it has nothing to dx§o with requests and responses
 // virtuals allow the user to create fields derived from other fields
 tourSchema
     .virtual('durationInWeeks')
