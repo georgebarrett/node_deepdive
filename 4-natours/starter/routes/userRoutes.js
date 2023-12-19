@@ -8,6 +8,9 @@ routes
     .post('/signup', authcontroller.signup)
 
 routes
+    .post('/signup', authcontroller.login)
+
+routes
     .route('/')
     .get(usersController.getAllUsers)
     .post(usersController.createUser)
