@@ -12,7 +12,7 @@ routes
 
 routes
     .route('/')
-    .get(authcontroller.protect, usersController.getAllUsers)
+    .get(usersController.getAllUsers)
     .post(usersController.createUser)
 
 routes
