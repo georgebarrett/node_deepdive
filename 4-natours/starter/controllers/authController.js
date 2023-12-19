@@ -1,3 +1,4 @@
+const util = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsyncErrors = require('../utils/catchAsyncError');
@@ -57,11 +58,13 @@ const protect = catchAsyncErrors(async (req, res, next) => {
         token = req.headers.authorization.split(' ')[1];
     }
 
-    console.log(token);
-
     if (!token) {
-        return next(new AppError('please log in to gain access to tour details', 401))
+        return next(new AppError('please log in to gain access to tour details', 401));
     }
+
+    // verify is an asynchronous fucntion
+    const decodedPayload = await util.promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    console.log(decodedPayload);
 
     next();
 });
