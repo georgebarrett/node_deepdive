@@ -8,7 +8,7 @@ routes
     .post('/signup', authcontroller.signup)
 
 routes
-    .post('/signup', authcontroller.login)
+    .post('/login', authcontroller.login)
 
 routes
     .route('/')
