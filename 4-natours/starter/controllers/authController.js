@@ -16,6 +16,7 @@ const signup = catchAsyncErrors(async (req, res, next) => {
         email: req.body.email,
         password: req.body.password,
         passwordConfirmation: req.body.passwordConfirmation,
+        role: req.body.role
     });
 
     const token = assignToken(newUser._id); 
