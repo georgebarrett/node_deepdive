@@ -76,6 +76,8 @@ const protect = catchAsyncErrors(async (req, res, next) => {
     if (freshUser.changePasswordAfterAccountCreation(decodedPayload.iat)) {
         return next(new AppError('user recently changed password. please login again', 401));
     }
+
+    req.user = freshUser;
     
     next();
 });
