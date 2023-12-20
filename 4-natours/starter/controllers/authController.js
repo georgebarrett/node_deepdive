@@ -64,7 +64,6 @@ const protect = catchAsyncErrors(async (req, res, next) => {
 
     // verify is an asynchronous fucntion
     const decodedPayload = await util.promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    console.log(decodedPayload);
 
     // if user changes their password after the token has been issued. the old jwt should not be valid
     const freshUser = await User.findById(decodedPayload.id);
