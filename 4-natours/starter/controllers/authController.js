@@ -71,6 +71,11 @@ const protect = catchAsyncErrors(async (req, res, next) => {
     if (!freshUser) {
         return next(new AppError('the user belonging to this token no longer exists', 401));
     }
+
+    // this ensures their new jwt token is valid
+    if (freshUser.changePasswordAfterAccountCreation(decodedPayload.iat)) {
+        return next(new AppError('user recently changed password. please login again', 401));
+    }
     
     next();
 });
