@@ -66,6 +66,12 @@ const protect = catchAsyncErrors(async (req, res, next) => {
     const decodedPayload = await util.promisify(jwt.verify)(token, process.env.JWT_SECRET);
     console.log(decodedPayload);
 
+    // if user changes their password after the token has been issued. the old jwt should not be valid
+    const freshUser = await User.findById(decodedPayload.id);
+    if (!freshUser) {
+        return next(new AppError('the user belonging to this token no longer exists', 401));
+    }
+    
     next();
 });
 
