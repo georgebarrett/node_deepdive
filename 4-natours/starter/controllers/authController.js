@@ -82,8 +82,20 @@ const protect = catchAsyncErrors(async (req, res, next) => {
     next();
 });
 
+// the return middleware function gets access to the roles parameter
+// the roles are assigned to users like ['admin'], which give them more permission rights
+const restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return next(new AppError('access denied', 403));
+        }
+        next();
+    }
+}
+
 module.exports = {
     signup,
     login,
-    protect
+    protect,
+    restrictTo
 };
