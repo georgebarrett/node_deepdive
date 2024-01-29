@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const crypto = require('crypto');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
@@ -55,7 +56,7 @@ userSchema.pre('save', async function(next) {
 });
 
 
-// instance method - method that available on all documents of a certain collection
+// instance method - method that is available on all documents of a certain collection
 
 userSchema.methods.correctPassword = async function(candidatePassword, userPassword) {
     return await bcrypt.compare(candidatePassword, userPassword);
@@ -68,11 +69,15 @@ userSchema.methods.changePasswordAfterAccountCreation = function(JWTTimestamp) {
         
         return JWTTimestamp < passwordChangedTimeStamp;
     }  
-    
-    
     return false;
 };
 
+userSchema.methods.createPasswordResetToken = function() {
+    // using node's own crypto library
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    // this reset token needs to be encrypted as it is stored in the db. it is low level (attack vector)
+    crypto.createHash('sha256').update(resetToken).digest('hex');
+};
 
 
 const User = mongoose.model('User', userSchema);
