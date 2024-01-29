@@ -78,7 +78,17 @@ userSchema.methods.createPasswordResetToken = function() {
     // using node's own crypto library
     const resetToken = crypto.randomBytes(32).toString('hex');
     // this reset token needs to be encrypted as it is stored in the db. it is low level (attack vector)
-    crypto.createHash('sha256').update(resetToken).digest('hex');
+    this.passwordResetToken = crypto
+        .createHash('sha256')
+        .update(resetToken)
+        .digest('hex');
+
+        // logged as an object so i will the see the variable anme and the value
+        console.log({ resetToken }, this.passwordResetToken);
+
+    this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000;
+
+    return resetToken;
 };
 
 
