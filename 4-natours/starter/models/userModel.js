@@ -43,7 +43,9 @@ const userSchema = new mongoose.Schema({
     passwordChangedAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    passwordResetToken: String,
+    passwordResetTokenExpires: Date
 });
 
 userSchema.pre('save', async function(next) {
