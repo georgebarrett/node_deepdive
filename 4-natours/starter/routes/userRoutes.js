@@ -6,9 +6,9 @@ const routes = express();
 
 routes
     .post('/signup', authcontroller.signup)
-
-routes
     .post('/login', authcontroller.login)
+    .post('/forgotPassword', authcontroller.login)
+    .post('/resetPassword', authcontroller.login)
 
 routes
     .route('/')
