@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
 const catchAsyncErrors = require('../utils/catchAsyncError');
 const AppError = require('../utils/appError');
+const sendEmail = require('../utils/email');
 
 const assignToken = id => {
     return jwt.sign({ id: id }, process.env.JWT_SECRET, {
@@ -103,6 +104,32 @@ const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const resetToken = user.createPasswordResetToken();
     // the validate before save bypasses any validators
     await user.save({ validateBeforeSave: false });
+
+    // this is the reset URL that sends a http request when the user clicks the password reset button in the email
+    const resetURL = `${req.protocol}://${req.get('host')}/api/v1/users/resetPassword/${resetToken}`;
+
+    const message = `Forgot your password? please submit a PATCH request with your new password to: ${resetURL}\nif you haven't forgotten your password then please ignore this email`;
+
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'your password reset token (valid for 10 minutes)',
+            message: message
+        });
+
+        res.status(200).json({
+            status: 'success',
+            message: 'token sent to email'
+        });
+    // this catch block resets the token and the expires property
+    } catch(error) {
+        user.passwordResetToken = undefined;
+        user.passwordResetTokenExpires = undefined;
+        // because the catch modifies the data and doesn't save it I bypass my validators
+        await user.save({ validateBeforeSave: false });
+
+        return next(new AppError('there was an error sending the email. please try again'), 500);
+    }
 });
 
 const resetPassword = (req, res, next) => {
