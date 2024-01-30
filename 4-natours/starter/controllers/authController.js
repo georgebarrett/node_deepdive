@@ -93,9 +93,27 @@ const restrictTo = (...roles) => {
     }
 }
 
+const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findOne({ email: req.body.email })
+
+    if (!user) {
+        return next(new AppError('there is no user with that email', 404));
+    }
+
+    const resetToken = user.createPasswordResetToken();
+    // the validate before save bypasses any validators
+    await user.save({ validateBeforeSave: false });
+});
+
+const resetPassword = (req, res, next) => {
+    
+}
+
 module.exports = {
     signup,
     login,
     protect,
-    restrictTo
+    restrictTo,
+    forgotPassword,
+    resetPassword,
 };
