@@ -8,7 +8,7 @@ routes
     .post('/signup', authcontroller.signup)
     .post('/login', authcontroller.login)
     .post('/forgotPassword', authcontroller.forgotPassword)
-    .post('/resetPassword', authcontroller.resetPassword)
+    .patch('/resetPassword/:token', authcontroller.resetPassword)
 
 routes
     .route('/')
