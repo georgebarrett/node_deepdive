@@ -7,8 +7,8 @@ const routes = express();
 routes
     .post('/signup', authcontroller.signup)
     .post('/login', authcontroller.login)
-    .post('/forgotPassword', authcontroller.login)
-    .post('/resetPassword', authcontroller.login)
+    .post('/forgotPassword', authcontroller.forgotPassword)
+    .post('/resetPassword', authcontroller.resetPassword)
 
 routes
     .route('/')
