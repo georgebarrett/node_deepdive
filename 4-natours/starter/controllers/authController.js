@@ -12,6 +12,18 @@ const assignToken = (id) => {
     });
 };
 
+const createSendToken = (user, statusCode, res) => {
+    const token = assignToken(user._id);
+    
+    res.status(statusCode).json({
+        status: 'success',
+        token,
+        data: {
+            user: user,
+        },
+    });
+};
+
 const signup = catchAsyncErrors(async (req, res, next) => {
     const newUser = await User.create({
         name: req.body.name,
