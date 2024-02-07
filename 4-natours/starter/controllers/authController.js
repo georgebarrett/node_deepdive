@@ -33,15 +33,7 @@ const signup = catchAsyncErrors(async (req, res, next) => {
         role: req.body.role,
     });
 
-    const token = assignToken(newUser._id);
-
-    res.status(201).json({
-        status: 'success',
-        token,
-        data: {
-            user: newUser,
-        },
-    });
+    createSendToken(newUser, 201, res);
 });
 
 const login = catchAsyncErrors(async (req, res, next) => {
@@ -57,11 +49,7 @@ const login = catchAsyncErrors(async (req, res, next) => {
         return next(new AppError('incorrect email or password', 401));
     }
 
-    const token = assignToken(user._id);
-    res.status(200).json({
-        status: 'success',
-        token,
-    });
+    createSendToken(user, 200, res);
 });
 
 const protect = catchAsyncErrors(async (req, res, next) => {
@@ -160,12 +148,7 @@ const resetPassword = catchAsyncErrors(async (req, res, next) => {
     user.passwordResetTokenExpires = undefined;
     await user.save();
 
-    const token = assignToken(user._id);
-
-    res.status(200).json({
-        status: 'success',
-        token: token,
-    });
+    createSendToken(user, 200, res);
 });
 
 const updatePassword = catchAsyncErrors(async (req, res, next) => {
@@ -178,6 +161,8 @@ const updatePassword = catchAsyncErrors(async (req, res, next) => {
     user.password = req.body.password;
     user.passwordCurrent = req.body.passwordCurrent;
     await user.save();
+
+    createSendToken(newUser, 200, res);
 });
 
 module.exports = {
