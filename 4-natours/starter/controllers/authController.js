@@ -159,7 +159,7 @@ const updatePassword = catchAsyncErrors(async (req, res, next) => {
     }
 
     user.password = req.body.password;
-    user.passwordCurrent = req.body.passwordCurrent;
+    user.passwordConfirmation = req.body.passwordConfirmation;
     await user.save();
 
     createSendToken(newUser, 200, res);
