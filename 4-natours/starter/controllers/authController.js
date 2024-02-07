@@ -154,7 +154,7 @@ const resetPassword = catchAsyncErrors(async (req, res, next) => {
 const updatePassword = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.user.id).select('+password');
 
-    if (!(await user.correctPassword(req.boy.passwordCurrent, user.password))) {
+    if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
         return next(new AppError('your current password is incorrect', 401))
     }
 
@@ -162,7 +162,7 @@ const updatePassword = catchAsyncErrors(async (req, res, next) => {
     user.passwordConfirmation = req.body.passwordConfirmation;
     await user.save();
 
-    createSendToken(newUser, 200, res);
+    createSendToken(user, 200, res);
 });
 
 module.exports = {
