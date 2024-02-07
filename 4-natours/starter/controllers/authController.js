@@ -162,6 +162,10 @@ const updatePassword = catchAsyncErrors(async (req, res, next) => {
     if (!(await user.correctPassword(req.boy.passwordCurrent, user.password))) {
         return next(new AppError('your current password is incorrect', 401))
     }
+
+    user.password = req.body.password;
+    user.passwordCurrent = req.body.passwordCurrent;
+    await user.save();
 });
 
 module.exports = {
