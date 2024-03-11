@@ -9,11 +9,7 @@ routes
   .post('/login', authcontroller.login)
   .post('/forgotPassword', authcontroller.forgotPassword)
   .patch('/resetPassword/:token', authcontroller.resetPassword)
-  .patch(
-    '/updateMyPassword',
-    authcontroller.protect,
-    authcontroller.updatePassword,
-  )
+  .patch('/updateMyPassword',authcontroller.protect,authcontroller.updatePassword,)
   .patch('/updateMe', authcontroller.protect, usersController.updateMe);
 
 routes
