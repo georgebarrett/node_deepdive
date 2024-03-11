@@ -5,22 +5,27 @@ const authcontroller = require('../controllers/authController');
 const routes = express();
 
 routes
-    .post('/signup', authcontroller.signup)
-    .post('/login', authcontroller.login)
-    .post('/forgotPassword', authcontroller.forgotPassword)
-    .patch('/resetPassword/:token', authcontroller.resetPassword)
-    .patch('/updateMyPassword', authcontroller.protect, authcontroller.updatePassword)
+  .post('/signup', authcontroller.signup)
+  .post('/login', authcontroller.login)
+  .post('/forgotPassword', authcontroller.forgotPassword)
+  .patch('/resetPassword/:token', authcontroller.resetPassword)
+  .patch(
+    '/updateMyPassword',
+    authcontroller.protect,
+    authcontroller.updatePassword,
+  )
+  .patch('/updateMe', authcontroller.protect, usersController.updateMe);
 
 routes
-    .route('/')
-    .get(usersController.getAllUsers)
-    .post(usersController.createUser)
+  .route('/')
+  .get(usersController.getAllUsers)
+  .post(usersController.createUser);
 
 routes
-    // adding :id creates a variable in the url that can store an id integer
-    .route('/:id')
-    .get(usersController.getUserById)
-    .patch(usersController.updateUser)
-    .delete(usersController.deleteUser)
+  // adding :id creates a variable in the url that can store an id integer
+  .route('/:id')
+  .get(usersController.getUserById)
+  .patch(usersController.updateUser)
+  .delete(usersController.deleteUser);
 
 module.exports = routes;
