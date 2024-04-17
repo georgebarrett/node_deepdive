@@ -46,13 +46,23 @@ const updateMe = catchAsyncError(async (req, res, next) => {
   // filtering out unwanted field names
   const filteredBody = filterObject(req.body, 'name', 'email');
   // update user document
-  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {new: true, runValidators: true});
+  const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, { new: true, runValidators: true });
 
   res.status(200).json({
     status: 'success',
     data: {
       user: updatedUser
     }
+  });
+});
+
+// user deleting/deactivating their acccount
+const deleteMe = catchAsyncError(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user.id, { active: false })
+
+  res.status(204).json({
+    status: 'success',
+    data: null
   });
 });
 
@@ -90,5 +100,6 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
-  updateMe
+  updateMe,
+  deleteMe
 };
