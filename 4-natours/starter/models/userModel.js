@@ -69,6 +69,12 @@ userSchema.pre('save', function(next) {
     next();
 });
 
+// this points to the current query
+userSchema.pre(/^find/, function(next) {
+    this.find({ active: { $ne: false } });
+    next();
+});
+
 
 // instance method - method that is available on all documents of a certain collection
 
