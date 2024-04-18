@@ -5,11 +5,15 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const app = express();
 
 
 // GLOBAL MIDDLEWARE
+
+// security for headers. essential
+app.use(helmet());
 
 // morgan is in this if statement so it will only be activated when the 'development' envirnoment is activated
 // this is due to morgan being able to display sensitive information.
