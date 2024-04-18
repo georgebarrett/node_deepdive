@@ -14,6 +14,18 @@ const assignToken = (id) => {
 
 const createSendToken = (user, statusCode, res) => {
     const token = assignToken(user._id);
+    const cookieOptions = {
+        // Date.now() is right now
+        expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+        // the cookie cannot be accessed or modified by the browser
+        httpOnly: true
+    };
+    // with 'secure' the cookie will only be sent on an encrypted connection 
+    if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+    // jwt is the name of the cookie
+    // token is the data i want sent in the cookie
+    res.cookie('jwt', token, cookieOptions);
     
     res.status(statusCode).json({
         status: 'success',
