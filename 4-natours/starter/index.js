@@ -4,11 +4,12 @@ const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
 
 
-// MIDDLEWARE
+// GLOBAL MIDDLEWARE
 
 // morgan is in this if statement so it will only be activated when the 'development' envirnoment is activated
 // this is due to morgan being able to display sensitive information.
@@ -18,6 +19,18 @@ if (process.env.NODE_ENV === 'development') {
     // when a request is made, morgan shows some useful stuff in the console
     app.use(morgan('dev')); 
 };
+
+// the limit properties depend muchly on the size and scale of the app
+const limiter = rateLimit({
+    // 100 http requests from the same IP per hour  
+    max: 100,
+    windowMs: 60 * 60 * 1000,
+    // upon exceeding
+    message: 'Too many requests from this IP. Please try again in an hour'
+});
+
+// the limiter function will only be applied to routes that include /api
+app.use('/api', limiter);
 
 // express.json is middleware so that data from the client side can be attached to request objects
 app.use(express.json());
