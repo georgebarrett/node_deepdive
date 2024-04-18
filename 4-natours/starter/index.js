@@ -37,7 +37,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // express.json is middleware so that data from the client side can be attached to request objects
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 
 // this is for being able to access static files
 // it also sets the public folder to the route
