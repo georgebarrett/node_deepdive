@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const hpp = require('hpp');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 const tourRoutes = require('./routes/tourRoutes');
@@ -10,7 +11,6 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 
 const app = express();
-
 
 // GLOBAL MIDDLEWARE
 
@@ -44,7 +44,19 @@ app.use(express.json({ limit: '10kb' }));
 // DATA SANITISATION - noSQL and XSS
 
 app.use(mongoSanitize());
-app,use(xss());
+app.use(xss());
+// prevents parameter polution
+app.use(hpp({
+    // the allowed duplicate parameter properties
+    whitelist: [
+        'duration', 
+        'ratingsQuantity', 
+        'ratingsAverage', 
+        'maxGroupSize', 
+        'difficulty', 
+        'price'
+    ]
+}));
 
 // this is for being able to access static files
 // it also sets the public folder to the route
