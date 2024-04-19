@@ -22,7 +22,7 @@ connectdb();
 // READING JSON FILE
 
 // the JSON.parse converts the json data into a javascript object
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours-simple.json`, 'utf-8'));
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
 
 // FUNCTION TO IMPORT DATA FROM JSON FILE TO DATABASE
 
