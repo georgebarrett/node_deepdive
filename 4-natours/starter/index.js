@@ -6,6 +6,8 @@ const tourRoutes = require('./routes/tourRoutes');
 const userRoutes = require('./routes/userRoutes');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 
 const app = express();
 
@@ -38,6 +40,11 @@ app.use('/api', limiter);
 
 // express.json is middleware so that data from the client side can be attached to request objects
 app.use(express.json({ limit: '10kb' }));
+
+// DATA SANITISATION - noSQL and XSS
+
+app.use(mongoSanitize());
+app,use(xss());
 
 // this is for being able to access static files
 // it also sets the public folder to the route
