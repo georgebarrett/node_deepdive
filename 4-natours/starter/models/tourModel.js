@@ -94,7 +94,31 @@ const tourSchema = new mongoose.Schema({
         // usually the tours are not secret hence the 'false'
         type: Boolean,
         default: false
-    }
+    },
+    startLocation: {
+        type: {
+            type: String,
+            default: 'Point',
+            enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String
+    },
+    // specifying an array will create embedded documents
+    locations: [
+        {
+            type: {
+                type: String,
+                default: 'Point',
+                enum: ['Point']
+            },
+            coordinates: [Number],
+            address: String,
+            description: String,
+            day: Number
+        }
+    ]
     }, 
     {
         // these schema options ensure that virtual properties are included
