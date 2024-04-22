@@ -182,12 +182,24 @@ tourSchema.pre(/^find/, function(next) {
     next();
 });
 
+tourSchema.pre(/^find/, function(next) {
+    // this.. always points to the current query
+    // all the 'guides' fields will be populated by the referenced user
+    this.populate({
+        path: 'guides',
+        // excluded from population process
+        select: '-__v -passwordChangedAt'
+    })
+    next();
+});
+
 // this post middleware function displays the document post time in milliseconds
 tourSchema.post(/^find/, function(documents, next) {
     // this.start is essentially a timer that was started in the previous middleware function
     console.log(`query took ${Date.now() - this.start} milliseconds`)
     next();
 });
+
 
 // AGGREGATION MIDDLEWARE
 // using pre because i want the middleware to fire before the aggregation pipeline takes place
