@@ -118,7 +118,8 @@ const tourSchema = new mongoose.Schema({
             description: String,
             day: Number
         }
-    ]
+    ],
+    guides: Array
     }, 
     {
         // these schema options ensure that virtual properties are included
