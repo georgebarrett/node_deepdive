@@ -38,7 +38,8 @@ const getAllTours = catchAsyncErrors(async (req, res, next) => {
             tours: tours
         }
     });
-});   
+});
+
 // ALTERNATIVE METHOD
 
 // await until all the tours are found and then return them
@@ -59,10 +60,9 @@ const getAllTours = catchAsyncErrors(async (req, res, next) => {
 //     }
 // });
 
-
 const getTourById = catchAsyncErrors(async (req, res, next) => {
     // req = is the url request. params = the variables within the url. id = the param that is being latched onto
-    const tourById = await Tour.findById(req.params.id);
+    const tourById = await Tour.findById(req.params.id)
 
     if (!tourById) {
         return next(new AppError('no tour found with that id', 404));
@@ -75,6 +75,7 @@ const getTourById = catchAsyncErrors(async (req, res, next) => {
         }
     }); 
 });
+
 // ALTERNATIVE METHOD
 
 // by multiplying the string by one, it will convert the string to an integer
