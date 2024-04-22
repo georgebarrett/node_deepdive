@@ -120,7 +120,13 @@ const tourSchema = new mongoose.Schema({
             day: Number
         }
     ],
-    guides: Array
+    // guides: Array
+    guides: [
+        {
+            type: mongoose.Schema.ObjectId,
+            reference: 'User'
+        }
+    ]
     }, 
     {
         // these schema options ensure that virtual properties are included
@@ -151,14 +157,18 @@ tourSchema.pre('save', function(next) {
     next();
 });
 
-tourSchema.pre('save', async function(next) {
-    // this.guides is an array of all the User ids
-    // the map function will return promises due to the asynchronous nature
-    const guidesPromises = this.guides.map(async id => await User.findById(id));
-    // overrides array of user ids with an array of user documents
-    this.guides = await Promise.all(guidesPromises);
-    next();
-});
+// EMBEDDING
+// tourSchema.pre('save', async function(next) {
+//     // this.guides is an array of all the User ids
+//     // the map function will return promises due to the asynchronous nature
+//     const guidesPromises = this.guides.map(async id => await User.findById(id));
+//     // overrides array of user ids with an array of user documents
+//     this.guides = await Promise.all(guidesPromises);
+//     next();
+// });
+
+// REFERNCING
+
 
 // QUERY MIDDLEWARE
 // the 'find' makes this query middleware
