@@ -120,9 +120,12 @@ const tourSchema = new mongoose.Schema({
             day: Number
         }
     ],
+    // EMBEDDED
     // guides: Array
+    // REFERENCING
     guides: [
         {
+            // plucks the id from the user model
             type: mongoose.Schema.ObjectId,
             reference: 'User'
         }
@@ -166,9 +169,6 @@ tourSchema.pre('save', function(next) {
 //     this.guides = await Promise.all(guidesPromises);
 //     next();
 // });
-
-// REFERNCING
-
 
 // QUERY MIDDLEWARE
 // the 'find' makes this query middleware
