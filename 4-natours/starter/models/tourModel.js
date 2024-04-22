@@ -127,7 +127,7 @@ const tourSchema = new mongoose.Schema({
         {
             // plucks the id from the user model
             type: mongoose.Schema.ObjectId,
-            reference: 'User'
+            ref: 'User'
         }
     ]
     }, 
