@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const validator = require('validator');
+const User = require('./userModel');
+// const validator = require('validator');
 
 // outlining the schema and storing it in a variable
 const tourSchema = new mongoose.Schema({
@@ -130,7 +131,7 @@ const tourSchema = new mongoose.Schema({
 );
 
 // this is busines logic that is not actually part of the database
-// it has nothing to dx§o with requests and responses
+// it has nothing to do with requests and responses
 // virtuals allow the user to create fields derived from other fields
 tourSchema
     .virtual('durationInWeeks')
@@ -138,7 +139,7 @@ tourSchema
     // getter function that returns the value of the virtual property
     .get(function() {
         // the duration field is in days, therefore dividing it by 7 will give a weekly value
-        // 'this points to the current virtual property'
+        // 'this' points to the current virtual property
         return this.duration / 7
     });
 
@@ -147,6 +148,15 @@ tourSchema
 tourSchema.pre('save', function(next) {
     // when a document is saved a slug field is generated
     this.slug = slugify(this.name, { lower: true });
+    next();
+});
+
+tourSchema.pre('save', async function(next) {
+    // this.guides is an array of all the User ids
+    // the mp function will return promises due to the asynchronous nature
+    const guidesPromises = this.guides.map(async id => await User.findById(id));
+    // overrides array of user ids with an array of user documents
+    this.guides = await Promise.all(guidesPromises);
     next();
 });
 
