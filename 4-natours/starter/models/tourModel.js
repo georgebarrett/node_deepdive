@@ -153,7 +153,7 @@ tourSchema.pre('save', function(next) {
 
 tourSchema.pre('save', async function(next) {
     // this.guides is an array of all the User ids
-    // the mp function will return promises due to the asynchronous nature
+    // the map function will return promises due to the asynchronous nature
     const guidesPromises = this.guides.map(async id => await User.findById(id));
     // overrides array of user ids with an array of user documents
     this.guides = await Promise.all(guidesPromises);
