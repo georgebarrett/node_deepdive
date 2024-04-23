@@ -34,11 +34,9 @@ const reviewSchema = new mongoose.Schema(
 );
 
 reviewSchema.pre(/^find/, function(next) {
+    // .populates can be chained together to produce more nested field
+    // in this case i just want the user's name to appear in the user object that is nested in the reviews object 
     this.populate({
-        // this points to the tour field
-        path: 'tour',
-        select: 'name'
-    }).populate({
         path: 'user',
         select: 'name photo'
     });
