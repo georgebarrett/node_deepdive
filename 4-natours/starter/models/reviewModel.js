@@ -17,6 +17,7 @@ const reviewSchema = new mongoose.Schema(
         },
         tour: {
             type: mongoose.Schema.ObjectId,
+            // this points to the Tour collection
             ref: 'Tour',
             required: [true, 'a review must belong to a tour']
         },
@@ -31,6 +32,18 @@ const reviewSchema = new mongoose.Schema(
         toObject: { virtuals: true }
     }
 );
+
+reviewSchema.pre(/^find/, function(next) {
+    this.populate({
+        // this points to the tour field
+        path: 'tour',
+        selct: 'name'
+    }).populate({
+        path: 'user',
+        select: 'name photo'
+    });
+    next();
+});
 
 const Review = mongoose.model('Review', reviewSchema);
 
