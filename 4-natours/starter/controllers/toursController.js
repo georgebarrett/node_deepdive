@@ -62,7 +62,7 @@ const getAllTours = catchAsyncErrors(async (req, res, next) => {
 
 const getTourById = catchAsyncErrors(async (req, res, next) => {
     // req = is the url request. params = the variables within the url. id = the param that is being latched onto
-    const tourById = await Tour.findById(req.params.id);
+    const tourById = await Tour.findById(req.params.id).populate('reviews');
 
     if (!tourById) {
         return next(new AppError('no tour found with that id', 404));
