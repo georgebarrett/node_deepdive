@@ -215,7 +215,7 @@ tourSchema.pre('aggregate', function(next) {
 // by convention models should start with a capital
 // models take the data schema and allow for method operations
 // 'tours' makes a collection called tours within the tours_database
-const Tour = mongoose.model('tours', tourSchema);
+const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour;
 
