@@ -73,7 +73,7 @@ app.use((req, res, next) => {
 // adding v1 is a form of version control
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
-app.use('api/v1/reviews', reviewRoutes);
+app.use('/api/v1/reviews', reviewRoutes);
 
 app.all('*', (req, res, next) => {
 
