@@ -37,7 +37,7 @@ reviewSchema.pre(/^find/, function(next) {
     this.populate({
         // this points to the tour field
         path: 'tour',
-        selct: 'name'
+        select: 'name'
     }).populate({
         path: 'user',
         select: 'name photo'
