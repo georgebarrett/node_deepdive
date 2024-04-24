@@ -32,6 +32,6 @@ routes
 
 routes
     .route('/:tourId/reviews')
-    .post(authController.protect, authController.restrictTo('users'), reviewController.createReview);
+    .post(authController.protect, authController.restrictTo('user'), reviewController.createReview);
 
 module.exports = routes;
