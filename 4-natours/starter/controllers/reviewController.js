@@ -1,6 +1,4 @@
 const Review = require('../models/reviewModel');
-const APIFeatures = require('../utils/apiFeatures');
-const AppError = require('../utils/appError');
 const catchAsyncErrors = require('../utils/catchAsyncError');
 
 const getAllReviews = catchAsyncErrors(async (req, res, next) => {
