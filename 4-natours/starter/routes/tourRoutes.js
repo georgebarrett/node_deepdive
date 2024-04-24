@@ -1,9 +1,14 @@
 const express = require('express');
 const toursController = require('../controllers/toursController');
 const authController = require('../controllers/authController');
-const reviewController = require('../controllers/reviewController');
+const reviewRouter = require('../routes/reviewRoutes');
 
 const routes = express();
+
+// for the path bellow i want to use the review router. mounting routers
+// index.js will send the tour here. here will re route the tour to the review router
+// consequently the tour router and review router are seperated and WET
+routes.use('/:tourId/reviews', reviewRouter);
 
 routes
     .route('/top-5-cheapest')
