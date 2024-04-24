@@ -30,8 +30,9 @@ routes
     .patch(toursController.updateTour)
     .delete(authController.protect, authController.restrictTo('admin', 'lead-guide'), toursController.deleteTour);
 
-routes
-    .route('/:tourId/reviews')
-    .post(authController.protect, authController.restrictTo('user'), reviewController.createReview);
+// removed due to express's ability to mergeParams
+    // routes
+//     .route('/:tourId/reviews')
+//     .post(authController.protect, authController.restrictTo('user'), reviewController.createReview);
 
 module.exports = routes;
