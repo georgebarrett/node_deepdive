@@ -80,12 +80,8 @@ const createUser = (req, res) => {
   });
 };
 
-const updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route not yet defined',
-  });
-};
+// do not update passwords with this. findByIdAndUpdate in crud-factory nullifies the security middleware
+const updateUser = factory.updateOne(User);
 
 const deleteUser = factory.deleteOne(User);
 

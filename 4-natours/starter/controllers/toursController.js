@@ -105,47 +105,9 @@ const createTour = catchAsyncErrors(async (req, res, next) => {
     }); 
 });
 
-const updateTour = catchAsyncErrors(async (req, res, next) => {
-    // the req.body refers to what will be updated
-    const update = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-        // this ensures that the new updated document is the one that will be returned
-        new: true,
-        // ensures the updateTour function passes throught the middleware functions in the model
-        runValidators: true
-    });
+const updateTour = factory.updateOne(Tour);
 
-    if (!update) {
-        return next(new AppError('no tour found with that id', 404));
-    }
-    
-    res.status(200).json({
-        status: 'success',
-        message: 'tour updated',
-        data: {
-            tour: update
-        }
-    });
-});
-
-// factory holds the crud functions. deleteOne is the function. Tour is the model
 const deleteTour = factory.deleteOne(Tour);
-
-// old function pre crud-factory
-// const deleteTour = catchAsyncErrors(async (req, res, next) => {
-//     const remove = await Tour.findByIdAndDelete(req.params.id);
-
-//     if (!remove) {
-//         return next(new AppError('no tour found with that id', 404));
-//     }
-
-//     res.status(200).json({
-//         status: 'success',
-//         message: 'tour deleted',
-//         data: {
-//             tour: remove
-//         }
-//     });
-// });
 
 const getTourStats = catchAsyncErrors(async (req, res, next) => {
     // using the Tour model to access the tour collection

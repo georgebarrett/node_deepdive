@@ -35,10 +35,13 @@ const createReview = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
+const updateReview = factory.updateOne(Review);
+
 const deleteReview = factory.deleteOne(Review);
 
 module.exports = {
     getAllReviews,
     createReview,
+    updateReview,
     deleteReview
 };
