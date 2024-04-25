@@ -3,6 +3,7 @@ const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
 const catchAsyncErrors = require('../utils/catchAsyncError');
+const factory = require('./crudFactory');
 
 const aliasTopFiveCheapestTours = (req, res, next) => {
     // this is a url query in middleware format that prefills parts of the query object
@@ -126,21 +127,25 @@ const updateTour = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-const deleteTour = catchAsyncErrors(async (req, res, next) => {
-    const remove = await Tour.findByIdAndDelete(req.params.id);
+// factory holds the crud functions. deleteOne is the function. Tour is the model
+const deleteTour = factory.deleteOne(Tour);
 
-    if (!remove) {
-        return next(new AppError('no tour found with that id', 404));
-    }
+// old function pre crud-factory
+// const deleteTour = catchAsyncErrors(async (req, res, next) => {
+//     const remove = await Tour.findByIdAndDelete(req.params.id);
 
-    res.status(200).json({
-        status: 'success',
-        message: 'tour deleted',
-        data: {
-            tour: remove
-        }
-    });
-});
+//     if (!remove) {
+//         return next(new AppError('no tour found with that id', 404));
+//     }
+
+//     res.status(200).json({
+//         status: 'success',
+//         message: 'tour deleted',
+//         data: {
+//             tour: remove
+//         }
+//     });
+// });
 
 const getTourStats = catchAsyncErrors(async (req, res, next) => {
     // using the Tour model to access the tour collection
