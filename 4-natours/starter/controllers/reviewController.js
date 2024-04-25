@@ -1,5 +1,7 @@
+const { Model } = require('mongoose');
 const Review = require('../models/reviewModel');
 const catchAsyncErrors = require('../utils/catchAsyncError');
+const factory = require('./crudFactory');
 
 const getAllReviews = catchAsyncErrors(async (req, res, next) => {
     let filter = {};
@@ -33,7 +35,10 @@ const createReview = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
+const deleteReview = factory.deleteOne(Review);
+
 module.exports = {
     getAllReviews,
-    createReview
+    createReview,
+    deleteReview
 };
