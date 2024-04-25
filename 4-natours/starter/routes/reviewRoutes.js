@@ -14,7 +14,12 @@ const routes = express.Router({ mergeParams: true });
 routes
     .route('/')
     .get(reviewController.getAllReviews)
-    .post(authController.protect, authController.restrictTo('user'), reviewController.createReview);
+    .post(
+        authController.protect, 
+        authController.restrictTo('user'), 
+        reviewController.setUserAndTourIds, 
+        reviewController.createReview
+    );
 
 routes
     .route('/:id')
