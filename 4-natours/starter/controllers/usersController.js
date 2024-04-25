@@ -2,7 +2,7 @@ const fs = require('fs');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsyncError = require('../utils/catchAsyncError');
-const { features } = require('process');
+const factory = require('./crudFactory');
 
 const filterObject = (object, ...allowedFields) => {
   const newObject = {};
@@ -87,12 +87,7 @@ const updateUser = (req, res) => {
   });
 };
 
-const deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route not yet defined',
-  });
-};
+const deleteUser = factory.deleteOne(User);
 
 module.exports = {
   getAllUsers,
