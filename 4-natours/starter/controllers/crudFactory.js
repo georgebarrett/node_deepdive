@@ -2,6 +2,18 @@ const { Model } = require('mongoose');
 const catchAsyncError = require('../utils/catchAsyncError');
 const AppError = require('../utils/appError');
 
+const createOne = Model => catchAsyncError(async (req, res, next) => {
+    const document = await Model.create(req.body)
+
+    res.status(200).json({
+        status: 'success',
+        message: 'a new document has been created',
+        data: {
+            data: document
+        }
+    });
+});
+
 const updateOne = Model => catchAsyncError(async (req, res, next) => {
     const document = await Model.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
@@ -36,6 +48,7 @@ const deleteOne = Model => catchAsyncError(async (req, res, next) => {
 });
 
 module.exports = {
+    createOne,
     updateOne,
     deleteOne
 };
