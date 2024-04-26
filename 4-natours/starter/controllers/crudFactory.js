@@ -66,6 +66,7 @@ const deleteOne = Model => catchAsyncError(async (req, res, next) => {
 });
 
 module.exports = {
+    getOne,
     createOne,
     updateOne,
     deleteOne
