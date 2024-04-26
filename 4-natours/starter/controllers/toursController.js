@@ -61,37 +61,7 @@ const getAllTours = catchAsyncErrors(async (req, res, next) => {
 //     }
 // });
 
-const getTourById = catchAsyncErrors(async (req, res, next) => {
-    // req = is the url request. params = the variables within the url. id = the param that is being latched onto
-    const tourById = await Tour.findById(req.params.id).populate('reviews');
-
-    if (!tourById) {
-        return next(new AppError('no tour found with that id', 404));
-    }
-
-    res.status(200).json({
-        status: 'success',
-        data: {
-            tour: tourById
-        }
-    }); 
-});
-
-// ALTERNATIVE METHOD
-
-// by multiplying the string by one, it will convert the string to an integer
-// const id = req.params.id * 1;
-
-// .find creates a new array with the tour that matches the tour in the params
-// const tour = tours.find(element => element.id === id);
-
-// res.status(200).json({
-//     status: 'success',
-//     data: {
-//         tour: tour
-//     }
-// });
-
+const getTourById = factory.getOne(Tour, { path: 'reviews' });
 
 const createTour = factory.createOne(Tour);
 
