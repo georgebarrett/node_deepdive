@@ -20,19 +20,6 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 );
 
-const getAllUsers = catchAsyncError(async (req, res, next) => {
-  const users = await User.find();
-
-  // 500 = internal server error
-  res.status(200).json({
-    status: 'success',
-    results: users.length,
-    data: {
-      users: users,
-    },
-  });
-});
-
 // updating the currently athenticated user
 const updateMe = catchAsyncError(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirmation) {
@@ -66,14 +53,16 @@ const deleteMe = catchAsyncError(async (req, res, next) => {
   });
 });
 
-const getUserById = factory.getOne(User);
-
 const createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
     message: 'route not yet defined. please use /signup instead',
   });
 };
+
+const getAllUsers = factory.getAll(User);
+
+const getUserById = factory.getOne(User);
 
 // do not update passwords with this. findByIdAndUpdate in crud-factory nullifies the security middleware
 const updateUser = factory.updateOne(User);
