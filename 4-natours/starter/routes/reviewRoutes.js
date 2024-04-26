@@ -23,6 +23,7 @@ routes
 
 routes
     .route('/:id')
+    .get(reviewController.getReviewById)
     .patch(reviewController.updateReview)
     .delete(reviewController.deleteReview);
     // .delete(authController.protect, authController.restrictTo('admin'), crudFactory.deleteOne);
