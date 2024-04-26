@@ -28,6 +28,8 @@ const setUserAndTourIds = (req, res, next) => {
     next();
 };
 
+const getReviewById = factory.getOne(Review);
+
 const createReview = factory.createOne(Review);
 
 const updateReview = factory.updateOne(Review);
@@ -35,6 +37,7 @@ const updateReview = factory.updateOne(Review);
 const deleteReview = factory.deleteOne(Review);
 
 module.exports = {
+    getReviewById,
     getAllReviews,
     createReview,
     updateReview,
