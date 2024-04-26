@@ -1,23 +1,5 @@
-const { Model } = require('mongoose');
 const Review = require('../models/reviewModel');
-const catchAsyncErrors = require('../utils/catchAsyncError');
 const factory = require('./crudFactory');
-
-const getAllReviews = catchAsyncErrors(async (req, res, next) => {
-    let filter = {};
-    // if there is a tur id then filter will be equal to the object
-    if (req.params.tourId) filter = { tour: req.params.tourId };
-    // .find will return all the reviews unless a tour id has been passed in. then it will just return the reviews for that tour
-    const reviews = await Review.find(filter);
-
-    res.status(200).json({
-        status: 'success',
-        results: reviews.length,
-        data: {
-            review: reviews
-        }
-    });
-});
 
 const setUserAndTourIds = (req, res, next) => {
     // these ifs define the tour and user if they are not present in the request body
@@ -27,6 +9,8 @@ const setUserAndTourIds = (req, res, next) => {
     if (!req.body.user) req.body.user = req.user.id;
     next();
 };
+
+const getAllReviews = factory.getAll(Review);
 
 const getReviewById = factory.getOne(Review);
 
