@@ -1,7 +1,24 @@
-const { Model } = require('mongoose');
 const catchAsyncError = require('../utils/catchAsyncError');
 const AppError = require('../utils/appError');
-const { populate } = require('../models/reviewModel');
+const APIFeatures = require('../utils/apiFeatures');
+
+const getAll = Model => catchAsyncErrors(async (req, res, next) => {
+    const features = new APIFeatures(Model.find(), req.query)
+        .filter()
+        .sort()
+        .limitFields()
+        .paginate()
+    // query now lives in 'features' which is the new object stored in a variable
+    const document = await features.query;
+
+    res.status(200).json({
+        status: 'success',
+        results: document.length,
+        data: {
+            data: document
+        }
+    });
+});
 
 const getOne = (Model, populateOptions) => catchAsyncError(async (req, res, next) => {
     let query = Model.findById(req.params.id);
@@ -67,6 +84,7 @@ const deleteOne = Model => catchAsyncError(async (req, res, next) => {
 
 module.exports = {
     getOne,
+    getAll,
     createOne,
     updateOne,
     deleteOne
