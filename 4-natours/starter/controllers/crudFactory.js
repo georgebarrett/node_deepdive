@@ -2,7 +2,7 @@ const catchAsyncError = require('../utils/catchAsyncError');
 const AppError = require('../utils/appError');
 const APIFeatures = require('../utils/apiFeatures');
 
-const getAll = Model => catchAsyncErrors(async (req, res, next) => {
+const getAll = Model => catchAsyncError(async (req, res, next) => {
     const features = new APIFeatures(Model.find(), req.query)
         .filter()
         .sort()
