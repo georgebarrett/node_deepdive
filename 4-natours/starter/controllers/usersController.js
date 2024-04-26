@@ -66,17 +66,12 @@ const deleteMe = catchAsyncError(async (req, res, next) => {
   });
 });
 
-const getUserById = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route not yet defined',
-  });
-};
+const getUserById = factory.getOne(User);
 
 const createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'route not yet defined',
+    message: 'route not yet defined. please use /signup instead',
   });
 };
 
