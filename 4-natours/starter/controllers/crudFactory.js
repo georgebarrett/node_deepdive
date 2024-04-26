@@ -1,6 +1,24 @@
 const { Model } = require('mongoose');
 const catchAsyncError = require('../utils/catchAsyncError');
 const AppError = require('../utils/appError');
+const { populate } = require('../models/reviewModel');
+
+const getOne = (Model, populateOptions) = catchAsyncError(async (req, res, next) => {
+    let query = Model.findById(req.params.id);
+    if (populateOptions) query = query.populate(populateOptions);
+    const document = await query;
+
+    if (!document) {
+        return next(new AppError('no document found with that id', 404));
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            data: document
+        }
+    }); 
+});
 
 const createOne = Model => catchAsyncError(async (req, res, next) => {
     const document = await Model.create(req.body)
