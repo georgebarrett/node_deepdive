@@ -3,7 +3,7 @@ const catchAsyncError = require('../utils/catchAsyncError');
 const AppError = require('../utils/appError');
 const { populate } = require('../models/reviewModel');
 
-const getOne = (Model, populateOptions) = catchAsyncError(async (req, res, next) => {
+const getOne = (Model, populateOptions) => catchAsyncError(async (req, res, next) => {
     let query = Model.findById(req.params.id);
     if (populateOptions) query = query.populate(populateOptions);
     const document = await query;
