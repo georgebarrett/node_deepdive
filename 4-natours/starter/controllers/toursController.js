@@ -13,53 +13,7 @@ const aliasTopFiveCheapestTours = (req, res, next) => {
     next();
 };
 
-const getAllTours = catchAsyncErrors(async (req, res, next) => {
-    console.log(req.requestTime);
-    // creating a new instance of the APIFeatures object and storing it into a variable
-    // Tour.find() is passing a query object
-    // req.query is the string that is coming from express
-    // the four methods are defined in the APIFeatures class and must include a return statement
-    const features = new APIFeatures(Tour.find(), req.query)
-        .filter()
-        .sort()
-        .limitFields()
-        .paginate()
-    // await the query result so that all the selected documents can be retrieved
-    // query now lives in 'features' which is the new object stored in a variable
-    const tours = await features.query;
-
-    // .json converts a javascript object into a json strong and sends it
-    res.status(200).json({
-        status: 'success',
-        requestedAt: req.requestTime,
-        results: tours.length,
-        // data is the envelope for the response
-        data: {
-            // url endpoint: tours data
-            tours: tours
-        }
-    });
-});
-
-// ALTERNATIVE METHOD
-
-// await until all the tours are found and then return them
-// the find method returns an array containing javascript objects
-// const allTours = await Tour.find();
-
-// this uses the find method to filter through the tours
-// const allTours = await Tour.find({
-//     duration: 5,
-//     difficulty: 'easy'
-// });
-
-// res.status(200).json({
-//     status: 'success',
-//     results: allTours.length,
-//     data: {
-//         tours: allTours
-//     }
-// });
+const getAllTours = factory.getAll(Tour);
 
 const getTourById = factory.getOne(Tour, { path: 'reviews' });
 
