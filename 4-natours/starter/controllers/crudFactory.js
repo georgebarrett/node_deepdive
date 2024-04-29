@@ -13,7 +13,8 @@ const getAll = Model => catchAsyncError(async (req, res, next) => {
         .limitFields()
         .paginate()
     // query now lives in 'features' which is the new object stored in a variable
-    const document = await features.query;
+    // .explain() = in-built function that adds stats to a query
+    const document = await features.query.explain();
 
     res.status(200).json({
         status: 'success',
