@@ -20,6 +20,13 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 );
 
+const getMe = (req, res, next) => {
+  // this means i can use the getOne crud-factory function, which finds the user's id using the url paramters
+  // and redfine at is their id. i can do this because they have logged in
+  req.params.id = req.user.id;
+  next();
+};
+
 // updating the currently athenticated user
 const updateMe = catchAsyncError(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirmation) {
@@ -75,6 +82,7 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  getMe,
   updateMe,
   deleteMe
 };
