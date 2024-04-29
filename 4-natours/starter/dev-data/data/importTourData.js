@@ -2,6 +2,8 @@ const fs = require('fs');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const Tour = require('../../models/tourModel');
+const User = require('../../models/userModel');
+const Review = require('../../models/reviewModel');
 
 dotenv.config({ path: './config.env' });
 
@@ -23,12 +25,16 @@ connectdb();
 
 // the JSON.parse converts the json data into a javascript object
 const tours = JSON.parse(fs.readFileSync(`${__dirname}/tours.json`, 'utf-8'));
+const users = JSON.parse(fs.readFileSync(`${__dirname}/users.json`, 'utf-8'));
+const reviews = JSON.parse(fs.readFileSync(`${__dirname}/reviews.json`, 'utf-8'));
 
 // FUNCTION TO IMPORT DATA FROM JSON FILE TO DATABASE
 
 const importToursData = async () => {
     try {
         await Tour.create(tours);
+        await User.create(users, { validateBeforeSave: false });
+        await Review.create(reviews);
         console.log('data imported to database');
     } catch (error) {
         console.log(error);
@@ -44,6 +50,8 @@ const deleteAllData = async () => {
         // with deleteMany nothing needs to be passed in because it will delete all
         // Tour is mongoose model which provides methods to interact with the mongodb database
         await Tour.deleteMany();
+        await User.deleteMany();
+        await Review.deleteMany();
         console.log('all data has been deleted');
     } catch (error) {
         console.log(error)
