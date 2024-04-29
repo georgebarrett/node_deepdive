@@ -21,7 +21,7 @@ routes
 
 routes
     .route('/monthly-plan/:year')
-    .get(toursController.getMonthlyPlan);
+    .get(authController.protect, authController.restrictTo('admin', 'lead-guide', 'guide'), toursController.getMonthlyPlan);
 
 routes
     .route('/')
