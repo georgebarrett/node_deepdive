@@ -11,11 +11,12 @@ const routes = express.Router({ mergeParams: true });
 // both of these routes will be re-routed to the router below using mergeParams
 // routes.use('/:tourId/reviews', reviewRouter); - this line is logic behing the re-routing and is in tourRoutes.js
 
+routes.use(authController.protect);
+
 routes
     .route('/')
     .get(reviewController.getAllReviews)
-    .post(
-        authController.protect, 
+    .post( 
         authController.restrictTo('user'), 
         reviewController.setUserAndTourIds, 
         reviewController.createReview
@@ -26,6 +27,5 @@ routes
     .get(reviewController.getReviewById)
     .patch(reviewController.updateReview)
     .delete(reviewController.deleteReview);
-    // .delete(authController.protect, authController.restrictTo('admin'), crudFactory.deleteOne);
 
 module.exports = routes;
