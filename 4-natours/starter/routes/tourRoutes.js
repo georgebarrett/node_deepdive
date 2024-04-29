@@ -25,7 +25,7 @@ routes
 
 routes
     .route('/')
-    .get(authController.protect, toursController.getAllTours)
+    .get(toursController.getAllTours)
     .post(toursController.createTour);
 
 routes
