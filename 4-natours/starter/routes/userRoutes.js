@@ -5,15 +5,22 @@ const authcontroller = require('../controllers/authController');
 const routes = express();
 
 routes
-  // first protect middleware, then getMe will assign the id of the user to the URL parameters, then the GET request can be made 
-  .get('/me', authcontroller.protect, usersController.getMe, usersController.getUserById)
   .post('/signup', authcontroller.signup)
   .post('/login', authcontroller.login)
   .post('/forgotPassword', authcontroller.forgotPassword)
   .patch('/resetPassword/:token', authcontroller.resetPassword)
-  .patch('/updateMyPassword',authcontroller.protect,authcontroller.updatePassword)
-  .patch('/updateMe', authcontroller.protect, usersController.updateMe)
-  .delete('/deleteMe', authcontroller.protect, usersController.deleteMe);
+  
+// this line applies the protect functionality to all the routes below
+routes.use(authcontroller.protect);
+
+routes
+  // first protect middleware, then getMe will assign the id of the user to the URL parameters, then the GET request can be made 
+  .get('/me', usersController.getMe, usersController.getUserById)
+  .patch('/updateMyPassword', authcontroller.updatePassword)
+  .patch('/updateMe', usersController.updateMe)
+  .delete('/deleteMe', usersController.deleteMe);
+
+routes.use(authcontroller.restrictTo('admin'));
 
 routes
   .route('/')
