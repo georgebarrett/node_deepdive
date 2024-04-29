@@ -26,7 +26,7 @@ routes
 routes
     .route('/')
     .get(toursController.getAllTours)
-    .post(toursController.createTour);
+    .post(authController.protect, authController.restrictTo('admin', 'lead-guide'), toursController.createTour);
 
 routes
     // adding :id creates a variable in the url that can store an id integer
