@@ -22,7 +22,7 @@ const tours = JSON.parse(
 
 const getMe = (req, res, next) => {
   // this means i can use the getOne crud-factory function, which finds the user's id using the url paramters
-  // and redfine at is their id. i can do this because they have logged in
+  // this line assigns the id of the logged in user to the id in the url paramter
   req.params.id = req.user.id;
   next();
 };
