@@ -5,6 +5,8 @@ const authcontroller = require('../controllers/authController');
 const routes = express();
 
 routes
+  // first protect middleware, then getMe will assign the id of the user to the URL parameters, then the GET request can be made 
+  .get('/me', authcontroller.protect, usersController.getMe, usersController.getAllUsers)
   .post('/signup', authcontroller.signup)
   .post('/login', authcontroller.login)
   .post('/forgotPassword', authcontroller.forgotPassword)
