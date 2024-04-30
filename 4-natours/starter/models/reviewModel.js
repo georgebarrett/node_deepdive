@@ -63,7 +63,6 @@ reviewSchema.statics.calcAverageRatings = async function(tourId) {
             }
         }
     ]);
-    console.log(stats);
 };
 
 reviewSchema.post('save', function() {
