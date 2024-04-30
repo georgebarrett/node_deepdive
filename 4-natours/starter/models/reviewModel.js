@@ -43,6 +43,29 @@ reviewSchema.pre(/^find/, function(next) {
     next();
 });
 
+// instance method for calculating the average rating of tours
+// tourId is the id of the tour for which the ratings are calculated
+reviewSchema.statics.calcAverageRatings = async function(tourId) {
+    // the aggregation pipeline is bound to reviews because of 'this'. only the reviews collection in my db will be interacted with
+    const stats = await this.aggregate([
+        {
+            // $match filters through the document until the tour with the right tour ID is found
+            $match: { tour: tourId }
+        },
+        {
+            $group: {
+                // this groups documents based on the 'tour' field
+                _id: '$tour',
+                // counts the number of reviews for each tour. incrementing by 1
+                numOfRatings: { $sum: 1 },
+                // calculates the rating for each group using the $avg operator
+                avgRating: { $avg: '$rating' }
+            }
+        }
+    ]);
+    console.log(stats);
+};
+
 const Review = mongoose.model('Review', reviewSchema);
 
 module.exports = Review;
