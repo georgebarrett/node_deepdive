@@ -14,7 +14,8 @@ const getAll = Model => catchAsyncError(async (req, res, next) => {
         .paginate()
     // query now lives in 'features' which is the new object stored in a variable
     // .explain() = in-built function that adds stats to a query
-    const document = await features.query.explain();
+    // const document = await features.query.explain();
+    const document = await features.query;
 
     res.status(200).json({
         status: 'success',
