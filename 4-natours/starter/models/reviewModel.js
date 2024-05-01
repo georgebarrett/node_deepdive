@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Tour = require('../models/tourModel');
 
 const reviewSchema = new mongoose.Schema(
     {
@@ -43,13 +44,13 @@ reviewSchema.pre(/^find/, function(next) {
     next();
 });
 
-// instance method for calculating the average rating of tours
+// static method so 'aggregate' could be used. static methods influence the model itself
 // tourId is the id of the tour for which the ratings are calculated
 reviewSchema.statics.calcAverageRatings = async function(tourId) {
-    // the aggregation pipeline is bound to reviews because of 'this'. only the reviews collection in my db will be interacted with
+    // the aggregation pipeline is bound to reviews because of 'this'
     const stats = await this.aggregate([
         {
-            // $match filters through the document until the tour with the right tour ID is found
+            // selecting all the revews that match the tourId
             $match: { tour: tourId }
         },
         {
@@ -63,6 +64,12 @@ reviewSchema.statics.calcAverageRatings = async function(tourId) {
             }
         }
     ]);
+    console.log(stats);
+    // saving the stats from the pipeline to the tour in the database
+    await Tour.findByIdAndUpdate(tourId, {
+        ratingsQuantity: stats[0].numOfRatings,
+        ratingsAverage: stats[0].avgRating
+    });
 };
 
 reviewSchema.post('save', function() {
