@@ -144,6 +144,8 @@ const tourSchema = new mongoose.Schema({
 // price is the index. 1 means iterating in an ascending order. -1 the opposite
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ slug: 1 });
+// telling mongo that the start location should be indexed to a 2d sphere
+tourSchema.index({ startLocation: '2dsphere' })
 
 // this is busines logic that is not actually part of the database
 // it has nothing to do with requests and responses
