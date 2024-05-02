@@ -121,6 +121,23 @@ const getMonthlyPlan = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
+const getToursWithin = catchAsyncErrors(async (req, res, next) => {
+    // all the info comes from the URL paramters and is stored. the info his been destructured hence the {}
+    const { distance, latlng, unit } = req.params;
+    // the latlng param is changed from a string into an array or strings divided by a comma with the .split
+    // the two elements are then stored individually in a variable
+    const [lat, lng] = latlng.split(',');
+
+    if (!lat || !lng) {
+        next(new AppError('please provide the latitude and longitude in lat,lng format', 400));
+    }
+    console.log(distance, lat, lng, unit)
+
+    res.status(200).json({
+        status: 'success',
+    });
+});
+
 module.exports = {
     getAllTours,
     getTourById,
@@ -129,6 +146,7 @@ module.exports = {
     deleteTour,
     getTourStats,
     getMonthlyPlan,
+    getToursWithin,
     aliasTopFiveCheapestTours
 };
 
