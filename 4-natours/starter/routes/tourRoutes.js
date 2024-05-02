@@ -24,7 +24,8 @@ routes
     .get(authController.protect, authController.restrictTo('admin', 'lead-guide', 'guide'), toursController.getMonthlyPlan);
 
 routes
-    .route('/tours-within/:distance/centre/:latlng/unit/:unit', toursController.getToursWithin)
+    .route('/tours-within/:distance/centre/:latlng/unit/:unit')
+    .get(toursController.getToursWithin);
 
 routes
     .route('/')
