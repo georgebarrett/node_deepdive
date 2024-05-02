@@ -34,6 +34,10 @@ const reviewSchema = new mongoose.Schema(
     }
 );
 
+// each combination of tour and user has to be unique to allow a user to make a review on a tour
+// this prevents multiple reviews on a tour from the same user
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
+
 reviewSchema.pre(/^find/, function(next) {
     // .populates can be chained together to produce more nested field
     // in this case i just want the user's name to appear in the user object that is nested in the reviews object 
