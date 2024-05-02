@@ -64,12 +64,19 @@ reviewSchema.statics.calcAverageRatings = async function(tourId) {
             }
         }
     ]);
-    console.log(stats);
-    // saving the stats from the pipeline to the tour in the database
-    await Tour.findByIdAndUpdate(tourId, {
-        ratingsQuantity: stats[0].numOfRatings,
-        ratingsAverage: stats[0].avgRating
-    });
+    if (stats.length > 0 ) {
+        // saving the stats from the pipeline to the tour in the database
+        await Tour.findByIdAndUpdate(tourId, {
+            ratingsQuantity: stats[0].numOfRatings,
+            ratingsAverage: stats[0].avgRating
+        });
+    } else {
+        // this is the default for when there are no reviews
+        await Tour.findByIdAndUpdate(tourId, {
+            ratingsQuantity: 0,
+            ratingsAverage: 4.5
+        });
+    }   
 };
 
 reviewSchema.post('save', function() {
@@ -80,13 +87,14 @@ reviewSchema.post('save', function() {
 
 // method for updating a review
 reviewSchema.pre(/^findOneAnd/, async function(next) {
+    // findOne retrieves the current document from the database and stores it in this.review. the current query variable
     this.review = await this.clone().findOne();
-    console.log(this.review);
     next();
 });
 
 // method for performing the new review calculations 
 reviewSchema.post(/^findOneAnd/, async function() {
+    // due to this.review i can call the calcAverageRatings function
     await this.review.constructor.calcAverageRatings(this.review.tour);
 });
 
