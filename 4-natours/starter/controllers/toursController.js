@@ -166,7 +166,16 @@ const getDistances = catchAsyncErrors(async (req, res, next) => {
                     coordinates: [lng * 1, lat * 1]
                 },
                 // this field will be created and display all the aggregation calculations that have been made
-                distanceField: 'distance'
+                distanceField: 'distance',
+                // converting distance to km
+                distanceMultiplier: 0.0001
+            }
+        },    
+        {
+            // the fields inside the 'distance' array field that i want to keep
+            $project: {
+                distance: 1,
+                name: 1
             }
         }
     ]);
