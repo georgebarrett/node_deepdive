@@ -28,6 +28,10 @@ routes
     .get(toursController.getToursWithin);
 
 routes
+    .route('/distances/:latlng/unit/:unit')
+    .get(toursController.getDistances)
+
+routes
     .route('/')
     .get(toursController.getAllTours)
     .post(authController.protect, authController.restrictTo('admin', 'lead-guide'), toursController.createTour);
