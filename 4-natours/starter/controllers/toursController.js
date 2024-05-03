@@ -128,13 +128,23 @@ const getToursWithin = catchAsyncErrors(async (req, res, next) => {
     // the two elements are then stored individually in a variable
     const [lat, lng] = latlng.split(',');
 
+    // this variable stores radians. a radian is a unit that divides the distance variable by the radius of the earth
+    const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+    
     if (!lat || !lng) {
         next(new AppError('please provide the latitude and longitude in lat,lng format', 400));
     }
     console.log(distance, lat, lng, unit)
 
+    // centerSphere takes an array of the coordinates and the radius
+    const tours = await Tour.find({ startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } } });
+
     res.status(200).json({
         status: 'success',
+        results: tours.length,
+        data: {
+            data: tours
+        }
     });
 });
 
