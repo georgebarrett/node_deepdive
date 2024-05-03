@@ -156,7 +156,7 @@ const getDistances = catchAsyncErrors(async (req, res, next) => {
         next(new AppError('please provide the latitude and longitude in lat, lng format', 400));
     }
 
-    const distances = Tour.aggregate([
+    const distances = await Tour.aggregate([
         {
             $geoNear: {
                 // the geographic point that is passed into the function
