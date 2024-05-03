@@ -171,7 +171,7 @@ const getDistances = catchAsyncErrors(async (req, res, next) => {
         }
     ]);
 
-    res.stats(200).json({
+    res.status(200).json({
         status: 'success',
         data: {
             data: distances
