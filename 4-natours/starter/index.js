@@ -10,6 +10,7 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
+const cors = require('cors');
 
 const app = express();
 
@@ -17,6 +18,13 @@ const app = express();
 
 // security for headers. essential
 app.use(helmet());
+app.use(cors());
+
+app.use(cors({
+    origin: 'http://localhost:5173/'
+}));
+
+app.use(express.static(path.join(__dirname, '../frontend/dist')));
 
 // morgan is in this if statement so it will only be activated when the 'development' envirnoment is activated
 // this is due to morgan being able to display sensitive information.
@@ -58,10 +66,6 @@ app.use(hpp({
         'price'
     ]
 }));
-
-// this is for being able to access static files
-// it also sets the public folder to the route
-app.use(express.static(`${__dirname}/public`));
 
 // always pass next into middleware functions otherwise the code gets stuck
 app.use((req, res, next) => {
