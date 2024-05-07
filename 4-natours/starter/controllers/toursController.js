@@ -152,6 +152,8 @@ const getDistances = catchAsyncErrors(async (req, res, next) => {
     const {latlng, unit } = req.params;
     const [lat, lng] = latlng.split(',');
 
+    const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+
     if (!lat || !lng) {
         next(new AppError('please provide the latitude and longitude in lat, lng format', 400));
     }
@@ -168,7 +170,7 @@ const getDistances = catchAsyncErrors(async (req, res, next) => {
                 // this field will be created and display all the aggregation calculations that have been made
                 distanceField: 'distance',
                 // converting distance to km
-                distanceMultiplier: 0.0001
+                distanceMultiplier: multiplier
             }
         },    
         {
