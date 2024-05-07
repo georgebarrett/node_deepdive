@@ -18,13 +18,22 @@ const app = express();
 
 // security for headers. essential
 app.use(helmet());
-app.use(cors());
 
 app.use(cors({
     origin: 'http://localhost:5173/'
 }));
 
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
+app.get('/', (req, res) => {
+    res.send('Buenos dias')
+});                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, 'dist')));
+
+// Handles any requests that don't match the ones above by serving the index.html file
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
 
 // morgan is in this if statement so it will only be activated when the 'development' envirnoment is activated
 // this is due to morgan being able to display sensitive information.
@@ -80,10 +89,7 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/reviews', reviewRoutes);
 
 app.all('*', (req, res, next) => {
-
     next(new AppError(`cannot find ${req.originalUrl} on this server...`, 404));
-
-    next(error);
 });
 
 app.use(globalErrorHandler);
