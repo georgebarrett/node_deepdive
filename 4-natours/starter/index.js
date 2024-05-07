@@ -29,11 +29,11 @@ app.get('/', (req, res) => {
 });                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 
 // Serve static files from the React app build directory
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
 
 // Handles any requests that don't match the ones above by serving the index.html file
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
 });
 
 // morgan is in this if statement so it will only be activated when the 'development' envirnoment is activated
