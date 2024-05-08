@@ -15,26 +15,25 @@ const path = require('path');
 
 const app = express();
 
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
 // GLOBAL MIDDLEWARE
+
+// Serve static files from the React app build directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // security for headers. essential
 app.use(helmet());
 
 app.use(cors({
     origin: 'http://localhost:5173/'
-}));
-
-app.get('/', (req, res) => {
-    res.send('Buenos dias')
-});                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-
-// Serve static files from the React app build directory
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
+}));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 
 // Handles any requests that don't match the ones above by serving the index.html file
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'frontend/dist', 'index.html'));
+// });
 
 // morgan is in this if statement so it will only be activated when the 'development' envirnoment is activated
 // this is due to morgan being able to display sensitive information.
