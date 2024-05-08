@@ -1,5 +1,4 @@
 const express = require('express');
-const { route } = require('./reviewRoutes');
 
 const routes = express.Router();
 
