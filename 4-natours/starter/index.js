@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // GLOBAL MIDDLEWARE
 
-// Serve static files from the React app build directory
+// serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // security for headers. essential
@@ -81,6 +81,10 @@ app.use((req, res, next) => {
     // this is attaching a date to the request. .toISOString converts the date into a nice string
     req.requestTime = new Date().toISOString();
     next();
+});
+
+app.get('/', (req, res) => {
+    res.status(200).render('base');
 });
 
 // adding v1 is a form of version control
