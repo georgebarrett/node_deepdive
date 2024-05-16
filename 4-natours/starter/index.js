@@ -83,6 +83,10 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get('/', (req, res) => {
+    res.status(200).render('base');
+});
+
 // adding v1 is a form of version control
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
