@@ -4,7 +4,7 @@ const routes = express.Router();
 
 routes.get('/', (req, res) => {
     res.status(200).render('base', {
-        tour: 'The Forest Hiker',
+        tour: 'The Shoe Gazer',
         user: 'George'
     });
 });
@@ -17,7 +17,7 @@ routes.get('/overview', (req, res) => {
 
 routes.get('/tour', (req, res) => {
     res.status(200).render('tour', {
-        title: 'The Star Gazer Tour'
+        title: 'The Shoe Gazer Tour'
     });
 });
 
