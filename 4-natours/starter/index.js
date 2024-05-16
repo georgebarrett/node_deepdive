@@ -90,6 +90,18 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/overview', (req, res) => {
+    res.status(200).render('overview', {
+        title: 'All Tours'
+    });
+});
+
+app.get('/tour', (req, res) => {
+    res.status(200).render('tour', {
+        title: 'The Shoe Gazer'
+    });
+});
+
 // adding v1 is a form of version control
 app.use('/api/v1/tours', tourRoutes);
 app.use('/api/v1/users', userRoutes);
