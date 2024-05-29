@@ -19,7 +19,7 @@ const getTour = catchAsync(async (req, res) => {
     })
     
     res.status(200).render('tour', {
-        title: 'The Shoe Gazer',
+        title: `${tour.name} Tour`,
         tour: tour
     });
 });
