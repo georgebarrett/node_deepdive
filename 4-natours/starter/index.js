@@ -13,6 +13,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const cors = require('cors');
 const path = require('path');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -59,6 +60,7 @@ app.use('/api', limiter);
 
 // express.json is middleware so that data from the client side can be attached to request objects
 app.use(express.json({ limit: '10kb' }));
+app.use(cookieParser());
 
 // DATA SANITISATION - noSQL and XSS
 
@@ -81,6 +83,7 @@ app.use(hpp({
 app.use((req, res, next) => {
     // this is attaching a date to the request. .toISOString converts the date into a nice string
     req.requestTime = new Date().toISOString();
+    console.log(req.cookies);
     next();
 });
 
