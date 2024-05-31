@@ -12,7 +12,7 @@ const getOverview = catchAsync(async (req, res, next) => {
     });
 });
 
-const getTour = catchAsync(async (req, res) => {
+const getTour = catchAsync(async (req, res, next) => {
     const tour = await Tour.findOne({ slug: req.params.slug }).populate({
         path: 'reviews',
         fields: 'review rating user'
@@ -24,7 +24,14 @@ const getTour = catchAsync(async (req, res) => {
     });
 });
 
+const getLoginForm = (req, res) => {
+    res.status(200).render('login', {
+        title: 'Log in',
+    });
+};
+
 module.exports = {
     getOverview,
-    getTour
+    getTour,
+    getLoginForm
 }
