@@ -4,45 +4,44 @@ console.log('client says hi');
 const locations = JSON.parse(document.getElementById('map').dataset.locations);
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZ2VvcmdlYmFycmV0dDg3OSIsImEiOiJjbHd0OTI2Y3MwMWFjMmxzZ2x0cnl5eTZjIn0.RYXyzymRdX6EHEFH-LlnIw';
-    const map = new mapboxgl.Map({
-	    container: 'map', // container ID
-	    style: 'mapbox://styles/mapbox/streets-v12', // style URL
-	    center: [-74.5, 40], // starting position [lng, lat]
-	    zoom: 9, // starting zoom
-    });
-
-// console.log('client says hi');
-// document.addEventListener('DOMContentLoaded', () => {
-//     const mapElement = document.getElementById('map');
-//     if (mapElement) {
-//         console.log('Map element found');
-//         const locationsData = mapElement.dataset.locations;
-//         if (locationsData) {
-//             const locations = JSON.parse(locationsData);
-
-//             if (typeof mapboxgl !== 'undefined') {
-//                 console.log('Mapbox GL JS library is loaded.');
-//                 mapboxgl.accessToken = 'pk.eyJ1IjoiZ2VvcmdlYmFycmV0dDg3OSIsImEiOiJjbHd0OTI2Y3MwMWFjMmxzZ2x0cnl5eTZjIn0.RYXyzymRdX6EHEFH-LlnIw';
-//                 const map = new mapboxgl.Map({
-//                     container: 'map',
-//                     style: 'mapbox://styles/mapbox/streets-v9',
-//                     center: [-74.5, 40], // Example coordinates
-//                     zoom: 9 // Example zoom level
-//                 });
-
-//                 locations.forEach(location => {
-//                     new mapboxgl.Marker()
-//                         .setLngLat(location.coordinates)
-//                         .addTo(map);
-//                 });
-//             } else {
-//                 console.error('Mapbox GL JS library is not loaded.');
-//             }
-//         } else {
-//             console.error('No locations data found on the map element.');
-//         }
-//     } else {
-//         console.error('Map element not found.');
-//     }
-// });
     
+const map = new mapboxgl.Map({
+	container: 'map',
+	style: 'mapbox://styles/georgebarrett879/clwuet48b015h01qx7rw76foa',
+	scrollZoom: false
+});
+
+const bounds = new mapboxgl.lnglatBounds();
+
+locations.array.forEach(locations => {
+	// create html marker
+	const element = document.createElement('div');
+	element.className = 'marker';
+
+	// add marker
+	new mapboxgl.Marker({
+		element: element,
+		anchor: 'bottom'
+	}).setlnglat(locations.coordinates).addTo(map);
+
+	// add popup
+	new mapboxgl
+		.Popup({
+			offset: 30
+		})
+		.setlnglat(locations.coordinates)
+		.setHTML(`<p>Day ${locations.day}: ${locations.description}</p>`)
+		.addTo(map);
+
+	// extends map to include current location
+	bounds.extend(locations.coordinates);
+});
+
+map.fitBounds(bounds, {
+	padding: {
+		top: 200,
+		bottom: 150,
+		left: 100,
+		right: 100
+	}
+});
