@@ -2,9 +2,9 @@ doctype html
 html(lang="en")
     head
         block head
+            meta(http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com")
             meta(charset="UTF-8")
             meta(name='viewport', content='width=device-width, initial-scale=1.0')
-            meta(http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.mapbox.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://api.mapbox.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com")
             link(rel='stylesheet', href='/css/style.css')
             link(rel='shortcut icon' type='image/png' href='/img/favicon.png')
             link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,300i,700')
@@ -21,11 +21,11 @@ html(lang="en")
         //- FOOTER
         include _footer
 
+        script(src='/js/mapbox.js' defer)
+        script(src='/js/login.js' defer)
         script(
             src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" 
             integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" 
             crossorigin="anonymous" 
             referrerpolicy="no-referrer"
         )
-        script(src='/js/mapbox.js' defer)
-        script(src='/js/login.js' defer)
