@@ -69,7 +69,6 @@ const login = catchAsyncErrors(async (req, res, next) => {
 
 const protect = catchAsyncErrors(async (req, res, next) => {
     let token;
-
     if (
         req.headers.authorization &&
         req.headers.authorization.startsWith('Bearer')
@@ -99,6 +98,30 @@ const protect = catchAsyncErrors(async (req, res, next) => {
 
     req.user = freshUser;
 
+    next();
+});
+
+const isLoggedIn = catchAsyncErrors(async (req, res, next) => {
+    if (req.cookies.jwt) {
+        // verfies token
+        const decodedPayload = await util.promisify(jwt.verify)(
+            req.cookies.jwt,
+            process.env.JWT_SECRET,
+        );
+        // verifies that user exists
+        const freshUser = await User.findById(decodedPayload.id);
+        if (!freshUser) {
+            return next();
+        }
+        // verifies the most current user password
+        if (freshUser.changePasswordAfterAccountCreation(decodedPayload.iat)) {
+            return next();
+        }
+        // THERE IS A LOGGED IN USER
+        // the logged in user can be accessed in templates due to calling locals
+        res.locals.user = freshUser;
+        next();
+    }
     next();
 });
 
@@ -189,5 +212,6 @@ module.exports = {
     restrictTo,
     forgotPassword,
     resetPassword,
-    updatePassword
+    updatePassword,
+    isLoggedIn
 };
