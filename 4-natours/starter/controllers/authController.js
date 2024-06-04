@@ -120,7 +120,7 @@ const isLoggedIn = catchAsyncErrors(async (req, res, next) => {
         // THERE IS A LOGGED IN USER
         // the logged in user can be accessed in templates due to calling locals
         res.locals.user = freshUser;
-        next();
+        return next();
     }
     next();
 });
