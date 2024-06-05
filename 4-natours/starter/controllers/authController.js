@@ -205,6 +205,16 @@ const updatePassword = catchAsyncErrors(async (req, res, next) => {
     createSendToken(user, 200, res);
 });
 
+const logout = (req, res) => {
+    res.cookie('jwt', 'loggedOut', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    });
+    res.status(200).json({
+        status: 'success'
+    });
+};
+
 module.exports = {
     signup,
     login,
@@ -213,5 +223,6 @@ module.exports = {
     forgotPassword,
     resetPassword,
     updatePassword,
-    isLoggedIn
+    isLoggedIn,
+    logout
 };
