@@ -5,6 +5,7 @@ const authcontroller = require('../controllers/authController');
 const routes = express();
 
 routes
+  .get('/logout', authcontroller.logout)
   .post('/signup', authcontroller.signup)
   .post('/login', authcontroller.login)
   .post('/forgotPassword', authcontroller.forgotPassword)
