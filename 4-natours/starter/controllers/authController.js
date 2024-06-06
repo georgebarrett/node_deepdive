@@ -67,6 +67,16 @@ const login = catchAsyncErrors(async (req, res, next) => {
     createSendToken(user, 200, res);
 });
 
+const logout = (req, res) => {
+    res.cookie('jwt', 'loggedOut', {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    });
+    res.status(200).json({
+        status: 'success'
+    });
+};
+
 const protect = catchAsyncErrors(async (req, res, next) => {
     let token;
     if (
@@ -97,13 +107,13 @@ const protect = catchAsyncErrors(async (req, res, next) => {
     }
 
     req.user = freshUser;
-
     next();
 });
 
-const isLoggedIn = async (req, res, next) => {
-    try {    
-        if (req.cookies.jwt) {
+// only for rendered pages. there will be no errors
+const isLoggedIn = async (req, res, next) => {    
+    if (req.cookies.jwt) {
+        try {
             // verfies token
             const decodedPayload = await util.promisify(jwt.verify)(
                 req.cookies.jwt,
@@ -122,9 +132,9 @@ const isLoggedIn = async (req, res, next) => {
             // the logged in user can be accessed in templates due to calling locals
             res.locals.user = freshUser;
             return next();
+        } catch (error) {
+            return next();
         }
-    } catch (error) {
-        return next();
     }
     next();
 };
@@ -208,16 +218,6 @@ const updatePassword = catchAsyncErrors(async (req, res, next) => {
 
     createSendToken(user, 200, res);
 });
-
-const logout = (req, res) => {
-    res.cookie('jwt', 'loggedOut', {
-        expires: new Date(Date.now() + 10 * 1000),
-        httpOnly: true
-    });
-    res.status(200).json({
-        status: 'success'
-    });
-};
 
 module.exports = {
     signup,
