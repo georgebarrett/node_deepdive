@@ -12619,7 +12619,7 @@ if (mapBox) {
 }
 ;
 if (loginForm) {
-  document.querySelector('.form').addEventListener('submit', function (e) {
+  loginForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var email = document.getElementById('email').value;
     var password = document.getElementById('password').value;
@@ -12653,7 +12653,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49947" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62716" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
