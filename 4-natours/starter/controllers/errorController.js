@@ -23,13 +23,19 @@ const handleValidationError = err => {
     return new AppError(message, 400);
 };
 
-const sendDevError = (err, res) => {
-    res.status(err.statusCode).json({
-        status: err.status,
-        error: err,
-        message: err.message,
-        stack: err.stack
-    });
+const sendDevError = (err, req, res) => {
+    if (req.originalUrl.startsWith('/api')) {
+        res.status(err.statusCode).json({
+            status: err.status,
+            error: err,
+            message: err.message,
+            stack: err.stack
+        });
+    } else {
+        res.status(err.status).render('error', {
+            title: 'Something went wrong...'
+        });
+    }
 };
 
 const sendProdError = (err, res) => {
