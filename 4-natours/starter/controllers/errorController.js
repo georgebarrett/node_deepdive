@@ -26,36 +26,48 @@ const handleValidationError = err => {
 const sendDevError = (err, req, res) => {
     // api
     if (req.originalUrl.startsWith('/api')) {
-        res.status(err.statusCode).json({
+        return res.status(err.statusCode).json({
             status: err.status,
             error: err,
             message: err.message,
             stack: err.stack
         });
-    } else {
-        // rendered page
-        res.status(err.statusCode).render('error', {
-            title: 'Something went wrong...',
-            msg: err.message
-        });
     }
+    // rendered page
+    return res.status(err.statusCode).render('error', {
+        title: 'Something went wrong...',
+        msg: err.message
+    });
 };
 
 const sendProdError = (err, req, res) => {
-    if (err.isOperational) {
-        console.log({"prod": err})
-        res.status(err.statusCode).json({
-            status: err.status,
-            message: err.message,
-        });
-    } else {
+    if (req.originalUrl.startsWith('/api')) {
+        if (err.isOperational) {
+            return res.status(err.statusCode).json({
+                status: err.status,
+                message: err.message,
+            });
+        }
         console.error('error', err);
 
-        res.status(500).json({
+        return res.status(500).json({
             status: 'error',
             message: 'something went wrong...'
         });
     }
+    // B
+    if (err.isOperational) {
+        return res.status(err.statusCode).render('error', {
+            title: 'Something went wrong...',
+            message: err.message
+        });
+    }
+    console.error('error', err);
+
+    return res.status(err.statusCode).render('error', {
+        title: 'Something went wrong...',
+        msg: 'Please try again later.'
+    });
 };
 
 const handleJwtError = () => new AppError('invalid token. please login again', 401);
