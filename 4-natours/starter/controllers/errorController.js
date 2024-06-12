@@ -24,6 +24,7 @@ const handleValidationError = err => {
 };
 
 const sendDevError = (err, req, res) => {
+    // api
     if (req.originalUrl.startsWith('/api')) {
         res.status(err.statusCode).json({
             status: err.status,
@@ -32,8 +33,10 @@ const sendDevError = (err, req, res) => {
             stack: err.stack
         });
     } else {
-        res.status(err.status).render('error', {
-            title: 'Something went wrong...'
+        // rendered page
+        res.status(err.statusCode).render('error', {
+            title: 'Something went wrong...',
+            msg: err.message
         });
     }
 };
