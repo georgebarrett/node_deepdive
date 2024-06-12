@@ -8,6 +8,7 @@ routes.use(authController.isLoggedIn);
 
 routes.get('/', viewsController.getOverview);
 routes.get('/tour/:slug', authController.protect, viewsController.getTour);
-routes.get('/login', viewsController.getLoginForm)
+routes.get('/login', viewsController.getLoginForm);
+routes.get('/me', viewsController.getAccount);
 
 module.exports = routes;
