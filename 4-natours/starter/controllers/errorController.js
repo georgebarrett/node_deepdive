@@ -38,7 +38,7 @@ const sendDevError = (err, req, res) => {
     }
 };
 
-const sendProdError = (err, res) => {
+const sendProdError = (err, req, res) => {
     if (err.isOperational) {
         console.log({"prod": err})
         res.status(err.statusCode).json({
@@ -66,7 +66,7 @@ module.exports = (err, req, res, next) => {
     err.status = err.status || 'error'
 
     if (process.env.NODE_ENV === 'development') {
-        sendDevError(err, res);
+        sendDevError(err, req, res);
     } else if (process.env.NODE_ENV === 'production') {
         if (err.name === 'CastError') err = handleCastError(err);
         if (err.code === 11000) err = handleDuplicateFields(err);
@@ -74,6 +74,6 @@ module.exports = (err, req, res, next) => {
         if (err.name === 'JsonWebTokenError') err = handleJwtError()
         if (err.name === 'TokenExpiredError') err = handleJwtExpiryError();
 
-        sendProdError(err, res);
+        sendProdError(err, req, res);
     }    
 };
