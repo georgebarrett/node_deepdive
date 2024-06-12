@@ -76,19 +76,20 @@ const handleJwtExpiryError = () => new AppError('your token has expired. please 
 
 
 module.exports = (err, req, res, next) => {
-    console.log(err)
     err.statusCode = err.statusCode || 500;
     err.status = err.status || 'error'
 
     if (process.env.NODE_ENV === 'development') {
         sendDevError(err, req, res);
     } else if (process.env.NODE_ENV === 'production') {
-        if (err.name === 'CastError') err = handleCastError(err);
-        if (err.code === 11000) err = handleDuplicateFields(err);
-        if (err.name === 'ValidationError') err = handleValidationError(err);
-        if (err.name === 'JsonWebTokenError') err = handleJwtError()
-        if (err.name === 'TokenExpiredError') err = handleJwtExpiryError();
+        let error = { ...err };
+        error.message = err.message
+        if (error.name === 'CastError') error = handleCastError(error);
+        if (error.code === 11000) error = handleDuplicateFields(error);
+        if (error.name === 'ValidationError') error = handleValidationError(error);
+        if (error.name === 'JsonWebTokenError') error = handleJwtError()
+        if (error.name === 'TokenExpiredError') error = handleJwtExpiryError();
 
-        sendProdError(err, req, res);
+        sendProdError(error, req, res);
     }    
 };
