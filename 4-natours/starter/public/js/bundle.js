@@ -12502,30 +12502,20 @@ var updateData = exports.updateData = /*#__PURE__*/function () {
           });
         case 3:
           res = _context.sent;
-          console.log('Update Result:', result);
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', 'user data updated');
           }
-          _context.next = 11;
+          _context.next = 10;
           break;
-        case 8:
-          _context.prev = 8;
+        case 7:
+          _context.prev = 7;
           _context.t0 = _context["catch"](0);
-          if (_context.t0.response) {
-            console.error('Error response:', _context.t0.response.data);
-            (0, _alerts.showAlert)('error', _context.t0.response.data.message);
-          } else if (_context.t0.request) {
-            console.error('Error request:', _context.t0.request);
-            (0, _alerts.showAlert)('error', 'No response received from the server.');
-          } else {
-            console.error('Error message:', _context.t0.message);
-            (0, _alerts.showAlert)('error', 'An error occurred. Please try again.');
-          }
-        case 11:
+          (0, _alerts.showAlert)('error', _context.t0.response.data.message);
+        case 10:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 8]]);
+    }, _callee, null, [[0, 7]]);
   }));
   return function updateData(_x, _x2) {
     return _ref.apply(this, arguments);
