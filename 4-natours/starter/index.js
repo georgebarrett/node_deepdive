@@ -26,10 +26,18 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // security for headers. essential
-app.use(helmet());
+app.use(helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        connectSrc: ["'self'", "ws://localhost:64627"]
+      }
+    }
+}));
 
 app.use(cors({
-    origin: 'http://localhost:5173/'
+    origin: 'http://localhost:64627/',
+    credentials: true
 }));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 
 // Handles any requests that don't match the ones above by serving the index.html file
@@ -60,6 +68,7 @@ app.use('/api', limiter);
 
 // express.json is middleware so that data from the client side can be attached to request objects
 app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 app.use(cookieParser());
 
 // DATA SANITISATION - noSQL and XSS
