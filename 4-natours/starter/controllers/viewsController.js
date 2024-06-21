@@ -35,8 +35,15 @@ const getLoginForm = (req, res) => {
     });
 };
 
+const getAccount = (req, res) => {
+    res.status(200).render('account', {
+        title: 'Your account'
+    });
+};
+
 module.exports = {
     getOverview,
     getTour,
-    getLoginForm
+    getLoginForm,
+    getAccount
 }
