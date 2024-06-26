@@ -12493,33 +12493,29 @@ var updateSettings = exports.updateSettings = /*#__PURE__*/function () {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          console.log('Data to be sent:', data);
           url = type === 'password' ? 'http://localhost:3000/api/v1/users/updateMyPassword' : 'http://localhost:3000/api/v1/users/updateMe';
-          console.log('URL:', url);
-          _context.next = 6;
+          _context.next = 4;
           return (0, _axios.default)({
             method: 'PATCH',
             url: url,
             data: data
           });
-        case 6:
+        case 4:
           res = _context.sent;
-          console.log('Response:', res);
           if (res.data.status === 'success') {
             (0, _alerts.showAlert)('success', "".concat(type.toUpperCase(), " updated successfully"));
           }
-          _context.next = 15;
+          _context.next = 11;
           break;
-        case 11:
-          _context.prev = 11;
+        case 8:
+          _context.prev = 8;
           _context.t0 = _context["catch"](0);
-          console.error('Error:', _context.t0);
           (0, _alerts.showAlert)('error', _context.t0.response.data.message);
-        case 15:
+        case 11:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[0, 11]]);
+    }, _callee, null, [[0, 8]]);
   }));
   return function updateSettings(_x, _x2) {
     return _ref.apply(this, arguments);
