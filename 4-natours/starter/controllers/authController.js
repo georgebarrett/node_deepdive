@@ -88,7 +88,7 @@ const protect = catchAsyncErrors(async (req, res, next) => {
         token = req.cookies.jwt;
     }
 
-    if (!token) {
+    if (!token || token === 'loggedOut') {
         return next(new AppError('please log in to gain access to tour details', 401));
     }
 
@@ -112,7 +112,7 @@ const protect = catchAsyncErrors(async (req, res, next) => {
 });
 
 // only for rendered pages. there will be no errors
-const isLoggedIn = async (req, res, next) => {    
+const isLoggedIn = async (req, res, next) => {  
     if (req.cookies.jwt) {
         try {
             // verfies token
