@@ -54,9 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const passwordCurrent = document.getElementById('password-current').value;
             const password = document.getElementById('password').value;
             const passwordConfirmation = document.getElementById('password-confirm').value;
-            console.log('Current Password:', passwordCurrent);
-            console.log('New Password:', password);
-            console.log('Confirm Password:', passwordConfirmation);
             updateSettings({ passwordCurrent, password, passwordConfirmation }, 'password');
         });
     };
