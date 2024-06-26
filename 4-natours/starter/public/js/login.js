@@ -31,7 +31,7 @@ export const logout = async () => {
             url: 'http://localhost:3000/api/v1/users/logout',
         });
         // setting reload to true forces a server reload not a bowser cached reload
-        if (res.data.status = 'success') location.reload(true);
+        if (res.data.status = 'success') location.href="/";
     } catch (error) {
         showAlert('error', 'Error occurred whilst logging out. Please try again.');       
     }
