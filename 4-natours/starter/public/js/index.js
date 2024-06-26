@@ -4,10 +4,8 @@ import '@babel/polyfill';
 import { login, logout } from "./login";
 import { displayMap } from './mapbox';
 import { updateSettings } from './updateSettings';
-console.log('script loaded');
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
 
+document.addEventListener('DOMContentLoaded', () => {
     // DOM elements - to ensure pages without .map do not throw errors
     // const mapBox = document.getElementById('map');
     const loginForm = document.querySelector('.form--login');
@@ -22,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // };
 
     if (loginForm) {
-        console.log('Login form found');
         loginForm.addEventListener('submit', e => {
             e.preventDefault();
             const email = document.getElementById('email').value;
@@ -32,12 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (logOutButton) {
-        console.log('Logout button found');
         logOutButton.addEventListener('click', logout);
     };
 
     if (userDataForm) {
-        console.log('User data form found');
         userDataForm.addEventListener('submit', e => {
             e.preventDefault();
             const name = document.getElementById('name').value;
@@ -47,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     if (userPasswordForm) {
-        console.log('User password form found');
         userPasswordForm.addEventListener('submit', e => {
             e.preventDefault();
             console.log('Password form submitted');
