@@ -12663,10 +12663,7 @@ var _mapbox = require("./mapbox");
 var _updateSettings = require("./updateSettings");
 /* eslint-disabled */
 
-console.log('script loaded');
 document.addEventListener('DOMContentLoaded', function () {
-  console.log('DOM fully loaded and parsed');
-
   // DOM elements - to ensure pages without .map do not throw errors
   // const mapBox = document.getElementById('map');
   var loginForm = document.querySelector('.form--login');
@@ -12681,7 +12678,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // };
 
   if (loginForm) {
-    console.log('Login form found');
     loginForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var email = document.getElementById('email').value;
@@ -12691,12 +12687,10 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   ;
   if (logOutButton) {
-    console.log('Logout button found');
     logOutButton.addEventListener('click', _login.logout);
   }
   ;
   if (userDataForm) {
-    console.log('User data form found');
     userDataForm.addEventListener('submit', function (e) {
       e.preventDefault();
       var name = document.getElementById('name').value;
@@ -12709,7 +12703,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
   ;
   if (userPasswordForm) {
-    console.log('User password form found');
     userPasswordForm.addEventListener('submit', function (e) {
       e.preventDefault();
       console.log('Password form submitted');
@@ -12759,7 +12752,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57601" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62699" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
