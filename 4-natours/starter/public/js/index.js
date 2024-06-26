@@ -4,22 +4,22 @@ import '@babel/polyfill';
 import { login, logout } from "./login";
 import { displayMap } from './mapbox';
 import { updateSettings } from './updateSettings';
-
+console.log('script loaded');
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM fully loaded and parsed');
 
     // DOM elements - to ensure pages without .map do not throw errors
-    const mapBox = document.getElementById('map');
+    // const mapBox = document.getElementById('map');
     const loginForm = document.querySelector('.form--login');
     const logOutButton = document.querySelector('.nav__el--logout');
     const userDataForm = document.querySelector('.form-user-data');
     const userPasswordForm = document.querySelector('.form-user-password');
 
     // DELEGATION
-    if (mapBox) {
-        const locations = JSON.parse(mapBox.dataset.locations);
-        displayMap(locations);
-    };
+    // if (mapBox) {
+    //     const locations = JSON.parse(mapBox.dataset.locations);
+    //     displayMap(locations);
+    // };
 
     if (loginForm) {
         console.log('Login form found');
@@ -53,11 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Password form submitted');
             const passwordCurrent = document.getElementById('password-current').value;
             const password = document.getElementById('password').value;
-            const passwordConfirm = document.getElementById('password-confirm').value;
+            const passwordConfirmation = document.getElementById('password-confirm').value;
             console.log('Current Password:', passwordCurrent);
             console.log('New Password:', password);
-            console.log('Confirm Password:', passwordConfirm);
-            updateSettings({ passwordCurrent, password, passwordConfirm }, 'password');
+            console.log('Confirm Password:', passwordConfirmation);
+            updateSettings({ passwordCurrent, password, passwordConfirmation }, 'password');
         });
     };
 
