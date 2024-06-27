@@ -43,7 +43,6 @@ if (userDataForm) {
 if (userPasswordForm) {
     userPasswordForm.addEventListener('submit', async e => {
         e.preventDefault();
-        console.log('Password form submitted');
         const passwordCurrent = document.getElementById('password-current').value;
         const password = document.getElementById('password').value;
         const passwordConfirmation = document.getElementById('password-confirm').value;
