@@ -1,9 +1,6 @@
 const express = require('express');
-const multer = require('multer');
 const usersController = require('../controllers/usersController');
 const authcontroller = require('../controllers/authController');
-
-const upload = multer({ dest: 'public/img/users' });
 
 const routes = express();
 
@@ -22,7 +19,7 @@ routes
   .get('/me', usersController.getMe, usersController.getUserById)
   .patch('/updateMyPassword', authcontroller.updatePassword)
   // .single is due to wanting to upload only one single image
-  .patch('/updateMe', upload.single('photo'), usersController.updateMe)
+  .patch('/updateMe', usersController.uploadUserPhoto, usersController.updateMe)
   .delete('/deleteMe', usersController.deleteMe);
 
 routes.use(authcontroller.restrictTo('admin'));
