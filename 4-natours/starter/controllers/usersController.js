@@ -30,6 +30,9 @@ const getMe = (req, res, next) => {
 
 // updating the currently athenticated user
 const updateMe = catchAsyncError(async (req, res, next) => {
+  console.log(req.file);
+  console.log(req.body);
+
   if (req.body.password || req.body.passwordConfirmation) {
     return next(
       new AppError(
