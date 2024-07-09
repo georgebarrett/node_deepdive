@@ -1,8 +1,13 @@
 const fs = require('fs');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
+const multer = require('multer');
 const catchAsyncError = require('../utils/catchAsyncError');
 const factory = require('./crudFactory');
+
+const upload = multer({ dest: 'public/img/users' });
+
+const uploadUserPhoto = upload.single('photo');
 
 const filterObject = (object, ...allowedFields) => {
   const newObject = {};
@@ -88,5 +93,6 @@ module.exports = {
   deleteUser,
   getMe,
   updateMe,
-  deleteMe
+  deleteMe,
+  uploadUserPhoto
 };
