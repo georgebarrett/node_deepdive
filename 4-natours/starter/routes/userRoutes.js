@@ -3,7 +3,7 @@ const multer = require('multer');
 const usersController = require('../controllers/usersController');
 const authcontroller = require('../controllers/authController');
 
-const upload = multer({ dest: 'public.img/users' });
+const upload = multer({ dest: 'public/img/users' });
 
 const routes = express();
 
