@@ -1,6 +1,9 @@
 const express = require('express');
+const multer = require('multer');
 const usersController = require('../controllers/usersController');
 const authcontroller = require('../controllers/authController');
+
+const upload = multer({ dest: 'public.img/users' });
 
 const routes = express();
 
@@ -18,7 +21,8 @@ routes
   // first protect middleware, then getMe will assign the id of the user to the URL parameters, then the GET request can be made 
   .get('/me', usersController.getMe, usersController.getUserById)
   .patch('/updateMyPassword', authcontroller.updatePassword)
-  .patch('/updateMe', usersController.updateMe)
+  // .single is due to wanting to upload only one single image
+  .patch('/updateMe', upload.single('photo'), usersController.updateMe)
   .delete('/deleteMe', usersController.deleteMe);
 
 routes.use(authcontroller.restrictTo('admin'));
