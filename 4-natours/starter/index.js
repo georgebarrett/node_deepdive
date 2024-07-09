@@ -90,7 +90,6 @@ app.use(hpp({
 
 // always pass next into middleware functions otherwise the code gets stuck
 app.use((req, res, next) => {
-    console.log(req.cookies);
     // this is attaching a date to the request. .toISOString converts the date into a nice string
     req.requestTime = new Date().toISOString();
     next();
