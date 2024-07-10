@@ -5,7 +5,29 @@ const multer = require('multer');
 const catchAsyncError = require('../utils/catchAsyncError');
 const factory = require('./crudFactory');
 
-const upload = multer({ dest: 'public/img/users' });
+const multerStorage = multer.diskStorage({
+  destination: (req, file, callBack) => {
+    callBack(null, 'public/img/users', )
+  },
+  filename: (req, file, callBack) => {
+    // extracting the file extension and how i want to store them
+    const extention = file.mimetype.split('/')[1];
+    callBack(null, `user-${req.user.id}-${Date.now()}.${extention}`);
+  }
+});
+
+const multerFilter = (req, file, callBack) => {
+  if (file.mimetype.startsWith('image')) {
+    callBack(null, true);
+  } else {
+    callBack(new AppError('Please only upload images.', 400), false);
+  }
+}
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
 
 const uploadUserPhoto = upload.single('photo');
 
