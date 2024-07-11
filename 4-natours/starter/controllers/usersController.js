@@ -57,9 +57,6 @@ const getMe = (req, res, next) => {
 
 // updating the currently athenticated user
 const updateMe = catchAsyncError(async (req, res, next) => {
-  console.log(req.file);
-  console.log(req.body);
-
   if (req.body.password || req.body.passwordConfirmation) {
     return next(
       new AppError(
@@ -68,8 +65,12 @@ const updateMe = catchAsyncError(async (req, res, next) => {
       ),
     );
   }
-  // filtering out unwanted field names
+
+  // filtering out unwanted field names that cannot be updated
   const filteredBody = filterObject(req.body, 'name', 'email');
+  // if there is a photo property then it will be added to the filteredBody object
+  // the photo property is equal to the files filename
+  if (req.file) filteredBody.photo = req.file.filename;
   // update user document
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, { new: true, runValidators: true });
 
