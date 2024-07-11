@@ -2,34 +2,85 @@ const fs = require('fs');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const multer = require('multer');
+const sharp = require('sharp');
 const catchAsyncError = require('../utils/catchAsyncError');
 const factory = require('./crudFactory');
 
-const multerStorage = multer.diskStorage({
-  destination: (req, file, callBack) => {
-    callBack(null, 'public/img/users', )
-  },
-  filename: (req, file, callBack) => {
+// const multerStorage = multer.diskStorage({
+//   destination: (req, file, callBack) => {
+//     callBack(null, 'public/img/users', )
+//   },
+//   filename: (req, file, callBack) => {
     // extracting the file extension and how i want to store them
-    const extention = file.mimetype.split('/')[1];
-    callBack(null, `user-${req.user.id}-${Date.now()}.${extention}`);
-  }
-});
+//     const extention = file.mimetype.split('/')[1];
+//     callBack(null, `user-${req.user.id}-${Date.now()}.${extention}`);
+//   }
+// });
 
-const multerFilter = (req, file, callBack) => {
-  if (file.mimetype.startsWith('image')) {
-    callBack(null, true);
-  } else {
-    callBack(new AppError('Please only upload images.', 400), false);
-  }
-}
+// const multerStorage = multer.memoryStorage();
+
+// const multerFilter = (req, file, callBack) => {
+//   if (file.mimetype.startsWith('image')) {
+//     callBack(null, true);
+//   } else {
+//     callBack(new AppError('Please only upload images.', 400), false);
+//   }
+// }
+
+// const upload = multer({
+//   storage: multerStorage,
+//   fileFilter: multerFilter
+// });
+
+// const uploadUserPhoto = upload.single('photo');
+
+// const resizeUserPhoto = catchAsyncError(async (req, res, next) => {
+//   if (!req.file) return next();
+
+//   req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+
+//   await sharp(req.file.buffer)
+//       .resize(500, 500)
+//       .toFormat('jpeg')
+//       .jpeg({ quality: 90 })
+//       .toFile(`public/img/users/${req.file.filename}`);
+
+//   next();
+// });
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image')) {
+        cb(null, true);
+    } else {
+        cb(
+            new AppError('Not an image, please upload an image file!', 400),
+            false,
+        );
+    }
+};
 
 const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter
+    storage: multerStorage,
+    fileFilter: multerFilter,
 });
 
 const uploadUserPhoto = upload.single('photo');
+
+const resizeUserPhoto = catchAsyncError(async (req, res, next) => {
+    if (!req.file) return next();
+
+    req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+
+    await sharp(req.file.buffer)
+        .resize(500, 500)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/users/${req.file.filename}`);
+
+    next();
+});
 
 const filterObject = (object, ...allowedFields) => {
   const newObject = {};
@@ -117,5 +168,6 @@ module.exports = {
   getMe,
   updateMe,
   deleteMe,
-  uploadUserPhoto
+  uploadUserPhoto,
+  resizeUserPhoto
 };
