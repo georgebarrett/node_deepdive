@@ -19,7 +19,7 @@ routes
   .get('/me', usersController.getMe, usersController.getUserById)
   .patch('/updateMyPassword', authcontroller.updatePassword)
   // .single is due to wanting to upload only one single image
-  .patch('/updateMe', usersController.uploadUserPhoto, usersController.updateMe)
+  .patch('/updateMe', usersController.uploadUserPhoto, usersController.resizeUserPhoto, usersController.updateMe)
   .delete('/deleteMe', usersController.deleteMe);
 
 routes.use(authcontroller.restrictTo('admin'));
