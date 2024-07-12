@@ -40,7 +40,12 @@ routes
     // adding :id creates a variable in the url that can store an id integer
     .route('/:id')
     .get(toursController.getTourById)
-    .patch(authController.protect, authController.restrictTo('admin', 'lead-guide'), toursController.updateTour)
+    .patch(
+        authController.protect, 
+        authController.restrictTo('admin', 'lead-guide'), 
+        toursController.uploadTourImages,
+        toursController.resizeTourImages,
+        toursController.updateTour)
     .delete(authController.protect, authController.restrictTo('admin', 'lead-guide'), toursController.deleteTour);
 
 // removed due to express's ability to mergeParams
