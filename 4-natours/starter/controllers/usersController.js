@@ -71,6 +71,7 @@ const uploadUserPhoto = upload.single('photo');
 const resizeUserPhoto = catchAsyncError(async (req, res, next) => {
     if (!req.file) return next();
 
+    // the images file name is stored in req.file.filename so it can be used in the updateMe route handler
     req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
 
     await sharp(req.file.buffer)
