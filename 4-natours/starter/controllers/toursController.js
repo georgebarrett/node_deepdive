@@ -2,8 +2,39 @@ const fs = require('fs');
 const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/apiFeatures');
 const AppError = require('../utils/appError');
+const multer = require('multer');
+const sharp = require('sharp');
 const catchAsyncErrors = require('../utils/catchAsyncError');
 const factory = require('./crudFactory');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+    if (file.mimetype.startsWith('image')) {
+        cb(null, true);
+    } else {
+        cb(
+            new AppError('Please upload an image file.', 400),
+            false,
+        );
+    }
+};
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: multerFilter,
+});
+
+const uploadTourImages = upload.fields([
+    // the names sync with the tour schema fields
+    { name: 'imageCover', maxCount: 1 },
+    { name: 'images', maxCount: 3 }
+]);
+
+const resizeTourImages = (req, res, next) => {
+    console.log(req.files);
+    next();
+};
 
 const aliasTopFiveCheapestTours = (req, res, next) => {
     // this is a url query in middleware format that prefills parts of the query object
@@ -200,7 +231,9 @@ module.exports = {
     getMonthlyPlan,
     getToursWithin,
     getDistances,
-    aliasTopFiveCheapestTours
+    aliasTopFiveCheapestTours,
+    uploadTourImages,
+    resizeTourImages
 };
 
 
