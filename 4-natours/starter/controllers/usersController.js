@@ -55,7 +55,7 @@ const multerFilter = (req, file, cb) => {
         cb(null, true);
     } else {
         cb(
-            new AppError('Not an image, please upload an image file!', 400),
+            new AppError('Please upload an image file.', 400),
             false,
         );
     }
