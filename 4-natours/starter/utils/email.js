@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer');
+const pug = require('pug');
 
 class Email {
     // the function that runs when a new object is created through this class
@@ -27,20 +28,33 @@ class Email {
             }
         });
     }
+
+    send(template, subject) {
+        // render HTML
+        const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`)
+
+        // define email options
+        const mailOptions = {
+            from: 'Aphex Twin <george@george.com>',
+            to: options.email,
+            subject: options.subject,
+            text: options.message
+        }
+
+        // create a transport and send email
+
+    }
+
+    sendWelcome() {
+        this.send('welcome', 'Welcome to the cult!');
+    }
 }
 const sendEmail = async (options) => {
 
-    const mailOptions = {
-        from: 'Aphex Twin <george@george.com>',
-        to: options.email,
-        subject: options.subject,
-        text: options.message
-    };
-
-    await transporter.sendMail(mailOptions);
+    
 };
 
-module.exports = sendEmail;
+
 
 // FOR GMAIL
     // const transporter = nodemailer.createTransport({
