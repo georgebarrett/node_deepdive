@@ -45,7 +45,8 @@ routes
         authController.restrictTo('admin', 'lead-guide'), 
         toursController.uploadTourImages,
         toursController.resizeTourImages,
-        toursController.updateTour)
+        toursController.updateTour
+    )
     .delete(authController.protect, authController.restrictTo('admin', 'lead-guide'), toursController.deleteTour);
 
 // removed due to express's ability to mergeParams
