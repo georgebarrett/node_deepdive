@@ -52,7 +52,7 @@ const resizeTourImages = catchAsyncErrors(async (req, res, next) => {
     await Promise.all(req.files.images.map(async (file, index) => {
         const filename = `tour-${req.params.id}-${Date.now()}-${index + 1}.jpeg`;
         
-        await sharp(req.files.imageCover[0].buffer)
+        await sharp(file.buffer)
             .resize(2000, 1333)
             .toFormat('jpeg')
             .jpeg({ quality: 90 })
@@ -60,7 +60,6 @@ const resizeTourImages = catchAsyncErrors(async (req, res, next) => {
 
         req.body.images.push(filename);    
     }));
-    console.log();
     next();
 });
 
