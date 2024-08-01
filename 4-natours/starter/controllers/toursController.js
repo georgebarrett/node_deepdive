@@ -31,10 +31,38 @@ const uploadTourImages = upload.fields([
     { name: 'images', maxCount: 3 }
 ]);
 
-const resizeTourImages = (req, res, next) => {
-    console.log(req.files);
+const resizeTourImages = catchAsyncErrors(async (req, res, next) => {
+
+    if (!req.files.imageCover || !req.files.images) return next();
+
+    // cover image
+    req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+
+    await sharp(req.files.imageCover[0].buffer)
+        .resize(2000, 1333)
+        .toFormat('jpeg')
+        .jpeg({ quality: 90 })
+        .toFile(`public/img/tours/${req.body.imageCover}`);
+
+    // tour images
+    req.body.images = [];
+    // map - generates array of promises, each representing an async image operation
+    // Pomise.all - waits for all the asyn promises to be resolved
+    // await - ensures subsequent code executes before moving on
+    await Promise.all(req.files.images.map(async (file, index) => {
+        const filename = `tour-${req.params.id}-${Date.now()}-${index + 1}.jpeg`;
+        
+        await sharp(req.files.imageCover[0].buffer)
+            .resize(2000, 1333)
+            .toFormat('jpeg')
+            .jpeg({ quality: 90 })
+            .toFile(`public/img/tours/${filename}`);
+
+        req.body.images.push(filename);    
+    }));
+    console.log();
     next();
-};
+});
 
 const aliasTopFiveCheapestTours = (req, res, next) => {
     // this is a url query in middleware format that prefills parts of the query object
