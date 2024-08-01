@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
+const htmlToText = require('html-to-text');
 
 class Email {
     // the function that runs when a new object is created through this class
@@ -13,7 +14,7 @@ class Email {
         this.from = `Aphex Twin ${process.env.EMAIL_FROM}`;
     }
 
-    createTransport() {
+    newTransport() {
         if (process.env.NODE_ENV === 'production') {
             // sendgrid
             return 1;
@@ -29,30 +30,34 @@ class Email {
         });
     }
 
-    send(template, subject) {
+    async send(template, subject) {
         // render HTML
-        const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`)
+        const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
+            firstName: this.firstName,
+            url: this.url,
+            subject: subject
+        });
 
         // define email options
         const mailOptions = {
-            from: 'Aphex Twin <george@george.com>',
-            to: options.email,
-            subject: options.subject,
-            text: options.message
+            from: this.from,
+            to: this.to,
+            subject: subject,
+            html: html,
+            // extracting content out of the html
+            text: htmlToText.fromString(html)
         }
 
         // create a transport and send email
-
+        await this.newTransport().transporter.sendMail(mailOptions);
     }
 
-    sendWelcome() {
-        this.send('welcome', 'Welcome to the cult!');
+    async sendWelcome() {
+        // 'welcome will be passed into 'template' and then grab the file from above
+        await this.send('welcome', 'Welcome to the cult!');
     }
 }
-const sendEmail = async (options) => {
 
-    
-};
 
 
 
