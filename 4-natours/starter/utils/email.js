@@ -4,16 +4,17 @@ const htmlToText = require('html-to-text');
 
 class Email {
     // the function that runs when a new object is created through this class
-    // the user and url are the bits needed to send emails. eg welcome emails when a user signsup
+    // the user and url are the bits needed to send emails. eg welcome emails when a user signs up
     constructor(user, url) {
         this.to = user.email;
         // for personalising the email
         this.firstName = user.name.split(' ')[0];
-        // equal to the incoming email
+        // equal to the incoming email url
         this.url = url;
         this.from = `Aphex Twin ${process.env.EMAIL_FROM}`;
     }
 
+    // different transports for different environements
     newTransport() {
         if (process.env.NODE_ENV === 'production') {
             // sendgrid
@@ -48,7 +49,7 @@ class Email {
             text: htmlToText.fromString(html)
         }
 
-        // create a transport and send email
+        // create a transport and ability to send email (does not actually send the email)
         await this.newTransport().transporter.sendMail(mailOptions);
     }
 
