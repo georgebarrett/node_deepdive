@@ -1,8 +1,9 @@
 const nodemailer = require('nodemailer');
 const pug = require('pug');
 const htmlToText = require('html-to-text');
+const { convert } = require('html-to-text');
 
-class Email {
+module.exports = class Email {
     // the function that runs when a new object is created through this class
     // the user and url are the bits needed to send emails. eg welcome emails when a user signs up
     constructor(user, url) {
@@ -33,7 +34,7 @@ class Email {
 
     async send(template, subject) {
         // render HTML
-        const html = pug.renderFile(`${__dirname}/../views/emails/${template}.pug`, {
+        const html = pug.renderFile(`${__dirname}/../views/email/${template}.pug`, {
             firstName: this.firstName,
             url: this.url,
             subject: subject
@@ -46,11 +47,11 @@ class Email {
             subject: subject,
             html: html,
             // extracting content out of the html
-            text: htmlToText.fromString(html)
+            text: convert(html)
         }
 
         // create a transport and ability to send email (does not actually send the email)
-        await this.newTransport().transporter.sendMail(mailOptions);
+        await this.newTransport().sendMail(mailOptions);
     }
 
     async sendWelcome() {
@@ -58,8 +59,6 @@ class Email {
         await this.send('welcome', 'Welcome to the cult!');
     }
 }
-
-
 
 
 // FOR GMAIL
