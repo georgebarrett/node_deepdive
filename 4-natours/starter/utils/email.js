@@ -58,6 +58,10 @@ module.exports = class Email {
         // 'welcome will be passed into 'template' and then grab the file from above
         await this.send('welcome', 'Welcome to the cult!');
     }
+
+    async sendPasswordReset() {
+        await this.send('passwordReset', 'Here is your password reset token (only valid for 10 minutes)')
+    }
 }
 
 
