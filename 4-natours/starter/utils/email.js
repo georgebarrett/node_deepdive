@@ -18,17 +18,24 @@ module.exports = class Email {
     // different transports for different environements
     newTransport() {
         if (process.env.NODE_ENV === 'production') {
-            // sendgrid
-            return 1;
+            // Brevo
+            return nodemailer.createTransport({
+                service: 'SendinBlue',
+
+                auth: {
+                    user: process.env.BREVO_NAME,
+                    pass: process.env.BREVO_PASSWORD,
+                },
+            });
         }
 
         return nodemailer.createTransport({
             host: process.env.EMAIL_HOST,
             port: process.env.EMAIL_PORT,
             auth: {
-                user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD   
-            }
+                user: process.env.EMAIL_ADDRESS,
+                pass: process.env.EMAIL_PASSWORD,
+            },
         });
     }
 
