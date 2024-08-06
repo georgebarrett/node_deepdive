@@ -4,6 +4,7 @@ import '@babel/polyfill';
 import { login, logout } from "./login";
 import { displayMap } from './mapbox';
 import { updateSettings } from './updateSettings';
+import { bookTour } from './stripe';
 
 // DOM elements - to ensure pages without .map do not throw errors
 // const mapBox = document.getElementById('map');
@@ -11,6 +12,7 @@ const loginForm = document.querySelector('.form--login');
 const logOutButton = document.querySelector('.nav__el--logout');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
+const bookButton = document.getElementById('book-tour');
 
 // DELEGATION
 // if (mapBox) {
@@ -68,3 +70,14 @@ passwordFields.forEach(field => {
         field.removeAttribute('readonly');
     });
 });
+
+if (bookButton) {
+    bookButton.addEventListener('click', e => {
+        // when clicked the text changes
+        e.target.textContent = 'Processing...';
+        // get tourId from the data attribute ''
+        const { tourId } = e.target.dataset;
+        // call bookTour function with the id
+        bookTour(tourId);
+    });
+}
