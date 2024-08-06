@@ -3,12 +3,11 @@ include _reviewCard
 
 //- this injects the script into the header of the base page
 block append head
-    //- <script src='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js'></script>
-    //- <link href='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css' rel='stylesheet' />
-    //- <script src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js'></script>
-    //- <link href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css' rel='stylesheet' />
-    //- script(src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js')
-    //- link(href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet')
+    //- script(src='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js')
+    //- link(href='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css')
+    //- script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
+    //- link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css')
+    script(src="https://js.stripe.com/v3/")
                 
 mixin overviewBox(label, text, icon)
     .overview-box__detail
