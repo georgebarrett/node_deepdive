@@ -3,11 +3,12 @@ include _reviewCard
 
 //- this injects the script into the header of the base page
 block append head
+    meta(http-equiv="Content-Security-Policy" content="script-src 'self' https://js.stripe.com")
+    script(src="https://js.stripe.com/v3/")
     //- script(src='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.js')
     //- link(href='https://api.mapbox.com/mapbox-gl-js/v3.4.0/mapbox-gl.css')
     //- script(src='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js')
     //- link(href='https://api.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css')
-    script(src="https://js.stripe.com/v3/")
                 
 mixin overviewBox(label, text, icon)
     .overview-box__detail
