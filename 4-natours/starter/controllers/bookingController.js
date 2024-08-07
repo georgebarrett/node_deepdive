@@ -1,4 +1,5 @@
 const Tour = require('../models/tourModel');
+const Booking = require('../models/bookingModel');
 const AppError = require('../utils/appError');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const catchAsyncErrors = require('../utils/catchAsyncError');
@@ -41,6 +42,18 @@ const getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
+const createBookingCheckout = catchAsyncErrors(async (req, res, next) => {
+    // UNSECURE - anyoe can make bookings without paying
+    const { tour, user, price } = req.query;
+
+    if (!tour && !user && !price) return next();
+
+    await Booking.create({ tour, user, price });
+    // response to redirect to the home route but without sensitive information in the URL
+    res.redirect(req.originalUrl.split('?')[0]);
+});
+
 module.exports = {
-    getCheckoutSession
+    getCheckoutSession,
+    createBookingCheckout
 }
