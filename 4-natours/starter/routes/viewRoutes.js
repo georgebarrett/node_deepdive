@@ -11,6 +11,7 @@ routes.get('/', bookingController.createBookingCheckout, authController.isLogged
 routes.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
 routes.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 routes.get('/me', authController.protect, viewsController.getAccount);
+routes.get('/my-tours', authController.protect, viewsController.getMyTours);
 
 routes.post('/submit-user-data', authController.protect, viewsController.updateUserData);
 
