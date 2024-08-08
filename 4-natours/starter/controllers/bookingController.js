@@ -1,6 +1,5 @@
 const Tour = require('../models/tourModel');
 const Booking = require('../models/bookingModel');
-const AppError = require('../utils/appError');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const catchAsyncErrors = require('../utils/catchAsyncError');
 const factory = require('./crudFactory');
@@ -53,7 +52,20 @@ const createBookingCheckout = catchAsyncErrors(async (req, res, next) => {
     res.redirect(req.originalUrl.split('?')[0]);
 });
 
+const createBooking = factory.createOne(Booking);
+const getBooking = factory.getOne(Booking);
+const getAllBookings = factory.getAll(Booking);
+const updateBooking = factory.updateOne(Booking);
+const deleteBooking = factory.deleteOne(Booking);
+
+
+
 module.exports = {
     getCheckoutSession,
-    createBookingCheckout
+    createBookingCheckout,
+    createBooking,
+    getBooking,
+    getAllBookings,
+    updateBooking,
+    deleteBooking
 }
