@@ -39,7 +39,9 @@ app.use(helmet({
 app.use(cors({
     origin: 'http://localhost:64627/',
     credentials: true
-}));                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
+}));
+
+app.options('*', cors());
 
 // Handles any requests that don't match the ones above by serving the index.html file
 // app.get('*', (req, res) => {
