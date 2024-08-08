@@ -28,7 +28,8 @@ const bookingSchema = new mongoose.Schema({
 // pre hook - for every 'find' query the document will always have the user field populatd by their details
 // and the tour field will be populated with the tour name
 bookingSchema.pre(/^find/, function (next) {
-    this.populate('user').populate({ path: 'tour', select: 'name' })
+    this.populate('user').populate({ path: 'tour', select: 'name' });
+    next();
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);
